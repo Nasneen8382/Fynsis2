@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'app1',
     'django_social_share',
+   
     
 ]
 
@@ -141,8 +142,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'sayuthanav916@gmail.com'
-EMAIL_HOST_PASSWORD = 'zaxzxwfdyogujpkr'
+EMAIL_HOST_USER = 'namedummy171@gmail.com'
+EMAIL_HOST_PASSWORD = 'qrgjirzhopixkbex'
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
 MEDIA_ROOT = os.path.join(BASE_DIR,'media')
@@ -160,3 +161,5 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'),]
 # MEDIA_URL = '/media/'
 
 LOGIN_URL='login'
+
+CRISPY_TEMPLATE_PACK='bootstrap4'

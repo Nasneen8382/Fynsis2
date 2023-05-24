@@ -1270,7 +1270,8 @@ $('#baldue').val(parseFloat(x .toFixed(2)));
     color: white;
   }
 </style>
-<form action="estcreate2" method="post" class="needs-validation" enctype="multipart/form-data"  novalidate >{% csrf_token %}
+<form action="estcreate2" method="post" class="needs-validation" enctype="multipart/form-data"  novalidate >
+  {% csrf_token %}
         
     <div class="page-content">
         <h2 id="hel"></h2>
