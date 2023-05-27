@@ -187,12 +187,14 @@
                                     </td>
                                 </tr>
                             </tbody>
+                            
+
                             <tr>
-                                <td style="border: none;"><a class="btn btn-outline-secondary ml-1" role="button"
+                                <td  style="border: none;"><a class="btn btn-outline-secondary ml-1" role="button"
                                         data-toggle='tooltip' data-placement='top' title='Add Another Line'
                                         id="add">+</a></td>
-                                <td class="text-right">Total : </td>
-                                <td><input type="number" name="total" id="total" class="form-control total text-right"
+                                <td class="text-right w-10">Total : </td>
+                                <td ><input type="number" name="total" id="total" class="form-control total text-right"
                                         value="0.00"></td>
                             </tr>
                         </table>
@@ -737,21 +739,49 @@
             $('#tab_logic').append(newRow);
         });
 
-        // Duplicate row function
-        $('#tab_logic').on('click', '.copy_row', function () {
-            var currentRow = $(this).closest('tr');
-            var clonedRow = currentRow.clone();
+       //Duplicate row function
+       $('#tab_logic').on('click', '.copy_row', function () {
+            console.log('hi');
+            var table = document.getElementById("tab_logic");
+            var RowCount = table.rows.length;
+            console.log(RowCount);
 
-            // Generate a new unique ID for the cloned row
-            var newRowId = 'row' + ($('#tab_logic tr').length + 1);
-            clonedRow.attr('id', newRowId);
+            // Get the values from the current row
+            var currentDesc = $(this).closest('tr').find("input[name='desc[]']").val();
+            var currentAmount = $(this).closest('tr').find("input[name='amount[]']").val();
+            console.log(currentDesc);
+            console.log(currentAmount);
 
+            var newRow = $(`
+                <tr id="row${RowCount}">
+                <td colspan="2" style="width: 80%;">
+                    <input type="text" name="desc[]" id="desc${RowCount}" class="form-control"
+                    placeholder="Description" value="${currentDesc}">
+                </td>
+                <td>
+                    <input type="number" name="amount[]" id="amount${RowCount}" class="form-control amount text-right"
+                    step="0.00" min="0" style="background-color: #2f516f; color: white;" value="${currentAmount}">
+                </td>
+                <td class='text-center'>
+                    <button type='button' id='copy_btn${RowCount}' class='btn btn-transparent text-secondary btn-sm rounded-circle copy_row'
+                    data-toggle='tooltip' data-placement='top' title='Clone' style='width:30px'>
+                    <i class="fas fa-copy"></i>
+                    </button>
+                </td>
+                <td class='text-center'>
+                    <button type='button' id='del_btn${RowCount}' class='btn btn-transparent text-danger btn-sm rounded-circle delete-row'
+                    data-toggle='tooltip' data-placement='top' title='Delete' style='width:30px'>
+                    <i class='fa fa-times'></i>
+                    </button>
+                </td>
+                </tr>
+            `);
 
-            // Append the cloned row after the current row
-            currentRow.after(clonedRow);
+            $('#tab_logic').append(newRow);
             calc_total();
         });
 
+        
          // Delete Row
         $('#tab_logic').on('click', '.delete-row', function () {
             $(this).closest('tr').remove();
@@ -759,6 +789,10 @@
         });
 
     });
+
+
+  
+
 
 </script>
 <script>

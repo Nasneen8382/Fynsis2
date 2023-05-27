@@ -37638,14 +37638,18 @@ def create_retainer_invoice(request):
 
         desc = request.POST.getlist("desc[]")
         amount = request.POST.getlist("amount[]")
+        print(desc)
+        print(amount)
 
         if len(desc)==len(amount) and desc and amount :
                 mapped=zip(desc,amount)
+                # print(mapped)
                 mapped=list(mapped)
+                print(mapped)
                 for ele in mapped:
-                    created = RetainerInvoiceItems.objects.get_or_create(description = ele[0],amount=ele[1],retainer_invoice = r_inv)
+                    created = RetainerInvoiceItems.objects.create(description = ele[0],amount=ele[1],retainer_invoice = r_inv)
         
-    return redirect('new_ret_invoice')
+    return redirect('retainer_invoices_list')
 
 def send_retainer_invoice(request):
     if request.method == 'POST':
@@ -37681,7 +37685,7 @@ def send_retainer_invoice(request):
                 mapped=zip(desc,amount)
                 mapped=list(mapped)
                 for ele in mapped:
-                    created = RetainerInvoiceItems.objects.get_or_create(description = ele[0],amount=ele[1],retainer_invoice = r_inv)
+                    created = RetainerInvoiceItems.objects.create(description = ele[0],amount=ele[1],retainer_invoice = r_inv)
         
         words = cust_name.split()
         first_name = words[0]
@@ -37694,12 +37698,12 @@ def send_retainer_invoice(request):
         recipient = cust_email
         send_mail(subject, message, settings.EMAIL_HOST_USER, [recipient])
         
-    return redirect('new_ret_invoice')
+    return redirect('retainer_invoices_list')
 
 def delete_inv(request,id):
     invoice = RetainerInvoices.objects.get(id=id)
     invoice.delete()
-    return redirect(retainer_invoices_list)
+    return redirect('retainer_invoices_list')
 
 def ret_invoice_slip(request,id):
     ret_invoice = RetainerInvoices.objects.get(id=id)
@@ -37760,7 +37764,7 @@ def update_ret_invoice(request,id):
                 mapped=zip(desc,amount)
                 mapped=list(mapped)
                 for ele in mapped:
-                    created = RetainerInvoiceItems.objects.get_or_create(description = ele[0],amount=ele[1],retainer_invoice = ret_inv)
+                    created = RetainerInvoiceItems.objects.create(description = ele[0],amount=ele[1],retainer_invoice = ret_inv)
         
     return redirect('ret_invoice_slip',id=ret_inv.id)
 
