@@ -1,5 +1,5 @@
 
-from curses.ascii import HT
+# from curses.ascii import HT
 from http.client import HTTPResponse
 from multiprocessing import context
 from django.db.models import Avg,Max,Min,Sum
@@ -23,10 +23,10 @@ from django.contrib.auth.decorators import login_required
 import itertools
 import requests
 # from .pdf import html2pdf
-from num2words import num2words
+# from num2words import num2words
 import random
 from django.template.loader import get_template
-from xhtml2pdf import pisa
+# from xhtml2pdf import pisa
 
 from django.db.models import F
 from django.db.models import Count

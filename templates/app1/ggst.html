@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    {% load static %}
+    <title>Datepicker</title>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Reset styles -->
+    <link rel="stylesheet" href="https://unpkg.com/modern-css-reset/dist/reset.min.css" />
+    <!-- Google Fonts Muli -->
+    <link href="https://fonts.googleapis.com/css2?family=Muli:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <title>Fin sYs</title>
+    <!--favicon-->
+    <link rel="icon" href="{% static 'assets/images/favicon-32x32.png' %}" type="image/png"/>
+    <!-- Vector CSS -->
+    <link href="{% static 'assets/plugins/vectormap/jquery-jvectormap-2.0.2.css' %}" rel="stylesheet"/>
+    <!--plugins-->
+    <link href="{% static 'assets/plugins/simplebar/css/simplebar.css' %}" rel="stylesheet"/>
+    <link href="{% static 'assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css' %}" rel="stylesheet"/>
+    <link href="{% static 'assets/plugins/metismenu/css/metisMenu.min.css' %}" rel="stylesheet"/>
+    <!-- loader-->
+    <link href="{% static 'assets/css/pace.min.css' %}" rel="stylesheet"/>
+    <script src="{% static 'assets/js/pace.min.js' %}"></script>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}"/>
+    <!-- Icons CSS -->
+    <link rel="stylesheet" href="{% static 'assets/css/icons.css' %}"/>
+    <!-- App CSS -->
+
+    
+    <link rel="stylesheet" href="{% static 'assets/css/app.css' %}"/>
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+    <style>
+        #ui-datepicker-div {
+            width: 15rem;
+            left: 600px;
+            font-size: 1rem;
+        }
+        .ui-datepicker-title{
+            font-size: .8rem
+
+        }
+        .ui-datepicker-calendar {
+            display: none;
+        }
+
+        .datepicker {
+            margin-top: 1rem;
+            display: grid;
+            justify-items: center;
+        }
+        select>option {
+            
+            background-color: rgb(212, 212, 212);
+        }
+
+        .ui-datepicker-prev {
+            background: white;
+            cursor: pointer;
+        }
+
+        .ui-datepicker-next {
+            background: white;
+            cursor: pointer;
+        }
+
+        .ui-datepicker .ui-datepicker-buttonpane button {
+            color: white;
+            background: black;
+            font-size: .8rem;
+        }
+
+        /* .ui-datepicker .ui-datepicker-buttonpane button:hover {
+            color: white;
+            background: rgb(234, 176, 0);
+        } */
+
+        .monthYearPicker {
+            font-size: 1rem;
+            height: 1.5rem;
+            width: 12rem;
+        }
+
+    </style>
+</head>
+
+<body>
+    <!-- <div class="datepicker">
+        <input readonly name="FromDate" class="monthYearPicker" placeholder=" From month/year" >
+        <input readonly name="ToDate" class="monthYearPicker" placeholder=" To month/year " />
+    </div> -->
+    <div class="page-content">
+        <div class="card radius-15">
+            <div class="card-body">
+                <div class="card-title">
+                    <center><h2 class="mb-0">GSTR-1</h2></center>
+                    <hr>
+                </div>
+            </div>
+        </div>
+
+        <div class="card radius-15">
+            <div class="card-body">
+                <form action="{% url 'gstr3b1' %}" method="post" class="needs-validation" novalidate>
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-4">
+                            <input readonly name="FromDate" class="monthYearPicker" placeholder=" From month/year" >                            
+                        </div>
+                        <div class="col-4">
+                            <input readonly name="ToDate" class="monthYearPicker" placeholder=" To month/year " /> 
+                        </div>
+                        
+                        <div class="col-4"></div>
+                    </div>
+                    <br>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-10"></div>
+                        <div class="col-md-2">
+                            <button class="btn btn-outline-info" type="submit">excel</button>
+                            <button class="btn btn_print btn-outline-info" >Print</button>
+                            <script type="text/javascript">
+                                $(document).ready(function ($) {
+                                    console.log('print');
+    
+                                    $(document).on('click', '.btn_print', function (event) {
+                                        console.log('print1');
+                                        event.preventDefault();
+                                        var element = document.getElementById('pdf-card');
+                                        var opt =
+                                        {
+                                            margin: 1,
+                                            filename: 'employee' + '.pdf',
+                                            image: { type: 'jpeg', quality: 0.98 },
+                                            html2canvas: { scale: 2 },
+                                            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+                                        };
+                                        html2pdf().set(opt).from(element).save();
+    
+                                    });
+    
+                                });
+                            </script>
+                            <button id="export-button">Export to Excel</button>
+                            <script>
+                              document.getElementById("export-button").addEventListener("click", function () {
+                                const table = document.getElementById("my-table");
+                                const workbook = XLSX.utils.table_to_book(table);
+                            
+                                // Convert the workbook to a blob
+                                const blob = new Blob([XLSX.write(workbook, { bookType: "xlsx", type: "blob" })], {
+                                  type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                                });
+                            
+                                // Create a download link and trigger the download
+                                const url = URL.createObjectURL(blob);
+                                const a = document.createElement("a");
+                                a.href = url;
+                                a.download = "table.xlsx";
+                                document.body.appendChild(a);
+                                a.click();
+                                document.body.removeChild(a);
+                              });
+                            </script>
+                        </div>   
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div class="card radius-15 " id="pdf-card">
+            <div class="card-body">
+                <div class="container-fluid">
+                    <p style="text-align: right;color: rgb(255, 255, 255);"><span style="font-weight: bold;">From Date</span>  : {{fromdate|date:'d-m-Y'}} <br> <span style="font-weight: bold;">To Date</span> : {{todate|date:'d-m-Y'}}</p>
+                    <table class="table table-responsive-md mt-4 table-hover table-bordered" style="background-color: rgba(0, 0, 0, 0.2);" >
+                        <thead>
+                            <tr>
+                                <th colspan="5" style="text-align: center;">Invoice Details</th>
+                                <th style="text-align: center;">Tax Rate</th>
+                                <th style="text-align: center;">Cess Rate</th>
+                                <th style="text-align: center;">Taxable Value</th>
+                                <th colspan="4" style="text-align: center;">Amount</th>
+                                <th style="text-align: center;">Place Of Supply(Name Of State)
+                                </th>
+                            </tr>
+                            <tr>
+                                <th style="text-align: center;">GSTIN/UIN</th>
+                                <th style="text-align: center;">Party Name</th>
+                                <th style="text-align: center;">Invoice No</th>
+                                <th style="text-align: center;">Date</th>
+                                <th style="text-align: center;">Value</th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th style="text-align: center;">Integrated</th>
+                                <th style="text-align: center;">Central Tax</th>
+                                <th style="text-align: center;">State/UT Tax</th>
+                                <th style="text-align: center;">Cess</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                           
+                        </tbody>
+                    </table>
+                    <br>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+<!-- Include the SheetJS library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+
+    <!-- REQUIRED FOR MONTH & YEAR PICKER -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6/jquery.min.js" type="text/javascript"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js" type="text/javascript"></script>
+    <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="Stylesheet"
+        type="text/css" />
+    <script>
+        $(function () {
+            $('.monthYearPicker').datepicker({
+                changeMonth: true,
+                changeYear: true,
+                showButtonPanel: true,
+                minDate: new Date(2020, 0),  // Year, Index of Month (Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec)
+                maxDate: new Date(2023, 3),  // Year, Index of Month (Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec)
+                dateFormat: 'MM yy'
+            }).focus(function () {
+                var thisCalendar = $(this);
+                $('.ui-datepicker-calendar').detach();
+                $('.ui-datepicker-close').click(function () {
+                    var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
+                    var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+                    thisCalendar.datepicker('setDate', new Date(year, month, 1));
+                });
+            });
+        });
+    </script>
+    <script>
+        function showTime() {
+            document.getElementById('currentTime').innerHTML = new Date().toUTCString();
+        }
+        showTime();
+        setInterval(function () {
+            showTime();
+        }, 1000);
+    </script>
+</body>
+
+</html>

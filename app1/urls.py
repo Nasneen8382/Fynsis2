@@ -1,9 +1,13 @@
 from django.urls import re_path,path
 from . import views
 from django.views.decorators.csrf import csrf_exempt
+from django.conf import settings
+from django.views.static import serve
+
 # from .views import EmailAttachementView
 
 urlpatterns = [
+    re_path(r'^static/(?P<path>.*)$', serve,{'document_root': settings.STATIC_ROOT}),
     re_path(r'^$', views.index, name='index'),
     re_path(r'^go$', views.go, name='go'),
     re_path(r'^Signup_emailval/$', views.Signup_emailval, name='Signup_emailval'),
