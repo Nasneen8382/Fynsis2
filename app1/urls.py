@@ -874,6 +874,9 @@ path('search_retinvoice',views.search_retinvoice,name='search_retinvoice'),
 
 
 
+path('gstrr1',views.gstrr1,name='gstrr1'),
+path('gstr2',views.gstr2,name='gstr2'),
+path('gstr9',views.gstr9,name='gstr9'),
 
 
     

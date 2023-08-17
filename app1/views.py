@@ -37836,6 +37836,15 @@ def search_retinvoice(request):
     return redirect('retainer_invoices_list')
 
 
+# ====================================================
 
+def gstrr1(request):
+    return render(request,'app1/gstrr1.html')        
 
+def gstr2(request):
+    return render(request,'app1/gstr2.html')     
+
+def gstr9(request):
+    return render(request,'app1/gstr9.html')        
+   
 
