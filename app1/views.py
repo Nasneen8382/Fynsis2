@@ -360,33 +360,65 @@ def register(request, id):
         return redirect('regcomp')
 
 
+# def login(request):
+#         print("Login")
+#         if request.method == 'POST':                
+#                 username = request.POST['username']
+#                 password = request.POST['password']
+#                 print(username)
+#                 print(password)
+#                 user = auth.authenticate(username=username, password=password)
+               
+#                 request.session["uid"] = user.id
+#                 if user is not None:
+#                     print("login1111")
+#                     auth.login(request, user)
+#                     print("login2222")
+#                     return redirect('godash')
+#                     print("login333")
+#                 else:
+#                     messages.info(request, 'Invalid username or password else1')
+#                     return redirect('regcomp')
+            
+#         else:
+#             messages.info(request, 'Invalid username or password else2')
+#             return render(request, 'app1/login.html')
+
+
 def login(request):
+    print("Login")
     try:
         if request.method == 'POST':
             try:
+                
                 username = request.POST['username']
                 password = request.POST['password']
+                print(username)
+                print(password)
                 user = auth.authenticate(username=username, password=password)
                
                 request.session["uid"] = user.id
                 if user is not None:
+                    print("login1111")
                     auth.login(request, user)
-                    return redirect('/app1/godash')
+                    print("login2222")
+                    return redirect('godash')
                 else:
-                    messages.info(request, 'Invalid username or password')
+                    messages.info(request, 'Invalid username or password else1')
                     return redirect('regcomp')
             except:
-                messages.info(request, 'Invalid username or password')
+                messages.info(request, 'Invalid username or password except1')
                 return render(request, 'app1/login.html')
         else:
-            messages.info(request, 'Invalid username or password')
+            messages.info(request, 'Invalid username or password else2')
             return render(request, 'app1/login.html')
     except:
-        messages.info(request, 'Invalid username or password')
+        messages.info(request, 'Invalid username or password except2')
         return render(request, 'app1/login.html')
 
 @login_required(login_url='regcomp')
 def godash(request):
+    print("godash1111")
     try:
         cmp1 = company.objects.get(id=request.session['uid'])
     except:
