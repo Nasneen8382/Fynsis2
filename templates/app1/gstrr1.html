@@ -3,10 +3,11 @@
 {% load static %}
 {% if user.is_authenticated %}
 <!-- Include jQuery -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
 
 <!-- Include jQuery.table2excel plugin -->
-<script src="https://cdn.jsdelivr.net/npm/jquery-table2excel@1.1.0/dist/jquery.table2excel.min.js"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/jquery-table2excel@1.1.0/dist/jquery.table2excel.min.js"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
 
 <style>
     #ui-datepicker-div {
@@ -61,12 +62,17 @@
         height: 1.5rem;
         width: 12rem;
     }
+    .bar {
+        align-items: center;
+        display: flex;
+        justify-content: space-between;
+    }
+    .bar .left{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
 </style>
 
-<div class="datepicker1">
-        <input readonly name="FromDate" class="monthYearPicker" placeholder=" From month/year" >
-        <input readonly name="ToDate" class="monthYearPicker" placeholder=" To month/year " />
-    </div>
 <div class="page-content">
     <div class="card radius-15">
         <div class="card-body">
@@ -81,36 +87,31 @@
 
     <div class="card radius-15">
         <div class="card-body">
-            <form action="{% url 'gstr3b1' %}" method="post" class="needs-validation" novalidate>
-                {% csrf_token %}
-                <div class="row">
-                    <div class="col-4">
-                        <label style="text-align:left ">Report period</label><br>
+            <div class="bar">
+                <div class=" left">
+                    <div class="px-2">
+                        <label style="text-align:left ">From</label><br>
                         <input readonly name="FromDate" class="monthYearPicker form-control"
                             placeholder=" From month/year">
                     </div>
-                    <div class="col-4">
-                        <input readonly name="ToDate" class="monthYearPicker" placeholder=" To month/year " />
+                    <div  class="px-2">
+                        <label style="text-align:left ">To</label><br>
+                        <input readonly name="ToDate" class="monthYearPicker form-control"
+                            placeholder=" From month/year">
                     </div>
 
-                    <div class="col-4">
-                        <label style="text-align:left ">Report period</label><br>
-                        <select class="form-control" id="filterstyle" onchange="filterDate(this)" list="hosting-plan"
-                            name="reportperiod" type="text">
-                            <option><span class="bx bx-right-arrow-alt"></span>All dates</option>
-                            <option><span class="bx bx-right-arrow-alt"></span>Custom</option>
-                            <option><span class="bx bx-right-arrow-alt"></span>Today</option>
-                            <option><span class="bx bx-right-arrow-alt"></span>This month</option>
-                            <option><span class="bx bx-right-arrow-alt"></span>This financial year</option>
-                        </select>
-                    </div>
                 </div>
+                <div class="right">
+                    <button class="btn btn_print btn-outline-info">Print</button>
+                    <button class=" btn btn-outline-info" id="export-button" onclick="exportAsExcel()">Excel</button>
+                </div>
+            </div>
                 <br>
                 <br>
                 <div class="row">
                     <div class="col-md-10"></div>
                     <div class="col-md-2">
-                        <button class="btn btn_print btn-outline-info">Print</button>
+                        
                         <script type="text/javascript">
                             $(document).ready(function ($) {
                                 console.log('print');
@@ -133,40 +134,20 @@
 
                             });
                         </script>
-                        <button class="xlsExportButton" id="export-button">Export to Excel</button>
                         <script>
-                            function tableToWorksheet(table) {
-                                var ws = XLSX.utils.table_to_sheet(table);
-                                return ws;
+                            function exportAsExcel() {
+                              const table = document.getElementById('myTable'); // Replace 'myTable' with your table's ID
+                              const wb = XLSX.utils.table_to_book(table);
+                            
+                              XLSX.writeFile(wb, 'table.xlsx');
                             }
-
-                            // Function to download an Excel file
-                            function downloadExcelFile(ws, filename) {
-                                var wb = XLSX.utils.book_new();
-                                XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
-                                XLSX.writeFile(wb, filename);
-                            }
-
-                            // Export button click event for XLS format
-                            document.querySelector('.xlsExportButton').addEventListener('click', function () {
-                                var contentToExport = document.getElementById('myTable');
-                                var worksheet = tableToWorksheet(contentToExport);
-                                downloadExcelFile(worksheet, '{{company.company_name}}.xls');
-                            });
-
-                            // Export button click event for XLSX format
-                            // document.querySelector('.xlsxExportButton').addEventListener('click', function () {
-                            //     var contentToExport = document.getElementById('myTable');
-                            //     var worksheet = tableToWorksheet(contentToExport);
-                            //     downloadExcelFile(worksheet, '{{company.company_name}}.xlsx');
-                            // });
-                        </script>
+                            </script>
+                       
 
 
 
                     </div>
                 </div>
-            </form>
         </div>
     </div>
 
