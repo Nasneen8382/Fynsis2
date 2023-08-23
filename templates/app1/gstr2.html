@@ -8,7 +8,7 @@
 
 
 <!-- Include jQuery.table2excel plugin -->
-<script src="https://cdn.jsdelivr.net/npm/jquery-table2excel@1.1.0/dist/jquery.table2excel.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
 
 <style>
     #ui-datepicker-div {
@@ -75,11 +75,20 @@
         height: 1.5rem;
         width: 12rem;
     }
+    .bar {
+        align-items: center;
+        display: flex;
+        justify-content: space-between;
+    }
+    .bar .left{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+.bar .left input{
+    height: 5vh;
+}
 </style>
-<!-- <div class="datepicker">
-        <input readonly name="FromDate" class="monthYearPicker" placeholder=" From month/year" >
-        <input readonly name="ToDate" class="monthYearPicker" placeholder=" To month/year " />
-    </div> -->
+
 <div class="page-content">
     <div class="card radius-15">
         <div class="card-body">
@@ -94,68 +103,57 @@
 
     <div class="card radius-15">
         <div class="card-body">
-            <form action="{% url 'gstr3b1' %}" method="post" class="needs-validation" novalidate>
-                {% csrf_token %}
-                <div class="row">
-                    <div class=" col-4 datepicker">
-                        <label for="FromDate">From Month/Year</label> <input readonly id="FromDate" name="FromDate"
-                            class="monthYearPicker" >
+            
+            <div class="bar">
+                <div class=" left">
+                    <div class="px-2">
+                        <label style="text-align:left ">From</label><br>
+                        <input readonly name="FromDate" class="monthYearPicker form-control"
+                            placeholder=" From month/year">
                     </div>
-                    <div class="col-4 datepicker">
-                        <label for="">To Month/Year</label><input readonly name="ToDate" class="monthYearPicker" >
+                    <div  class="px-2">
+                        <label style="text-align:left ">To</label><br>
+                        <input readonly name="ToDate" class="monthYearPicker form-control"
+                            placeholder=" From month/year">
                     </div>
 
-                    <div class="col-4"></div>
                 </div>
+                <div class="right">
+                    <button class="btn btn_print btn-outline-info">Print</button>
+                    <button class=" btn btn-outline-info" id="export-button" onclick="exportAsExcel()">Excel</button>
+                </div>
+            </div>
+            <script type="text/javascript">
+                $(document).ready(function ($) {
+                    console.log('print');
+
+                    $(document).on('click', '.btn_print', function (event) {
+                        console.log('print1');
+                        event.preventDefault();
+                        var element = document.getElementById('pdf-card');
+                        var opt =
+                        {
+                            margin: 1,
+                            filename: 'employee' + '.pdf',
+                            image: { type: 'jpeg', quality: 0.98 },
+                            html2canvas: { scale: 2 },
+                            jsPDF: { unit: 'in', format: 'a3', orientation: 'portrait' }
+                        };
+                        html2pdf().set(opt).from(element).save();
+
+                    });
+
+                });
+                function exportAsExcel() {
+                              const table = document.getElementById('myTable'); // Replace 'myTable' with your table's ID
+                              const wb = XLSX.utils.table_to_book(table);
+                            
+                              XLSX.writeFile(wb, 'gstr2.xlsx');
+                            }
+            </script>
                 <br>
                 <br>
-                <div class="row">
-                    <div class="col-md-10"></div>
-                    <div class="col-md-2">
-                        <button class="btn btn-outline-info" type="submit">excel</button>
-                        <button class="btn btn_print btn-outline-info">Print</button>
-                        <script type="text/javascript">
-                            $(document).ready(function ($) {
-                                console.log('print');
-
-                                $(document).on('click', '.btn_print', function (event) {
-                                    console.log('print1');
-                                    event.preventDefault();
-                                    var element = document.getElementById('pdf-card');
-                                    var opt =
-                                    {
-                                        margin: 1,
-                                        filename: 'employee' + '.pdf',
-                                        image: { type: 'jpeg', quality: 0.98 },
-                                        html2canvas: { scale: 2 },
-                                        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-                                    };
-                                    html2pdf().set(opt).from(element).save();
-
-                                });
-
-                            });
-                        </script>
-                        <button id="export-button">Export to Excel</button>
-                        <script>
-                            $(document).ready(function () {
-                                $("#export-button").on("click", function () {
-                                    // Call the table2excel plugin
-                                    $("#my-table").table2excel({
-                                        exclude: ".no-export", // CSS class to exclude from export
-                                        name: "Table Export", // Name of the Excel file
-                                        filename: "table", // File name without extension
-                                        fileext: ".xlsx", // File extension
-                                    });
-                                });
-                            });
-                        </script>
-
-
-
-                    </div>
-                </div>
-            </form>
+                
         </div>
     </div>
 
@@ -164,7 +162,7 @@
             <div class="container-fluid">
                 
                 <table class="table table-responsive-md mt-4 table-hover table-bordered"
-                    style="background-color: rgba(0, 0, 0, 0.2);">
+                    style="background-color: rgba(0, 0, 0, 0.2);" id="myTable">
                     <thead>
                         <tr>
                             <th style="text-align: center;">Reverse Charge</th>

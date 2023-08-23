@@ -71,6 +71,9 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
 }
+.bar .left input{
+    height: 5vh;
+}
 </style>
 
 <div class="page-content">
@@ -139,7 +142,7 @@
                               const table = document.getElementById('myTable'); // Replace 'myTable' with your table's ID
                               const wb = XLSX.utils.table_to_book(table);
                             
-                              XLSX.writeFile(wb, 'table.xlsx');
+                              XLSX.writeFile(wb, 'gstr1.xlsx');
                             }
                             </script>
                        
@@ -182,7 +185,24 @@
                         </tr>
                     </thead>
                     <tbody>
-
+                        {% for i in sale %}
+                        <tr class="text-center">
+                            <td>0</td>
+                            <td>{{i.customername}}</td>
+                            <td>{{i.invoiceno}}</td>
+                            <td>{{i.invoicedate}}</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>{{i.IGST}}</td>
+                            <td>{{i.CGST}}</td>
+                            <td>{{i.SGST}}</td>
+                            <td>{{i.TCS}}</td>
+                            <td>{{i.placosupply}}</td>
+                            
+                        </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
                 <br>

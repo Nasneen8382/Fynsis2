@@ -37871,7 +37871,8 @@ def search_retinvoice(request):
 # ====================================================
 
 def gstrr1(request):
-    return render(request,'app1/gstrr1.html')        
+    sale=invoice.objects.all()
+    return render(request,'app1/gstrr1.html',{'sale':sale})        
 
 def gstr2(request):
     return render(request,'app1/gstr2.html')     
