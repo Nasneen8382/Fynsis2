@@ -4,7 +4,6 @@
 {% if user.is_authenticated %}
 <!-- Include jQuery -->
 <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
-<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
 
 <!-- Include jQuery.table2excel plugin -->
@@ -108,12 +107,12 @@
                 <div class=" left">
                     <div class="px-2">
                         <label style="text-align:left ">From</label><br>
-                        <input readonly name="FromDate" class="monthYearPicker form-control"
+                        <input readonly name="FromDate" class="inputdate form-control"
                             placeholder=" From month/year">
                     </div>
                     <div  class="px-2">
                         <label style="text-align:left ">To</label><br>
-                        <input readonly name="ToDate" class="monthYearPicker form-control"
+                        <input readonly name="ToDate" class="inputdate form-control"
                             placeholder=" From month/year">
                     </div>
 
@@ -190,41 +189,36 @@
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
 
-<!-- REQUIRED FOR MONTH & YEAR PICKER -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-<!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6/jquery.min.js" type="text/javascript"></script> -->
-<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js" type="text/javascript"></script>
-<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="Stylesheet"
-    type="text/css" />
-<script>
-    $(function () {
-        $('.monthYearPicker').datepicker({
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+<script src="//code.jquery.com/jquery-1.12.4.js"></script>
+<script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <script>
+
+        $('.inputdate').datepicker( {
             changeMonth: true,
             changeYear: true,
             showButtonPanel: true,
-            minDate: new Date(2000, 0),  // Year, Index of Month (Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec)
-            maxDate: new Date(2023, 12),  // Year, Index of Month (Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec)
-            dateFormat: 'MM yy'
-        }).focus(function () {
-            var thisCalendar = $(this);
-            $('.ui-datepicker-calendar').detach();
-            $('.ui-datepicker-close').click(function () {
-                var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
-                var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
-                thisCalendar.datepicker('setDate', new Date(year, month, 1));
-            });
-        });
-    });
-</script>
-<script>
-    function showTime() {
-        document.getElementById('currentTime').innerHTML = new Date().toUTCString();
-    }
-    showTime();
-    setInterval(function () {
-        showTime();
-    }, 1000);
-</script>
+            dateFormat: 'MM yy',
+            minDate: new Date(2020, 0),  // Year, Index of Month (Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec)
+            maxDate: new Date(2023, 11),  // Year, Index of Month (Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec)
 
+            // onClose: function(dateText, inst) { 
+            //     var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
+            //     var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+            //     $(this).datepicker('setDate', new Date(year, month, 1));
+            // }
+        }).focus(function(){
+                var thisCalendar = $(this);
+                // $('.ui-datepicker-calendar').detach();
+                $(document).on("click", ".ui-datepicker-close",function() {
+                    var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
+                    var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+                    thisCalendar.datepicker('setDate', new Date(year, month, 1));
+                });
+            });
+        // 
+</script>
 {% endif %}
 {% endblock %}
