@@ -183,7 +183,7 @@
                             <thead>
                                 <tr  class="text-center" style="background-color: rgba(255, 255, 255, 0.137);">
                                     <th rowspan="2" style="text-align: center;">GSTIN/UIN</th>
-                                    <th colspan="5" style="text-align: center;">Invoice Details</th>
+                                    <th colspan="4" style="text-align: center;">Invoice Details</th>
                                     <th rowspan="2" style="text-align: center;">Tax Rate</th>
                                     <th rowspan="2" style="text-align: center;">Cess Rate</th>
                                     <th rowspan="2" style="text-align: center;">Taxable Value</th>
@@ -294,6 +294,8 @@
         $(document).on("click", ".ui-datepicker-close", function () {
             var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
             var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+            thisCalendar.datepicker("option", "dateFormat", "MM yy");
+
             thisCalendar.datepicker('setDate', new Date(year, month, 1));
         });
     });
