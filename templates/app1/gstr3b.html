@@ -81,7 +81,7 @@
             <div class="card-title">
                 <center>
                     <h2 class="mb-0">GSTR-3B</h2>
-                    <h2 id="inp"></h2>
+
                 </center>
                 <hr>
             </div>
@@ -96,14 +96,13 @@
                 <div class=" left">
                     <div class="px-2">
                         <label style="text-align:left ">From</label><br>
-                        <input readonly name="FromDate" class="inputdate form-control"
-                            placeholder=" From month/year">
+                        <input readonly name="FromDate" class="inputdate form-control" type="text" placeholder=" From month/year">
                     </div>
                     <div class="px-2">
                         <label style="text-align:left ">To</label><br>
-                        <input readonly name="ToDate" class="inputdate form-control"
-                            placeholder=" From month/year">
+                        <input  name="ToDate" class="inputdate form-control" placeholder=" From month/year">
                     </div>
+
 
                 </div>
                 <div class="right">
@@ -111,7 +110,8 @@
                     <button class=" btn btn-outline-info" id="export-button" onclick="exportAsExcel()">Excel</button>
                 </div>
             </div>
-            <br>
+            <h6 id="inp"></h6>
+
             <br>
 
 
@@ -435,36 +435,51 @@
 <link href="https://code.jquery.com/ui/jquery-ui-git.css" rel="stylesheet" type="text/css" />
 <script src="https://code.jquery.com/jquery-git.js"></script>
 <script src="https://code.jquery.com/ui/jquery-ui-git.js"></script>
-    <script>
+<script>
+// function set(m,y){
+//             console.log(y);
+//             $('.inputdate').datepicker("setDate",new Date(2021, 5))
+//          }
+    $('.inputdate').datepicker({
+        changeMonth: true,
+        changeYear: true,
+        showButtonPanel: true,
+        dateFormat: 'MM yy',
+        minDate: new Date(2020, 0),  // Year, Index of Month (Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec)
+        maxDate: new Date(2023, 11),  // Year, Index of Month (Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec)
 
-        $('.inputdate').datepicker( {
-            changeMonth: true,
-            changeYear: true,
-            showButtonPanel: true,
-            dateFormat: 'MM yy',
-            minDate: new Date(2020, 0),  // Year, Index of Month (Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec)
-            maxDate: new Date(2023, 11),  // Year, Index of Month (Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec)
+        // onClose: function(dateText, inst) { 
+        //     var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
+        //     var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+        // var selectedDate = new Date(year, month, 1);
+        // console.log(month);
+        // console.log(this);
+        //     this.datepicker('setDate', new Date(year, month, 1));
+        // }
+    }).focus(function () {
+        var thisCalendar = $(this);
+        $('.ui-datepicker-calendar').detach();
+        $(document).on("click", ".ui-datepicker-close", function () {
+            var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
+            var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+            
+            console.log(month);
+            console.log(year);
+            var selectedDate = new Date(year, month, 1);
+            document.getElementById("inp").innerHTML=selectedDate;
+            // $('.inputdate').datepicker("setDate","000000")  
+            // set(month,year);
+            // thisCalendar.datepicker("setDate", selectedDate);
 
-            // onClose: function(dateText, inst) { 
-            //     var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
-            //     var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
-            //     $(this).datepicker('setDate', new Date(year, month, 1));
-            // }
-        }).focus(function(){
-                var thisCalendar = $(this);
-                $('.ui-datepicker-calendar').detach();
-                $(document).on("click", ".ui-datepicker-close",function() {
-                    var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
-                    var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
-                    var selectedDate = new Date(year, month, 1);
-                     var date= new Date(selectedDate)
-                    console.log(date);
-                    document.getElementById("inp").innerHTML=date;
-                    thisCalendar.datepicker( "setDate", "date" );
 
-                });
-            });
-        // 
+        });
+    });
+    $('.inputdate').datepicker("setDate",selectedDate)    
 </script>
 {% endif %}
 {% endblock %}
+
+
+
+<button type="button" class="ui-datepicker-close ui-state-default ui-priority-primary ui-corner-all ui-state-hover"
+    data-handler="hide" data-event="click">Done</button>
