@@ -13,14 +13,8 @@
 
 <style>
     #ui-datepicker-div {
-        width: 15rem;
-        left: 600px;
-        font-size: 1rem;
-        background-color: aliceblue;
-    }
-
-    .ui-datepicker-title {
-        font-size: .8rem
+        width: 20rem;
+        left: 632px;
     }
 
     .ui-datepicker-calendar {
@@ -34,7 +28,6 @@
     }
 
     select>option {
-
         background-color: rgb(212, 212, 212);
     }
 
@@ -51,19 +44,13 @@
     .ui-datepicker .ui-datepicker-buttonpane button {
         color: white;
         background: black;
-        font-size: .8rem;
     }
 
-    /* .ui-datepicker .ui-datepicker-buttonpane button:hover {
-            color: white;
-            background: rgb(234, 176, 0);
-        } */
-
-    .monthYearPicker {
-        font-size: 1rem;
-        height: 1.5rem;
-        width: 12rem;
+    .ui-datepicker .ui-datepicker-buttonpane button:hover {
+        color: rgb(0, 0, 0);
+        background: rgb(177, 177, 177);
     }
+
 
     .bar {
         align-items: center;
@@ -79,10 +66,12 @@
     .bar .left input {
         height: 5vh;
     }
-    .nav .active{
+
+    .nav .active {
         border-bottom: 3px solid rgb(255, 255, 255);
     }
-    .nav li a{
+
+    .nav li a {
         text-decoration: none;
     }
 </style>
@@ -92,6 +81,7 @@
         <div class="card-body">
             <div class="card-title">
                 <center>
+                    <h5>{{cmp1.cname}}</h5>
                     <h2 class="mb-0">GSTR-1</h2>
                 </center>
                 <hr>
@@ -105,11 +95,13 @@
                 <div class=" left">
                     <div class="px-2">
                         <label style="text-align:left ">From</label><br>
-                        <input readonly name="FromDate" class="inputdate form-control" placeholder=" From month/year">
+                        <input name="FromDate" class="inputdate form-control"  id="in1"
+                            type="date">
                     </div>
                     <div class="px-2">
                         <label style="text-align:left ">To</label><br>
-                        <input readonly name="ToDate" class="inputdate form-control" placeholder=" From month/year">
+                        <input name="ToDate" class="inputdate form-control" id="in2"
+                            type="date">
                     </div>
 
                 </div>
@@ -181,8 +173,8 @@
                         <table class="table table-responsive-md mt-4 table-hover table-bordered" id="myTable"
                             style="background-color: rgba(0, 0, 0, 0.2);">
                             <thead>
-                                <tr  class="text-center" style="background-color: rgba(255, 255, 255, 0.137);">
-                                    
+                                <tr class="text-center" style="background-color: rgba(255, 255, 255, 0.137);">
+
                                     <th colspan="5" style="text-align: center;">Invoice Details</th>
                                     <th rowspan="2" style="text-align: center;">Tax Rate</th>
                                     <th rowspan="2" style="text-align: center;">Cess Rate</th>
@@ -192,12 +184,12 @@
                                     </th>
                                 </tr>
                                 <tr class="text-center" style="background-color: rgba(255, 255, 255, 0.137);">
-                                    <th  style="text-align: center;">GSTIN/UIN</th>
+                                    <th style="text-align: center;">GSTIN/UIN</th>
                                     <th style="text-align: center;">Party Name</th>
                                     <th style="text-align: center;">Invoice No</th>
                                     <th style="text-align: center;">Date</th>
                                     <th style="text-align: center;">Value</th>
-                                    
+
                                     <th style="text-align: center;">Integrated Tax</th>
                                     <th style="text-align: center;">Central Tax</th>
                                     <th style="text-align: center;">State/UT Tax</th>
@@ -207,7 +199,7 @@
                             <tbody>
                                 {% for i in sale %}
                                 <tr class="text-center">
-                                    <td>0</td>
+                                    <td>{{customer.gstin}}</td>
                                     <td>{{i.customername}}</td>
                                     <td>{{i.invoiceno}}</td>
                                     <td>{{i.invoicedate}}</td>
@@ -231,37 +223,37 @@
                 </div>
                 <div class="tab-pane" id="2">
                     <div class="container-fluid">
-                    <table class="table2excel  table table-responsive-md mt-4 table-hover table-bordered"
-                    style="background-color: rgba(0, 0, 0, 0.2);" id="myTable2">
-                    <thead>
-                        <tr class="text-center" style="background-color: rgba(255, 255, 255, 0.137);">
-                            
-                            <th colspan="7" style="text-align: center;">Cr. Note Details</th>
-                            <th rowspan="2" style="text-align: center;">Tax Rate</th>
-                            <th rowspan="2" style="text-align: center;">Cess Rate</th>
-                            <th rowspan="2" style="text-align: center;">Taxable Value</th>
-                            <th colspan="4" style="text-align: center;">Amount</th>
-                            <th rowspan="2" style="text-align: center;">Place Of Supply(Name Of State)
-                            </th>
-                        </tr>
-                        <tr class="text-center" style="background-color: rgba(255, 255, 255, 0.137);">
-                            <th rowspan="2" style="text-align: center;">GSTIN/UIN</th>
-                            <th style="text-align: center;">Party Name</th>
-                            <th style="text-align: center;">Invoice No</th>
-                            <th style="text-align: center;">Invoice Date</th>
-                            <th style="text-align: center;">Note No.</th>
-                            <th style="text-align: center;">Note Date</th>
-                            <th style="text-align: center;">Value</th>
-                            
-                            <th style="text-align: center;">Integrated Tax</th>
-                            <th style="text-align: center;">Central Tax</th>
-                            <th style="text-align: center;">State/UT Tax</th>
-                            <th style="text-align: center;">Cess</th>
-                        
-                        </tr>
-                        </thead>
-                    </table>
-                        </div>
+                        <table class="table2excel  table table-responsive-md mt-4 table-hover table-bordered"
+                            style="background-color: rgba(0, 0, 0, 0.2);" id="myTable2">
+                            <thead>
+                                <tr class="text-center" style="background-color: rgba(255, 255, 255, 0.137);">
+
+                                    <th colspan="7" style="text-align: center;">Cr. Note Details</th>
+                                    <th rowspan="2" style="text-align: center;">Tax Rate</th>
+                                    <th rowspan="2" style="text-align: center;">Cess Rate</th>
+                                    <th rowspan="2" style="text-align: center;">Taxable Value</th>
+                                    <th colspan="4" style="text-align: center;">Amount</th>
+                                    <th rowspan="2" style="text-align: center;">Place Of Supply(Name Of State)
+                                    </th>
+                                </tr>
+                                <tr class="text-center" style="background-color: rgba(255, 255, 255, 0.137);">
+                                    <th rowspan="2" style="text-align: center;">GSTIN/UIN</th>
+                                    <th style="text-align: center;">Party Name</th>
+                                    <th style="text-align: center;">Invoice No</th>
+                                    <th style="text-align: center;">Invoice Date</th>
+                                    <th style="text-align: center;">Note No.</th>
+                                    <th style="text-align: center;">Note Date</th>
+                                    <th style="text-align: center;">Value</th>
+
+                                    <th style="text-align: center;">Integrated Tax</th>
+                                    <th style="text-align: center;">Central Tax</th>
+                                    <th style="text-align: center;">State/UT Tax</th>
+                                    <th style="text-align: center;">Cess</th>
+
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -274,32 +266,66 @@
 <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 <script>
+    var table = document.getElementById("myTable");
 
-    $('.inputdate').datepicker({
-        changeMonth: true,
-        changeYear: true,
-        showButtonPanel: true,
-        dateFormat: 'MM yy',
-        minDate: new Date(2020, 0),  // Year, Index of Month (Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec)
-        maxDate: new Date(2023, 11),  // Year, Index of Month (Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec)
+    var fromDate;
+    $('#in1').on('change', function () {
+        fromDate = $(this).val();
+        $('#in2').prop('min', function () {
+            return fromDate
+        })
+        var startDate = new Date(document.getElementById("in1").value);
+        // var endDate = document.getElementById("in2").value;
+        var rows = table.getElementsByTagName("tr");
 
-        // onClose: function(dateText, inst) { 
-        //     var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
-        //     var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
-        //     $(this).datepicker('setDate', new Date(year, month, 1));
-        // }
-    }).focus(function () {
-        var thisCalendar = $(this);
-        // $('.ui-datepicker-calendar').detach();
-        $(document).on("click", ".ui-datepicker-close", function () {
-            var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
-            var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
-            thisCalendar.datepicker("option", "dateFormat", "MM yy");
+        for (var i = 2; i < rows.length; i++) {
+            var row = rows[i];
+            var dateCell = row.cells[3];
+            var rowDate = new Date(dateCell.textContent);
 
-            thisCalendar.datepicker('setDate', new Date(year, month, 1));
-        });
-    });
-        //
+            if (rowDate >= startDate) {
+                row.style.display = "";
+            } else {
+                row.style.display = "none";
+            }
+        }
+    })
+    var toDate;
+    $('#in2').on('change', function () {
+        toDate = $(this).val();
+        $('#in1').prop('max', function () {
+            return toDate
+        })
+        var endDate = new Date(document.getElementById("in2").value);
+        var rows = table.getElementsByTagName("tr");
+
+        for (var i = 2; i < rows.length; i++) {
+            var row = rows[i];
+            var dateCell = row.cells[3];
+            var rowDate = new Date(dateCell.textContent);
+
+            if (rowDate <= endDate) {
+                row.style.display = "";
+            } else {
+                row.style.display = "none";
+            }
+        }
+    })
+    // var startDate = document.getElementById("in1").value;
+    // var endDate = document.getElementById("in2").value;
+    // var rows = table.getElementsByTagName("tr");
+
+    // for (var i = 2; i < rows.length; i++) {
+    //     var row = rows[i];
+    //     var dateCell = row.cells[3];
+    //     var rowDate = new Date(dateCell.textContent);
+
+    //     if (rowDate >= startDate && rowDate <= endDate) {
+    //         row.style.display = "";
+    //     } else {
+    //         row.style.display = "none";
+    //     }
+    // }
 </script>
 {% endif %}
 {% endblock %}

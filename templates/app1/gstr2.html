@@ -11,13 +11,8 @@
 
 <style>
     #ui-datepicker-div {
-        width: 15rem;
-        left: 600px;
-        font-size: 1rem;
-    }
-
-    .ui-datepicker-title {
-        font-size: .8rem
+        width: 20rem;
+        left: 632px;
     }
 
     .ui-datepicker-calendar {
@@ -25,26 +20,12 @@
     }
 
     .datepicker {
-        width: 20rem;
-        /* display: grid; */
+        margin-top: 1rem;
+        display: grid;
         justify-items: center;
-        border: 1px solid black;
-    }
-
-    .datepicker input {
-        outline: none;
-        border: none;
-        line-height: 1em;
-        font-size: 1rem;
-    }
-
-    .datepicker label {
-        font-size: 1rem;
-        color: rgb(66, 66, 66);
     }
 
     select>option {
-
         background-color: rgb(212, 212, 212);
     }
 
@@ -61,19 +42,14 @@
     .ui-datepicker .ui-datepicker-buttonpane button {
         color: white;
         background: black;
-        font-size: .8rem;
     }
 
-    /* .ui-datepicker .ui-datepicker-buttonpane button:hover {
-            color: white;
-            background: rgb(234, 176, 0);
-        } */
-
-    .monthYearPicker {
-        font-size: 1rem;
-        height: 1.5rem;
-        width: 12rem;
+    .ui-datepicker .ui-datepicker-buttonpane button:hover {
+        color: rgb(0, 0, 0);
+        background: rgb(177, 177, 177);
     }
+
+ 
     .bar {
         align-items: center;
         display: flex;
@@ -107,13 +83,13 @@
                 <div class=" left">
                     <div class="px-2">
                         <label style="text-align:left ">From</label><br>
-                        <input readonly name="FromDate" class="inputdate form-control"
-                            placeholder=" From month/year">
+                        <input  name="FromDate" class="inputdate form-control"  id="in1"
+                            type="date">
                     </div>
                     <div  class="px-2">
                         <label style="text-align:left ">To</label><br>
-                        <input readonly name="ToDate" class="inputdate form-control"
-                            placeholder=" From month/year">
+                        <input  name="ToDate" class="inputdate form-control" id="in2"
+                        type="date">
                     </div>
 
                 </div>
@@ -188,35 +164,24 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
 
 
-<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
-<script src="//code.jquery.com/jquery-1.12.4.js"></script>
-<script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
     <script>
+        var fromDate;
+    $('#in1').on('change', function () {
+        fromDate = $(this).val();
+        $('#in2').prop('min', function () {
+            return fromDate
+        })
+    })
+    var toDate;
+    $('#in2').on('change', function () {
+        toDate = $(this).val();
+        $('#in1').prop('max', function () {
+            return toDate
+        })
+    })
 
-        $('.inputdate').datepicker( {
-            changeMonth: true,
-            changeYear: true,
-            showButtonPanel: true,
-            dateFormat: 'MM yy',
-            minDate: new Date(2020, 0),  // Year, Index of Month (Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec)
-            maxDate: new Date(2023, 11),  // Year, Index of Month (Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec)
 
-            // onClose: function(dateText, inst) { 
-            //     var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
-            //     var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
-            //     $(this).datepicker('setDate', new Date(year, month, 1));
-            // }
-        }).focus(function(){
-                var thisCalendar = $(this);
-                // $('.ui-datepicker-calendar').detach();
-                $(document).on("click", ".ui-datepicker-close",function() {
-                    var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
-                    var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
-                    thisCalendar.datepicker('setDate', new Date(year, month, 1));
-                });
-            });
-        // 
 </script>
 {% endif %}
 {% endblock %}

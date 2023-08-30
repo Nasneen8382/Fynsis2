@@ -37871,8 +37871,16 @@ def search_retinvoice(request):
 # ====================================================
 
 def gstrr1(request):
-    sale=invoice.objects.all()
-    return render(request,'app1/gstrr1.html',{'sale':sale})        
+    if 'uid' in request.session:
+        if request.session.has_key('uid'):
+            uid = request.session['uid']
+        else:
+            return redirect('/')
+        cmp1 = company.objects.get(id=request.session['uid'])
+        customer = customer.objects.filter(cid=cmp1)
+        sale=invoice.objects.all()
+
+        return render(request,'app1/gstrr1.html',{'sale':sale,'cmp1':cmp1,'customer':customer})        
 
 def gstr2(request):
     return render(request,'app1/gstr2.html')     

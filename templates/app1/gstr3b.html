@@ -60,19 +60,11 @@
     }
 
     .ui-datepicker .ui-datepicker-buttonpane button:hover {
-        color: white;
-        background: rgb(234, 176, 0);
+        color: rgb(0, 0, 0);
+        background: rgb(177, 177, 177);
     }
 
-    .monthYearPicker {
-        font-size: 1rem;
-        height: 2rem;
-        width: 20rem;
-    }
-
-    .monthYearPara {
-        color: rgb(255, 255, 255);
-    }
+    
 </style>
 
 <div class="page-content">
@@ -89,20 +81,21 @@
     </div>
     <!-- <div id="datepicker"><input id="inputdate" class="inputdate" type="text" readonly></div> -->
 
-
     <div class="card radius-15">
         <div class="card-body">
             <div class="bar">
                 <div class=" left">
                     <div class="px-2">
                         <label style="text-align:left ">From</label><br>
-                        <input readonly name="FromDate" class="inputdate form-control" type="text" placeholder=" From month/year">
-                    </div>
-                    <div class="px-2">
-                        <label style="text-align:left ">To</label><br>
-                        <input  name="ToDate" class="inputdate form-control" placeholder=" From month/year">
+                        <input  name="FromDate" class="inputdate form-control" type="date"
+                             id="in1">
                     </div>
 
+                    <div class="px-2">
+                        <label style="text-align:left ">To</label><br>
+                        <input  name="ToDate" type="date" class="inputdate form-control"
+                            id="in2">
+                    </div>
 
                 </div>
                 <div class="right">
@@ -429,52 +422,22 @@
         </div>
     </div>
 </div>
-<!-- <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
-<script src="//code.jquery.com/jquery-1.12.4.js"></script>
-<script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script> -->
-<link href="https://code.jquery.com/ui/jquery-ui-git.css" rel="stylesheet" type="text/css" />
-<script src="https://code.jquery.com/jquery-git.js"></script>
-<script src="https://code.jquery.com/ui/jquery-ui-git.js"></script>
 <script>
-// function set(m,y){
-//             console.log(y);
-//             $('.inputdate').datepicker("setDate",new Date(2021, 5))
-//          }
-    $('.inputdate').datepicker({
-        changeMonth: true,
-        changeYear: true,
-        showButtonPanel: true,
-        dateFormat: 'MM yy',
-        minDate: new Date(2020, 0),  // Year, Index of Month (Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec)
-        maxDate: new Date(2023, 11),  // Year, Index of Month (Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec)
+        var fromDate;
+    $('#in1').on('change', function () {
+        fromDate = $(this).val();
+        $('#in2').prop('min', function () {
+            return fromDate
+        })
+    })
+    var toDate;
+    $('#in2').on('change', function () {
+        toDate = $(this).val();
+        $('#in1').prop('max', function () {
+            return toDate
+        })
+    })
 
-        // onClose: function(dateText, inst) { 
-        //     var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
-        //     var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
-        // var selectedDate = new Date(year, month, 1);
-        // console.log(month);
-        // console.log(this);
-        //     this.datepicker('setDate', new Date(year, month, 1));
-        // }
-    }).focus(function () {
-        var thisCalendar = $(this);
-        $('.ui-datepicker-calendar').detach();
-        $(document).on("click", ".ui-datepicker-close", function () {
-            var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
-            var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
-            
-            console.log(month);
-            console.log(year);
-            var selectedDate = new Date(year, month, 1);
-            document.getElementById("inp").innerHTML=selectedDate;
-            // $('.inputdate').datepicker("setDate","000000")  
-            // set(month,year);
-            // thisCalendar.datepicker("setDate", selectedDate);
-
-
-        });
-    });
-    $('.inputdate').datepicker("setDate",selectedDate)    
 </script>
 {% endif %}
 {% endblock %}
