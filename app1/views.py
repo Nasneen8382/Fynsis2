@@ -37877,15 +37877,28 @@ def gstrr1(request):
         else:
             return redirect('/')
         cmp1 = company.objects.get(id=request.session['uid'])
-        customer = customer.objects.filter(cid=cmp1)
+        customr = customer.objects.get(cid=cmp1)
+        cn = salescreditnote.objects.all()
         sale=invoice.objects.all()
 
-        return render(request,'app1/gstrr1.html',{'sale':sale,'cmp1':cmp1,'customer':customer})        
+        return render(request,'app1/gstrr1.html',{'sale':sale,'cmp1':cmp1,'customer':customr,'cn':cn})        
 
 def gstr2(request):
-    return render(request,'app1/gstr2.html')     
+    if 'uid' in request.session:
+        if request.session.has_key('uid'):
+            uid = request.session['uid']
+        else:
+            return redirect('/')
+        cmp1 = company.objects.get(id=request.session['uid'])
+        return render(request,'app1/gstr2.html',{'cmp1':cmp1})     
 
 def gstr9(request):
-    return render(request,'app1/gstr9.html')        
+    if 'uid' in request.session:
+        if request.session.has_key('uid'):
+            uid = request.session['uid']
+        else:
+            return redirect('/')
+        cmp1 = company.objects.get(id=request.session['uid'])
+        return render(request,'app1/gstr9.html',{'cmp1':cmp1})        
    
 

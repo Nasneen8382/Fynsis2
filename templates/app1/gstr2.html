@@ -69,7 +69,12 @@
         <div class="card-body">
             <div class="card-title">
                 <center>
-                    <h2 class="mb-0">GSTR-2</h2>
+                    <h6>{{cmp1.cname}}</h6>
+                    <h2 class="mb-0">GSTR-2 REPORT</h2>
+                    <div class="display">
+                        <div id="d1"  style="display: inline-block;"></div>
+                        <div id="d2"  style="display: inline-block;"></div>
+                    </div>
                 </center>
                 <hr>
             </div>
@@ -172,6 +177,9 @@
         $('#in2').prop('min', function () {
             return fromDate
         })
+        var tdate= new Date(fromDate)
+        var options = { year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById("d1").innerHTML = tdate.toLocaleDateString(undefined, options);
     })
     var toDate;
     $('#in2').on('change', function () {
@@ -179,6 +187,9 @@
         $('#in1').prop('max', function () {
             return toDate
         })
+        var tdate= new Date(toDate)
+        var options = { year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById("d2").innerHTML = "  To  "+tdate.toLocaleDateString(undefined, options);
     })
 
 

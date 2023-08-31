@@ -41,7 +41,9 @@
         <div class="card-body">
             <div class="card-title">
                 <center>
+                    <h6>{{cmp1.cname}}</h6>
                     <h2 class="mb-0">GSTR-9</h2>
+                    <p id="id1"></p>
                 </center>
                 <hr>
             </div>
@@ -1456,6 +1458,7 @@
 
         
             dynamicCell.innerHTML = selectedValue;
+            document.getElementById("id1").innerHTML=selectedValue;
         
     });
 
