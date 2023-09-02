@@ -1,6 +1,7 @@
 {% extends 'app1/base.html' %}
 {% block body %}
 {% load static %}
+{% load mathfilters %}
 {% if user.is_authenticated %}
 <!-- Include jQuery -->
 <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
@@ -58,7 +59,7 @@
         justify-content: space-between;
     }
 
-    .bar .left{
+    .bar .left {
         display: grid;
         grid-template-columns: 1fr 1fr;
     }
@@ -84,10 +85,10 @@
                     <h6>{{cmp1.cname}}</h6>
                     <h2 class="mb-0">GSTR-1 Report</h2>
                     <div class="display">
-                        <div id="d1"  style="display: inline-block;"></div>
-                        <div id="d2"  style="display: inline-block;"></div>
+                        <div id="d1" style="display: inline-block;"></div>
+                        <div id="d2" style="display: inline-block;"></div>
                     </div>
-                    
+
                 </center>
                 <hr>
             </div>
@@ -100,13 +101,11 @@
                 <div class=" left">
                     <div class="px-2">
                         <label style="text-align:left ">From</label><br>
-                        <input name="FromDate" class="inputdate form-control"  id="in1"
-                            type="date">
+                        <input name="FromDate" class="inputdate form-control" id="in1" type="date">
                     </div>
                     <div class="px-2">
                         <label style="text-align:left ">To</label><br>
-                        <input name="ToDate" class="inputdate form-control" id="in2"
-                            type="date">
+                        <input name="ToDate" class="inputdate form-control" id="in2" type="date">
                     </div>
 
                 </div>
@@ -269,12 +268,22 @@
                                     <td>{{i.taxamount}}</td>
                                     <td>0</td>
                                     <td>{{i.subtotal}}</td>
-                                    <td id="igst">{{i.taxamount}}</td>
-                                    <td id="cgst"></td>
-                                    <td id="sgst"></td>
+                                    {% if i.supply == cmp1.state %}
                                     <td>0</td>
-                                    <td>{{i.supply}}</td>
+                                    <td>{{ i.taxamount|div:2 }}</td>
+                                    <td>{{ i.taxamount|div:2 }}</td>
+                                    {% else %}
+                                    <td>{{i.taxamount}}</td>
+                                    <td>0</td>
+                                    <td>0</td>
+                                    {% endif %}
+
+
+                                    
+                                    <td>0</td>
+                                    <td id="sply">{{i.supply}}</td>
                                 </tr>
+                                
                                 {% endfor %}
                             </tbody>
                         </table>
@@ -286,18 +295,7 @@
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
 
-<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
-<script src="//code.jquery.com/jquery-1.12.4.js"></script>
-<script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<script>
-    $(document).ready(function(){
-            
 
-                $("#sgst").html($("#igst").html()/2);
-                $("#cgst").html($("#igst").html()/2);
-            
-        });
-</script>
 <script>
     var table = document.getElementById("myTable");
 
@@ -322,7 +320,7 @@
                 row.style.display = "none";
             }
         }
-        var tdate= new Date(fromDate)
+        var tdate = new Date(fromDate)
         var options = { year: 'numeric', month: 'long', day: 'numeric' };
         document.getElementById("d1").innerHTML = tdate.toLocaleDateString(undefined, options);
     })
@@ -346,26 +344,12 @@
                 row.style.display = "none";
             }
         }
-        var tdate= new Date(toDate)
+        var tdate = new Date(toDate)
         var options = { year: 'numeric', month: 'long', day: 'numeric' };
-        document.getElementById("d2").innerHTML ="  To  "+ tdate.toLocaleDateString(undefined, options);
+        document.getElementById("d2").innerHTML = "  To  " + tdate.toLocaleDateString(undefined, options);
     })
-    
-    // var startDate = document.getElementById("in1").value;
-    // var endDate = document.getElementById("in2").value;
-    // var rows = table.getElementsByTagName("tr");
 
-    // for (var i = 2; i < rows.length; i++) {
-    //     var row = rows[i];
-    //     var dateCell = row.cells[3];
-    //     var rowDate = new Date(dateCell.textContent);
-
-    //     if (rowDate >= startDate && rowDate <= endDate) {
-    //         row.style.display = "";
-    //     } else {
-    //         row.style.display = "none";
-    //     }
-    // }
+   
 </script>
 {% endif %}
 {% endblock %}

@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'app1',
     'django_social_share',
+    'mathfilters',
    
     
 ]
