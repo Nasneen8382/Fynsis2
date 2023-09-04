@@ -31446,7 +31446,7 @@ def gstr3b(request):
         total2 = 0
         
         for i in tax1 :
-            t0 += round(i.payments)
+            t0 += round(int(i.payments))
 
         total2 = t0
 
@@ -31454,7 +31454,7 @@ def gstr3b(request):
         total3 = 0
         
         for i in tax2 :
-            t02 += round(i.amount)
+            t02 += round(int(i.amount))
 
         total3 = t02
 
@@ -31462,7 +31462,7 @@ def gstr3b(request):
         total4 = 0
         
         for i in tax3 :
-            t03 += round(i.amount)
+            t03 += round(int(i.amount))
         
         total4 = t03
 
@@ -31475,7 +31475,7 @@ def gstr3b(request):
         
         for i in tax :
             if i.account == 'Output CGST':
-                t2 += round(i.payments)
+                t2 += round(int(i.payments))
         
         cgst = t2
 
@@ -31484,7 +31484,7 @@ def gstr3b(request):
         
         for i in tax :
             if i.account == 'Output SGST':
-                t4 += round(i.payments)
+                t4 += round(int(i.payments))
         
         sgst = t4
 
@@ -31493,7 +31493,7 @@ def gstr3b(request):
         
         for i in tax :
             if i.account == 'Output IGST':
-                t6 += round(i.payments)
+                t6 += round(int(i.payments))
         
         igst = t6
 
@@ -31502,7 +31502,7 @@ def gstr3b(request):
         
         for i in tax :
             if i.account == 'TDS Receivable':
-                t8 += round(i.payments)
+                t8 += round(int(i.payments))
         
         tds = t8
 
@@ -31512,7 +31512,7 @@ def gstr3b(request):
         for i in tax :
             if i.account == 'Output CGST':
                 if i.payments == '0':
-                    t10 += round(i.payments)
+                    t10 += round(int(i.payments))
         
         cgst1 = t10
 
@@ -31522,7 +31522,7 @@ def gstr3b(request):
         for i in tax :
             if i.account == 'Output SGST':
                 if i.payments == '0':
-                    t12 += round(i.payments)
+                    t12 += round(int(i.payments))
         
         sgst1 = t12
 
@@ -31532,7 +31532,7 @@ def gstr3b(request):
         for i in tax :
             if i.account == 'Output IGST':
                 if i.payments == '0':
-                    t14 += round(i.payments)
+                    t14 += round(int(i.payments))
         
         igst1 = t14
 
@@ -31542,7 +31542,7 @@ def gstr3b(request):
         for i in tax :
             if i.account == 'TDS Receivable':
                 if i.payments == '0':
-                    t16 += round(i.payments)
+                    t16 += round(int(i.payments))
         
         tds1 = t16
 
@@ -31551,7 +31551,7 @@ def gstr3b(request):
         
         for i in tax :
             if i.account == 'Input CGST':
-                t1 += round(i.payments)
+                t1 += round(int(i.payments))
         
         cgst2 = t1
 
@@ -31560,7 +31560,7 @@ def gstr3b(request):
         
         for i in tax :
             if i.account == 'Input SGST':
-                t3 += round(i.payments)
+                t3 += round(int(i.payments))
         
         sgst2 = t3
 
@@ -31569,7 +31569,7 @@ def gstr3b(request):
         
         for i in tax :
             if i.account == 'Input IGST':
-                t5 += round(i.payments)
+                t5 += round(int(i.payments))
         
         igst2 = t5
 
@@ -31578,7 +31578,7 @@ def gstr3b(request):
         
         for i in tax :
             if i.account == 'TDS Payable':
-                t7 += round(i.payments)
+                t7 += round(int(i.payments))
 
         tds2 = t7
 
@@ -36568,6 +36568,8 @@ def create_credit(request):
         cmp1 = company.objects.get(id=request.session['uid'])
         if request.method == 'POST':
             debit_no = '1000'
+                        # c= customer.objects.get(id=request.POST['vendor'])
+
             pdebit = salescreditnote(customer = request.POST['vendor'],
                                     address = request.POST['address'],
                                     email=request.POST['email'],
@@ -37877,7 +37879,7 @@ def gstrr1(request):
         else:
             return redirect('/')
         cmp1 = company.objects.get(id=request.session['uid'])
-        customr = customer.objects.get(cid=cmp1)
+        customr = customer.objects.filter(cid=cmp1)
         cn = salescreditnote.objects.all()
         sale=invoice.objects.all()
 
