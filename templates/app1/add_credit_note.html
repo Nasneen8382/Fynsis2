@@ -156,7 +156,7 @@
                                             
                                             <option selected disabled>Select Customer</option>
                                             {% for v in vndr %}
-                                            <option value="{{ v.id }}">{{ v.firstname }} {{ v.lastname }}</option>
+                                            <option value="{{ v.firstname }} {{ v.lastname }}">{{ v.firstname }} {{ v.lastname }}</option>
                                             {% endfor %}
                                         </select>
                                         <a class="btn btn-outline-secondary ml-1" role="button" data-target="#customercreation" data-toggle="modal">+</a>

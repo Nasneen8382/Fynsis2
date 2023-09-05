@@ -3386,6 +3386,20 @@ def invindex(request):
 def invcreate2(request):
     if request.method == 'POST':
         cmp1 = company.objects.get(id=request.session["uid"])
+        name = request.POST['customername']
+        x = name.split()
+        x.append(" ")
+        a = x[0]
+        b = x[1]
+        print(b)
+        if x[2] is not None:
+            b = x[1] + " " + x[2]
+            custobject = customer.objects.get(firstname=a, lastname=b)
+        else:
+            custobject = customer.objects.get(firstname=a, lastname=b)
+        gst = custobject.gstin                                          # updated by Nasneen O M
+        
+        
         inv2 = invoice(customername=request.POST['customername'], email=request.POST['email'],
                        invoiceno='1000',
                        invoicedate=request.POST['invoicedate'],
@@ -3402,7 +3416,7 @@ def invcreate2(request):
                        grandtotal=request.POST['grandtotal'],
                        amtrecvd=request.POST['amtrecvd'], 
                        baldue=request.POST['baldue'],
-
+                       gstin=gst
 
                        )
         if len(request.FILES) != 0:
@@ -36568,8 +36582,18 @@ def create_credit(request):
         cmp1 = company.objects.get(id=request.session['uid'])
         if request.method == 'POST':
             debit_no = '1000'
-                        # c= customer.objects.get(id=request.POST['vendor'])
+            name = request.POST['vendor']
+            x = name.split()
+            x.append(" ")
+            a = x[0]
+            b = x[1]
+            if x[2] is not None:
+                b = x[1] + " " + x[2]
+                custobject = customer.objects.get(firstname=a, lastname=b)
 
+            else:
+                custobject = customer.objects.get(firstname=a, lastname=b)
+            gstin = custobject.gstin                                           #updated by Nasneen O M
             pdebit = salescreditnote(customer = request.POST['vendor'],
                                     address = request.POST['address'],
                                     email=request.POST['email'],
@@ -36579,7 +36603,8 @@ def create_credit(request):
                                     subtotal=request.POST['subtotal'],
                                     taxamount=request.POST['taxamount'],
                                     grandtotal=request.POST['grandtotal'],
-                                    cid=cmp1
+                                    cid=cmp1,
+                                    gstin =gstin
                                 )
             pdebit.save()
             pdebit.credit_no = int(pdebit.credit_no) + pdebit.screditid

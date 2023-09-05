@@ -362,6 +362,7 @@ class invoice(models.Model):
 
 
     gsttype = models.CharField(max_length=100,null=True)
+    gstin = models.CharField(max_length=100, default='')
 
 class invoice_item(models.Model):
     invoice = models.ForeignKey(invoice,on_delete=models.CASCADE)
@@ -1633,7 +1634,6 @@ class salescreditnote(models.Model):
     cid = models.ForeignKey(company, on_delete=models.CASCADE,null=True)
     credit_no = models.IntegerField(default=1000)
     customer = models.CharField(max_length=100,null=True)
-    custom= models.ForeignKey(customer, on_delete=models.CASCADE,null=True)
     address = models.TextField(null=True)
     creditdate = models.DateField(null=True)
     email = models.CharField(max_length=100,null=True)
@@ -1642,6 +1642,7 @@ class salescreditnote(models.Model):
     subtotal = models.CharField(max_length=100,null=True)
     taxamount = models.CharField(max_length=100,null=True)
     grandtotal = models.CharField(max_length=100,null=True)
+    gstin = models.CharField(max_length=100, default='')
 
 class salescreditnote1(models.Model):
     scredit = models.ForeignKey(salescreditnote, on_delete=models.CASCADE,null=True)
