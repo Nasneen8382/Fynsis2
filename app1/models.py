@@ -358,11 +358,12 @@ class invoice(models.Model):
     IGST = models.CharField(max_length=100,default=0, null=True)
     CGST = models.CharField(max_length=100,default=0, null=True)
     SGST = models.CharField(max_length=100,default=0, null=True)
-    TCS = models.CharField(max_length=100,default=0, null=True)
+    # TCS = models.CharField(max_length=100,default=0, null=True)
+    taxamount = models.CharField(max_length=100,default=0, null=True)
+    shipping_charge = models.CharField(max_length=100,default=0, null=True)
 
 
     gsttype = models.CharField(max_length=100,null=True)
-    gstin = models.CharField(max_length=100, default='')
 
 class invoice_item(models.Model):
     invoice = models.ForeignKey(invoice,on_delete=models.CASCADE)
@@ -1640,9 +1641,10 @@ class salescreditnote(models.Model):
     supply = models.CharField(max_length=150,null=True)
     billno = models.CharField(max_length=100,null=True)
     subtotal = models.CharField(max_length=100,null=True)
+    shipping_charge = models.CharField(max_length=100,null=True,blank=True)
     taxamount = models.CharField(max_length=100,null=True)
     grandtotal = models.CharField(max_length=100,null=True)
-    gstin = models.CharField(max_length=100, default='')
+    description = models.CharField(max_length=255,null=True)
 
 class salescreditnote1(models.Model):
     scredit = models.ForeignKey(salescreditnote, on_delete=models.CASCADE,null=True)

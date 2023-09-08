@@ -3389,38 +3389,32 @@ def invcreate2(request):
         name = request.POST['customername']
         x = name.split()
         x.append(" ")
-        a = x[0]
-        b = x[1]
-        print(b)
-        if x[2] is not None:
-            b = x[1] + " " + x[2]
-            custobject = customer.objects.get(firstname=a, lastname=b)
-        else:
-            custobject = customer.objects.get(firstname=a, lastname=b)
+        a = x[1]
+        b = ' '.join(x[2:]) 
+        custobject = customer.objects.get(firstname=a, lastname=b)
+
         gst = custobject.gstin                                          # updated by Nasneen O M
-        
-        
-        inv2 = invoice(customername=request.POST['customername'], email=request.POST['email'],
+        inv2 = invoice(customername=request.POST.get('customername'), email=request.POST.get('email'),
                        invoiceno='1000',
-                       invoicedate=request.POST['invoicedate'],
-                       terms=request.POST['terms'], duedate=request.POST['duedate'], bname=request.POST['bname'],
-                       placosupply=request.POST['placosupply'],
+                       invoicedate=request.POST.get('invoicedate'),
+                       terms=request.POST.get('terms'), duedate=request.POST.get('duedate'), bname=request.POST.get('bname'),
+                       placosupply=request.POST.get('placosupply'),
 
                        cid=cmp1,
-                        subtotal=float(request.POST['subtotal']),
-                       note = request.POST['Note'],
-                       IGST = request.POST['IGST'],
-                       CGST = request.POST['CGST'],
-                       SGST = request.POST['SGST'],
-                       TCS = request.POST['TCS'],
-                       grandtotal=request.POST['grandtotal'],
-                       amtrecvd=request.POST['amtrecvd'], 
-                       baldue=request.POST['baldue'],
-                       gstin=gst
-
-                       )
+                        subtotal=float(request.POST.get('subtotal')),
+                       note = request.POST.get('Note'),
+                       IGST = request.POST.get('igst'),
+                       CGST = request.POST.get('cgst'),
+                       SGST = request.POST.get('sgst'),
+                       #TCS = request.POST['TCS'],
+                       shipping_charge = request.POST.get("ship"),
+                       taxamount = request.POST.get("taxamount"),
+                       grandtotal=request.POST.get('grandtotal'),
+                       amtrecvd=request.POST.get('amtrecvd'), 
+                       baldue=request.POST.get('grandtotal'),)
+        
         if len(request.FILES) != 0:
-            inv2.file=request.FILES['file'] 
+            inv2.file=request.FILES.get('file')
         orderno = 'OR'+str(random.randint(1111111,9999999))
         while invoice.objects.filter(invoice_orderno=orderno ) is None:
             orderno = 'OR'+str(random.randint(1111111,9999999))
@@ -3454,7 +3448,7 @@ def invcreate2(request):
         bs3.payments = inv2.grandtotal
         bs3.save()
 
-        placosupply=request.POST['placosupply']
+        placosupply=request.POST.get('placosupply')
         if placosupply == cmp1.state:
             bs4=balance_sheet()
             bs4.details = inv2.customername
@@ -3509,10 +3503,10 @@ def invcreate2(request):
         bs7.details2 = inv2.invoice_orderno
         bs7.date = inv2.invoicedate
         bs7.amount = inv2.grandtotal
-        bs7.payments = inv2.TCS
+        # bs7.payments = inv2.TCS
         bs7.save()
 
-        grandtotal = float(request.POST['grandtotal'])
+        grandtotal = float(request.POST.get('grandtotal'))
         acc = accounts1.objects.get(
             name='Account Receivable(Debtors)', cid=cmp1)
         if grandtotal != 0:
@@ -3531,39 +3525,44 @@ def invcreate2(request):
         except:
             pass
 
-        placosupply=request.POST['placosupply']
+        placosupply=request.POST.get('placosupply')
         if placosupply == cmp1.state:
-            CGST = float(request.POST['CGST'])
+            CGST = 0 if request.POST.get('CGST') is None else float(request.POST.get('CGST'))
             accocgst = accounts1.objects.get(
                 name='Output CGST', cid=cmp1)
             accocgst.balance = round(float(accocgst.balance + CGST), 2)
             accocgst.save()
-            SGST = float(request.POST['SGST'])
+            SGST = 0 if request.POST.get('SGST') is None else float(request.POST.get('SGST'))
             accosgst = accounts1.objects.get(
                 name='Output SGST', cid=cmp1)
             accosgst.balance = round(float(accosgst.balance + SGST), 2)
             accosgst.save()
         else:
-            IGST = float(request.POST['IGST'])
+            IGST = 0 if request.POST.get('IGST') is None else float(request.POST.get('IGST'))
             accoigst = accounts1.objects.get(
                 name='Output IGST', cid=cmp1)
             accoigst.balance = round(
                 float(accoigst.balance + IGST), 2)
             accoigst.save()
 
-        TCS = float(request.POST['TCS'])
-        accont = accounts1.objects.get(
-            name='TDS Receivable',cid=cmp1)
-        accont.balance = accont.balance - TCS
-        accont.save()
+        # TCS = float(request.POST['TCS'])
+        # accont = accounts1.objects.get(
+        #     name='TDS Receivable',cid=cmp1)
+        # accont.balance = accont.balance - TCS
+        # accont.save()
 
         product = request.POST.getlist("product[]")
         hsn  = request.POST.getlist("hsn[]")
-        description = request.POST.getlist("description[]")
+        # description = request.POST.getlist("description[]")
         qty = request.POST.getlist("qty[]")
         price = request.POST.getlist("price[]")
         
-        tax = request.POST.getlist("tax[]")
+        discount = request.POST.getlist("discount[]")
+        if request.POST.get('placosupply') == cmp1.state:
+                tax = request.POST.getlist("tax1[]")
+        else:
+                tax = request.POST.getlist("tax2[]")
+        # print(tax)
         total = request.POST.getlist("total[]")
 
         invoiceid=invoice.objects.get(invoiceid =inv2.invoiceid)
@@ -3575,21 +3574,21 @@ def invcreate2(request):
             mapped=zip(product,qty)
             mapped=list(mapped)
             for ele in mapped:
-                iAdd,created = itemstock.objects.get_or_create(items = ele[0],qty = ele[1],transactions="Invoice",details=dl,
+                iAdd = itemstock.objects.create(items = ele[0],qty = ele[1],transactions="Invoice",details=dl,
                 date=dt,inv=invoiceid,cid=cmp1)
 
-        if len(product)==len(hsn)==len(description)==len(qty)==len(price)==len(tax)==len(total) and product and hsn and description and qty and price and tax and total:
-            mapped=zip(product,hsn,description,qty,price,tax,total)
+        if len(product)==len(hsn)==len(qty)==len(price)==len(tax)==len(discount)==len(total) and product and hsn and discount and qty and price and tax and total:
+            mapped=zip(product,hsn, qty,price,tax,discount,total)
             mapped=list(mapped)
             for ele in mapped:
-                invoiceAdd,created = invoice_item.objects.get_or_create(product = ele[0],hsn=ele[1],description=ele[2],
-                qty=ele[3],price=ele[4],tax=ele[5],total=ele[6],invoice=invoiceid,cid=cmp1)
+                invoiceAdd  = invoice_item.objects.create(product = ele[0],hsn=ele[1],qty=ele[2],
+                price=ele[3],tax=ele[4],discount=ele[5],total=ele[6],invoice=invoiceid,cid=cmp1)
 
                 itemqty1 = itemtable.objects.get(name=ele[0],cid=cmp1)
                 if itemqty1.stock != 0:
                     temp=0
                     temp = itemqty1.stock
-                    temp = temp-int(ele[3])
+                    temp = temp-int(ele[2])
                     itemqty1.stock =temp
                     itemqty1.save()
 
@@ -3597,20 +3596,22 @@ def invcreate2(request):
                 if itemqty.stockout != 0:
                     temp=0
                     temp = itemqty.stockout
-                    temp = temp+int(ele[3])
+                    temp = temp+int(ele[2])
                     itemqty.stockout =temp
                     itemqty.save()
 
                 elif itemqty.stockout == 0:
                     temp=0
                     temp = itemqty.stockout 
-                    temp = temp+int(ele[3])
+                    temp = temp+int(ele[2])
                     itemqty.stockout =temp
                     itemqty.save()
 
         return redirect('goinvoices')
     else:
         return redirect('goinvoices')
+
+
 
 @login_required(login_url='regcomp')
 def invcreate(request):
@@ -31460,7 +31461,8 @@ def gstr3b(request):
         total2 = 0
         
         for i in tax1 :
-            t0 += round(int(i.payments))
+            if i.amount is not None:
+                t0 += round(int(i.payments))
 
         total2 = t0
 
@@ -31468,7 +31470,8 @@ def gstr3b(request):
         total3 = 0
         
         for i in tax2 :
-            t02 += round(int(i.amount))
+            if i.amount is not None:
+                t02 += round(int(i.amount))
 
         total3 = t02
 
@@ -31476,7 +31479,8 @@ def gstr3b(request):
         total4 = 0
         
         for i in tax3 :
-            t03 += round(int(i.amount))
+            if i.amount is not None:
+                t03 += round(int(i.amount))
         
         total4 = t03
 
@@ -31489,7 +31493,8 @@ def gstr3b(request):
         
         for i in tax :
             if i.account == 'Output CGST':
-                t2 += round(int(i.payments))
+                if i.payments is not None:
+                    t2 += round(int(i.payments))
         
         cgst = t2
 
@@ -31498,7 +31503,8 @@ def gstr3b(request):
         
         for i in tax :
             if i.account == 'Output SGST':
-                t4 += round(int(i.payments))
+                if i.payments is not None:
+                    t4 += round(int(i.payments))
         
         sgst = t4
 
@@ -31507,7 +31513,8 @@ def gstr3b(request):
         
         for i in tax :
             if i.account == 'Output IGST':
-                t6 += round(int(i.payments))
+                if i.payments is not None:
+                    t6 += round(int(i.payments))
         
         igst = t6
 
@@ -31516,7 +31523,8 @@ def gstr3b(request):
         
         for i in tax :
             if i.account == 'TDS Receivable':
-                t8 += round(int(i.payments))
+                if i.payments is not None:
+                    t8 += round(int(i.payments))
         
         tds = t8
 
@@ -31565,7 +31573,8 @@ def gstr3b(request):
         
         for i in tax :
             if i.account == 'Input CGST':
-                t1 += round(int(i.payments))
+                if i.payments is not None:
+                    t1 += round(int(i.payments))
         
         cgst2 = t1
 
@@ -31574,7 +31583,8 @@ def gstr3b(request):
         
         for i in tax :
             if i.account == 'Input SGST':
-                t3 += round(int(i.payments))
+                if i.payments is not None:
+                    t3 += round(int(i.payments))
         
         sgst2 = t3
 
@@ -31583,7 +31593,8 @@ def gstr3b(request):
         
         for i in tax :
             if i.account == 'Input IGST':
-                t5 += round(int(i.payments))
+                if i.payments is not None:
+                    t5 += round(int(i.payments))
         
         igst2 = t5
 
@@ -31592,7 +31603,8 @@ def gstr3b(request):
         
         for i in tax :
             if i.account == 'TDS Payable':
-                t7 += round(int(i.payments))
+                if i.payments is not None:
+                    t7 += round(int(i.payments))
 
         tds2 = t7
 
@@ -36582,19 +36594,28 @@ def create_credit(request):
         cmp1 = company.objects.get(id=request.session['uid'])
         if request.method == 'POST':
             debit_no = '1000'
-            name = request.POST['vendor']
+            name = request.POST.get('customer')
+            print(name)
             x = name.split()
             x.append(" ")
-            a = x[0]
-            b = x[1]
-            if x[2] is not None:
-                b = x[1] + " " + x[2]
-                custobject = customer.objects.get(firstname=a, lastname=b)
+            a = x[1]
+            b = ' '.join(x[2:]) 
+            custobject = customer.objects.get(firstname=a, lastname=b)
 
-            else:
-                custobject = customer.objects.get(firstname=a, lastname=b)
-            gstin = custobject.gstin                                           #updated by Nasneen O M
-            pdebit = salescreditnote(customer = request.POST['vendor'],
+            gstin = custobject.gstin                                          # Nithya
+
+            # x = name.split()
+            # x.append(" ")
+            # a = x[0]
+            # b = x[1]
+            # if x[2] is not None:
+            #     b = x[1] + " " + x[2]
+            #     custobject = customer.objects.get(firstname=a, lastname=b)
+
+            # else:
+            #     custobject = customer.objects.get(firstname=a, lastname=b)
+            # gstin = custobject.gstin                                           #updated by Nasneen O M
+            pdebit = salescreditnote(customer =request.POST.get('customer'),
                                     address = request.POST['address'],
                                     email=request.POST['email'],
                                     creditdate=request.POST['debitdate'],
@@ -36604,7 +36625,7 @@ def create_credit(request):
                                     taxamount=request.POST['taxamount'],
                                     grandtotal=request.POST['grandtotal'],
                                     cid=cmp1,
-                                    gstin =gstin
+                                    
                                 )
             pdebit.save()
             pdebit.credit_no = int(pdebit.credit_no) + pdebit.screditid
@@ -36640,6 +36661,7 @@ def create_credit(request):
             return redirect('credit_note')
         return redirect('credit_note')
     return redirect('/') 
+
 
 
 @login_required(login_url='regcomp')
@@ -37904,11 +37926,44 @@ def gstrr1(request):
         else:
             return redirect('/')
         cmp1 = company.objects.get(id=request.session['uid'])
-        customr = customer.objects.filter(cid=cmp1)
+        # customr = customer.objects.filter(cid=cmp1)
         cn = salescreditnote.objects.all()
         sale=invoice.objects.all()
+        
+            
+        for c in cn:
+            name = c.customer
+            print(name)
+            x = name.split()
+            x.append(" ")
+            a = x[0]
+            b = x[1]
+            if x[2] is not None:
+                b = x[1] + " " + x[2]
+                cust = customer.objects.get(email=c.email,firstname=a, lastname=b)
+                c.gstin= cust.gstin
 
-        return render(request,'app1/gstrr1.html',{'sale':sale,'cmp1':cmp1,'customer':customr,'cn':cn})        
+            else:
+                cust = customer.objects.get(email=c.email,firstname=a, lastname=b)
+                c.gstin= cust.gstin
+            
+        for s in sale:
+            name = s.customername
+            print(name)
+            x = name.split()
+            x.append(" ")
+            a = x[0]
+            b = x[1]
+            if x[2] is not None:
+                b = x[1] + " " + x[2]
+                cust = customer.objects.get(email=s.email,firstname=a, lastname=b)
+                s.gstin= cust.gstin
+
+            else:
+                cust = customer.objects.get(email=s.email,firstname=a, lastname=b)
+                s.gstin= cust.gstin
+
+        return render(request,'app1/gstrr1.html',{'sale':sale,'cmp1':cmp1,'cn':cn})        
 
 def gstr2(request):
     if 'uid' in request.session:
