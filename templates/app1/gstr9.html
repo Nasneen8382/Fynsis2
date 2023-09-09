@@ -1384,20 +1384,21 @@
         $(document).on('click', '.btn_print', function (event) {
             console.log('print1');
             event.preventDefault();
-            var element = document.getElementById('pdf-card');
-            var opt =
-            {
-                margin: 0.5,
-                filename: 'gstr1' + '.pdf',
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2 },
-                jsPDF: { unit: 'in', format: 'a3', orientation: 'portrait' }
-            };
-            html2pdf().set(opt).from(element).save();
+            var printContents = document.getElementById("pdf-card").innerHTML;
+            var originalContents = document.body.innerHTML;
+
+            document.body.innerHTML = printContents;
+
+            window.print();
+
+            document.body.innerHTML = originalContents;
 
         });
 
     });
+</script>
+<script type="text/javascript">
+ 
     function exportAsExcel() {
         const table1 = document.getElementById('myTable1');
         const table2 = document.getElementById('myTable4'); 

@@ -3386,14 +3386,7 @@ def invindex(request):
 def invcreate2(request):
     if request.method == 'POST':
         cmp1 = company.objects.get(id=request.session["uid"])
-        name = request.POST['customername']
-        x = name.split()
-        x.append(" ")
-        a = x[1]
-        b = ' '.join(x[2:]) 
-        custobject = customer.objects.get(firstname=a, lastname=b)
-
-        gst = custobject.gstin                                          # updated by Nasneen O M
+                                      # updated by Nasneen O M
         inv2 = invoice(customername=request.POST.get('customername'), email=request.POST.get('email'),
                        invoiceno='1000',
                        invoicedate=request.POST.get('invoicedate'),
@@ -37940,12 +37933,14 @@ def gstrr1(request):
             b = x[1]
             if x[2] is not None:
                 b = x[1] + " " + x[2]
-                cust = customer.objects.get(email=c.email,firstname=a, lastname=b)
-                c.gstin= cust.gstin
+                cust = customer.objects.filter(email=c.email,firstname=a, lastname=b)
+                for i in cust:
+                    c.gstin= i.gstin
 
             else:
-                cust = customer.objects.get(email=c.email,firstname=a, lastname=b)
-                c.gstin= cust.gstin
+                cust = customer.objects.filter(email=c.email,firstname=a, lastname=b)
+                for i in cust:
+                    c.gstin= i.gstin
             
         for s in sale:
             name = s.customername
@@ -37956,12 +37951,14 @@ def gstrr1(request):
             b = x[1]
             if x[2] is not None:
                 b = x[1] + " " + x[2]
-                cust = customer.objects.get(email=s.email,firstname=a, lastname=b)
-                s.gstin= cust.gstin
+                cust = customer.objects.filter(email=s.email,firstname=a, lastname=b)
+                for i in cust:
+                    s.gstin= i.gstin
 
             else:
-                cust = customer.objects.get(email=s.email,firstname=a, lastname=b)
-                s.gstin= cust.gstin
+                cust = customer.objects.filter(email=s.email,firstname=a, lastname=b)
+                for i in cust:
+                    s.gstin= i.gstin
 
         return render(request,'app1/gstrr1.html',{'sale':sale,'cmp1':cmp1,'cn':cn})        
 

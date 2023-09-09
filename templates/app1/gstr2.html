@@ -49,19 +49,21 @@
         background: rgb(177, 177, 177);
     }
 
- 
+
     .bar {
         align-items: center;
         display: flex;
         justify-content: space-between;
     }
-    .bar .left{
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-}
-.bar .left input{
-    height: 5vh;
-}
+
+    .bar .left {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .bar .left input {
+        height: 5vh;
+    }
 </style>
 
 <div class="page-content">
@@ -72,8 +74,8 @@
                     <h6>{{cmp1.cname}}</h6>
                     <h2 class="mb-0">GSTR-2 REPORT</h2>
                     <div class="display">
-                        <div id="d1"  style="display: inline-block;"></div>
-                        <div id="d2"  style="display: inline-block;"></div>
+                        <div id="d1" style="display: inline-block;"></div>
+                        <div id="d2" style="display: inline-block;"></div>
                     </div>
                 </center>
                 <hr>
@@ -83,18 +85,16 @@
 
     <div class="card radius-15">
         <div class="card-body">
-            
+
             <div class="bar">
                 <div class=" left">
                     <div class="px-2">
                         <label style="text-align:left ">From</label><br>
-                        <input  name="FromDate" class="inputdate form-control"  id="in1"
-                            type="date">
+                        <input name="FromDate" class="inputdate form-control" id="in1" type="date">
                     </div>
-                    <div  class="px-2">
+                    <div class="px-2">
                         <label style="text-align:left ">To</label><br>
-                        <input  name="ToDate" class="inputdate form-control" id="in2"
-                        type="date">
+                        <input name="ToDate" class="inputdate form-control" id="in2" type="date">
                     </div>
 
                 </div>
@@ -110,37 +110,37 @@
                     $(document).on('click', '.btn_print', function (event) {
                         console.log('print1');
                         event.preventDefault();
-                        var element = document.getElementById('pdf-card');
-                        var opt =
-                        {
-                            margin: 1,
-                            filename: 'employee' + '.pdf',
-                            image: { type: 'jpeg', quality: 0.98 },
-                            html2canvas: { scale: 2 },
-                            jsPDF: { unit: 'in', format: 'a3', orientation: 'portrait' }
-                        };
-                        html2pdf().set(opt).from(element).save();
+                        var printContents = document.getElementById("pdf-card").innerHTML;
+                        var originalContents = document.body.innerHTML;
+
+                        document.body.innerHTML = printContents;
+
+                        window.print();
+
+                        document.body.innerHTML = originalContents;
 
                     });
 
                 });
-                function exportAsExcel() {
-                              const table = document.getElementById('myTable'); // Replace 'myTable' with your table's ID
-                              const wb = XLSX.utils.table_to_book(table);
-                            
-                              XLSX.writeFile(wb, 'gstr2.xlsx');
-                            }
             </script>
-                <br>
-                <br>
-                
+            <script type="text/javascript">
+                function exportAsExcel() {
+                    const table = document.getElementById('myTable'); // Replace 'myTable' with your table's ID
+                    const wb = XLSX.utils.table_to_book(table);
+
+                    XLSX.writeFile(wb, 'gstr2.xlsx');
+                }
+            </script>
+            <br>
+            <br>
+
         </div>
     </div>
 
     <div class="card radius-15 " id="pdf-card">
         <div class="card-body">
             <div class="container-fluid">
-                
+
                 <table class="table table-responsive-md mt-4 table-hover table-bordered"
                     style="background-color: rgba(0, 0, 0, 0.2);" id="myTable">
                     <thead>
@@ -150,7 +150,7 @@
                         </tr>
                         <tr>
                             <th style="text-align: center;">GSTIN/UIN</th>
-                            <th style="text-align: center;">Party Name	</th>
+                            <th style="text-align: center;">Party Name </th>
                             <th style="text-align: center;">No.</th>
                             <th style="text-align: center;">Date</th>
                             <th style="text-align: center;">Value</th>
@@ -170,14 +170,14 @@
 
 
 
-    <script>
-        var fromDate;
+<script>
+    var fromDate;
     $('#in1').on('change', function () {
         fromDate = $(this).val();
         $('#in2').prop('min', function () {
             return fromDate
         })
-        var tdate= new Date(fromDate)
+        var tdate = new Date(fromDate)
         var options = { year: 'numeric', month: 'long', day: 'numeric' };
         document.getElementById("d1").innerHTML = tdate.toLocaleDateString(undefined, options);
     })
@@ -187,9 +187,9 @@
         $('#in1').prop('max', function () {
             return toDate
         })
-        var tdate= new Date(toDate)
+        var tdate = new Date(toDate)
         var options = { year: 'numeric', month: 'long', day: 'numeric' };
-        document.getElementById("d2").innerHTML = "  To  "+tdate.toLocaleDateString(undefined, options);
+        document.getElementById("d2").innerHTML = "  To  " + tdate.toLocaleDateString(undefined, options);
     })
 
 
