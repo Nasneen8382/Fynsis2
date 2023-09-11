@@ -11,32 +11,44 @@
             </div>
         </div>
         <div class="card p-3">
-            <form method="post" action="{% url 'createaccount' %}">
+            <form method="post" action="{% url 'createaccount' %}" id="accountForm">
                 {% csrf_token %}
                 <div class="row mt-2 mb-2">
                     <div class="col-md-6">
                         <label for="acctyp">Account Type</label>
-                        <select name="acctype" id="select1"
-                                class="custom-select-md form-control w-100">
+                        <input type="text" value="Assets" id="acctype" name="acctype" hidden>
+                        <select name="detype" id="Account_type"
+                                class="custom-select-md form-control w-100"  onchange="AccountTypeChange(this)">
+
                                
-                                <option >Account Receivable</option>
-                                <option>Current Assets</option>
-                                <option>Bank</option>
-                                <option>Fixed Assets</option>
-                                <option>Non-Current Assets</option>
-                                <option>Accounts Payable</option>
-                                <option>Credit Card</option>
-                                <option>Current Liabilities</option>
-                                <option>Non-Current Liabilities</option>
-                                <option>Equity</option>
-                                <option>Income</option>
-                                <option>Other Incomes</option>
-                                <option>Cost Of Goods Sold</option>
-                                <option>Expenses</option>
-                                <option>Other Expenses</option>
-                                <option>Undeposited Funds</option>
-                                <option>Stock(New)</option>
-                                <option>Cash</option>
+                               
+                                    <optgroup label="Assets" style="background-color: rgb(114, 114, 244);">Assets</optgroup>
+                                    <option style="padding-left:15px" value="Other Asset"> Other Asset </option>
+                                    <option style="padding-left:15px" value="Other Current Asset"> Other Current Asset </option>
+                                    <option style="padding-left:15px" value="Cash"> Cash </option>
+                                    <option style="padding-left:15px" value="Bank"> Bank </option>
+                                    <option style="padding-left:15px" value="Fixed Asset"> Fixed Asset </option>
+                                    <option style="padding-left:15px" value="Stock"> Stock</option>
+                                    <option style="padding-left:15px" value="Payment Clearing"> Payment Clearing</option>
+                                    <optgroup label="Liability" style="background-color: rgb(114, 114, 244);">Liability</optgroup>
+                                    <option style="padding-left:30px" value="Other Current Liability">Other Current Liability </option>
+                                    <option style="padding-left:15px" value="Credit Card"> Credit Card </option>
+                                    <option style="padding-left:15px" value="Long Term Liability"> Long Term Liability </option>
+                                    <option style="padding-left:15px" value="Other Liability"> Other Liability </option>
+                                    <option style="padding-left:15px" value="Overseas Tax Payable"> Overseas Tax Payable </option>
+                                    <optgroup label="Equity" style="background-color: rgb(114, 114, 244);">Equity</optgroup>
+                                    <option style="padding-left:15px" value="Equity"> Equity </option>
+                                    <optgroup label="Income" style="background-color: rgb(114, 114, 244);">Income</optgroup>
+                                    <option style="padding-left:15px" value="Income"> Income </option>
+                                    <option style="padding-left:15px" value="Other Income"> Other Income </option>
+                                    <optgroup label="Expense"style="background-color: rgb(114, 114, 244);">Expense</optgroup>
+                                    <option style="padding-left:15px" value="Expense"> Expense </option>
+                                    <option style="padding-left:15px" value="Cost Of Goods Sold"> Cost Of Goods Sold </option>
+                                    <option style="padding-left:15px" value="Other Expense"> Other Expense </option>
+                                    
+                                    
+                                 
+                              
                                 
                                
                             
@@ -62,14 +74,13 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-6 mt-2">
-                        <textarea class="form-control mt-2" name="Type details" cols="20"
-                        rows="10" style="font-size: small;" disabled>Use Cash and Cash Equivalents to track cash or assets that can be converted into cash immediately. For example, marketable securities and Treasury bills.</textarea>
+                    <div class="col-md-6 mt-2"> 
+                        <div id="acnt-desc" class="form-control" name="detype" style="font-size: small;  height: 200px;"></div>
                     </div>
                     <div class="col-md-6 mt-2">
                         <div class="mt-2">
                             <div>
-                                <label for="asof">as of</label>
+                                <label for="asof">As of</label>
                                 <input type="date" name="asof" id="asof" class="form-control" value="{{ tod }}">
                             </div>
                         </div>
@@ -292,10 +303,12 @@
                         <div class="col-md-5"></div>
                         <div class="col-md-4"></div>
                         <div class="col-md-3">
-                            <button type="submit" class="btn btn-outline-info">Save and
-                                close
-                            </button>
+                            <button type="submit" class="btn btn-outline-info">Save</button>
+                                
+                           
+                            <a type="submit" class="btn btn-outline-info" onclick="clearForm()">Close</a>
                         </div>
+                       
                     </div>
                 </div>
                 
@@ -318,6 +331,201 @@
                     $select.attr('disabled', 'disabled');
                 }
             });
+
+            document.getElementById("acnt-desc").innerHTML=`
+                                                            <b>Asset</b> <br> Track special assets like goodwill and other intangible assets<br/>
+                                                           
+                                                           `;
         });
+    </script>
+
+    <script>
+       
+        function AccountTypeChange(selectBox) {
+        var selectElement = document.getElementById("Account_type");
+        var selectedValue = selectElement.value;
+        var Acnt_desc = document.getElementById("acnt-desc");
+        var acctype = document.getElementById("acctype");
+ 
+          
+        switch(selectedValue) {
+
+                case "Other Asset":
+                    Acnt_desc.innerHTML=`
+                                                            <b>Asset</b> <br> Track special assets like goodwill and other intangible assets<br/>
+                                                           
+                                                            `;
+                                                            acctype.value="Asset";
+                    break;
+                case "Other Current Asset":
+                    Acnt_desc.innerHTML=`
+                                                            <b>Asset</b> <br> Any short term asset that can be converted into cash or cash equivalents easily<br/>
+                                                            <ul>
+                                                                <li>1.Prepaid expenses</li>
+                                                                <li>2.Stocks and Mutual Funds</li>
+                                                            </ul>
+                                                            `;
+                                                            acctype.value="Asset";
+                    break;
+                case "Cash":
+                    Acnt_desc.innerHTML=`
+                                                            <b>Asset</b> <br> To keep track of cash and other cash equivalents like petty cash, undeposited funds, etc.<br/>
+                                                           
+                                                            `;
+                                                            acctype.value="Asset";
+                    break;
+                case "Bank":
+                    Acnt_desc.innerHTML=`
+                                                            <b>Asset</b> <br> To keep track of bank accounts like Savings, Checking, and Money Market accounts<br/>
+                                                           
+                                                            `;
+                                                            acctype.value="Asset";
+                    break;
+                case "Fixed Asset":
+                    Acnt_desc.innerHTML=`
+                                                            <b>Asset</b> <br> Any long term investment or an asset that cannot be converted into cash easily like:<br/>
+                                                            <ul>
+                                                                <li>1.Land and Buildings</li>
+                                                                <li>2.Plant, Machinery and Equipment</li>
+                                                                <li>3.Computers</li>
+                                                                <li>3.Furniture</li>
+                                                            </ul>
+                                                            `;
+                                                            acctype.value="Asset";
+                    break;
+                case "Stock":
+                    Acnt_desc.innerHTML=`
+                                                            <b>Asset</b> <br> To keep track of your inventory assets.<br/>
+                                                           
+                                                            `;
+                                                            acctype.value="Asset";
+                    break;
+                case "Payment Clearing":
+                    Acnt_desc.innerHTML=`
+                                                            <b>Asset</b> <br> To keep track of funds moving in and out via payment processors like Stripe, PayPal, etc.<br/>
+                                                           
+                                                            `;
+                                                            acctype.value="Asset";
+                    break;
+                case "Other Current Liability":
+                    Acnt_desc.innerHTML=`
+                                                            <b>Liability</b> <br> Any short term liability like:<br/>
+                                                            <ul>
+                                                                <li>1.Customer Deposits</li>
+                                                                <li>2.Tax Payable</li>
+                                                                
+                                                            </ul>
+                                                            `;
+                                                            acctype.value="Liability"
+                    break;
+                case "Credit Card":
+                    Acnt_desc.innerHTML=`
+                                                            <b>Liability</b> <br>Create a trail of all your credit card transactions by creating a credit card account<br/>
+                                                           
+                                                            `;
+                                                            acctype.value="Liability"
+                    break;
+                case "Long Term Liability":
+                    Acnt_desc.innerHTML=`
+                                                            <b>Liability</b> <br> Liabilities that mature after a minimum period of one year like Notes Payable, Debentures, and Long Term Loans<br/>
+                                                           
+                                                            `;
+                                                            acctype.value="Liability"
+                    break;
+                case "Other Liability":
+                    Acnt_desc.innerHTML=`
+                                                            <b>Liability</b> <br>Obligation of an entity arising from past transactions or events which would require repayment.<br/>
+                                                            <ul>
+                                                                <li>1.Tax to be paid</li>
+                                                                <li>2.Loan to be Repaid</li>
+                                                                <li>3.Loan to be Repaid</li>
+                                                                
+                                                            </ul>
+                                                            `;
+                                                            acctype.value="Liability"
+                    break;
+                case "Overseas Tax Payable":
+                    Acnt_desc.innerHTML=`
+                                                            <b>Liability</b> <br> To keep track of funds moving in and out via payment processors like Stripe, PayPal, etc.<br/>
+                                                           
+                                                            `;
+                                                            acctype.value="Liability"
+                    break;
+                case "Equity":
+                    Acnt_desc.innerHTML=`
+                                                            <b>Equity</b> <br>Owners or stakeholders interest on the assets of the business after deducting all the liabilities<br/>
+                                                           
+                                                            `;
+                                                            acctype.value="Equity"
+                    break;
+                case "Income":
+                    Acnt_desc.innerHTML=`
+                                                            <b>Income</b> <br>Income or Revenue earned from normal business activities like sale of goods and services to customers<br/>
+                                                           
+                                                            `;
+                                                            acctype.value="Income"
+                    break;
+                case "Other Income":
+                    Acnt_desc.innerHTML=`
+                                                            <b>Income</b> <br>Income or revenue earned from activties not directly related to your business like :<br/>
+                                                            <ul>
+                                                                <li>1.Interest Earned</li>
+                                                                <li>2.Dividend Earned</li>
+                                                               
+                                                                
+                                                            </ul>
+                                                            `;
+                                                            acctype.value="Income"
+                    break;
+                case "Expense":
+                    Acnt_desc.innerHTML=`
+                                                            <b>Expense</b> <br>Reflects expenses incurred for running normal business operations, such as :<br/>
+                                                            <ul>
+                                                                <li>1.Advertisements and Marketing</li>
+                                                                <li>2.Business Travel Expenses</li>
+                                                                <li>3.License Fees</li>
+                                                                <li>4.Utility Expenses</li>
+                                                               
+                                                                
+                                                            </ul>
+                                                            `;
+                                                            acctype.value="Expense"
+                    break;
+                case "Cost Of Goods Sold":
+                    Acnt_desc.innerHTML=`
+                                                            <b>Expense</b> <br>This indicates the direct costs attributable to the production of the goods sold by a company such as:<br/>
+                                                            <ul>
+                                                                <li>1.Material and Labor costs</li>
+                                                                <li>2.Cost of obtaining raw materials</li>
+                                                               
+                                                                
+                                                            </ul>
+                                                            `;
+                                                            acctype.value="Expense"
+                    break;
+                case "Other Expense":
+                    Acnt_desc.innerHTML=`
+                                                            <b>Expense</b> <br>Reflects expenses incurred for activities unrelated to primary business operations like :<br/>
+                                                            <ul>
+                                                                <li>1.Bad debts</li>
+                                                                <li>2.Contributions Towards Charity</li>
+                                                                <li>3.Insurance</li>
+                                                                
+                                                            </ul>
+                                                            `;
+                                                            acctype.value="Expense"
+                    break;
+
+                default:
+                    Acnt_desc.innerHTML="";
+        }
+
+         
+    }
+
+    function clearForm() {
+        const form = document.getElementById('accountForm');
+        form.reset();
+    }
     </script>
 {% endblock %}

@@ -83,10 +83,33 @@
                                 <input type="text" name="phone" id="phone" value="{{ cmp1.phone }}"
                                        class="form-control" style="background-color: #2f516f;color: white;" readonly>
                             </div>
+                            
+                        </div>
+                        <div class="row m-3">
                             <div class="col-md-6">
                                 <label for="bname">Legal Business Name</label>
                                 <input type="text" name="bname" id="bname" value="{{ cmp1.bname }}"
                                        class="form-control" style="background-color: #2f516f;color: white;" readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="ctype">Pan Number</label>
+                                <input type="text" name="pannum" id="pannum" value="{{ cmp1.pan_number}}"
+                                       class="form-control" style="background-color: #2f516f;color: white;" readonly>
+                                
+                            </div>
+                        </div>
+                        <div class="row m-3">
+                            <div class="col-md-6">
+                                <label for="industry">GST Type</label>
+                                
+                                <input type="text" name="gsttype" id="gsttype" value="{{ cmp1.gst_type }}"
+                                       class="form-control" style="background-color: #2f516f;color: white;" readonly>
+                            </div>
+                            <div class="col-md-6 d-none gstrow" >
+                                <label for="ctype">GST Number</label>
+                                <input type="text" name="gstnum" id="gstnum" value="{{ cmp1.gst_number }}"
+                                       class="form-control " style="background-color: #2f516f;color: white;" readonly>
+                                
                             </div>
                         </div>
                         <div class="row m-3">
@@ -116,4 +139,28 @@
         </div>
     </div>
 
+    <script>
+
+        $(document).ready(function() {
+         
+        var x=$('#gsttype').val();
+        if(x=="unregistered Business") 
+        {
+            $(".gstrow").removeClass('d-block');
+            $(".gstrow").addClass('d-none');
+
+        }
+        else if(x == 'Overseas'){
+            $(".gstrow").removeClass('d-block');
+            $(".gstrow").addClass('d-none');
+        }
+        else 
+        {
+            $(".gstrow").removeClass('d-none');
+            $(".gstrow").addClass('d-block');
+        }
+        
+         
+    });
+  </script>
 {% endblock %}

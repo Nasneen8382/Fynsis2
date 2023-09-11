@@ -1,42 +1,42 @@
 {% extends 'app1/base.html' %}
 {% block body %}
-    {% load static %}
+{% load static %}
 
 
 <style>
-    .search {
-  width: 100%;
-  position: relative;
-  display: flex;
-}
+        .search {
+    width: 100%;
+    position: relative;
+    display: flex;
+    }
 
-.searchTerm {
-  width: 100%;
-  border: 3px solid #7690da;
-  border-right: none;
-  padding: 5px;
-  height: 36px;
-  border-radius: 5px 0 0 5px;
-  outline: none;
-  color: #9DBFAF;
-  
-}
+    .searchTerm {
+    width: 100%;
+    border: 3px solid #7690da;
+    border-right: none;
+    padding: 5px;
+    height: 36px;
+    border-radius: 5px 0 0 5px;
+    outline: none;
+    color: #9DBFAF;
+    
+    }
 
-.searchTerm:focus{
-  color:#7690da;
-}
+    .searchTerm:focus{
+    color:#7690da;
+    }
 
-.searchButton {
-  width: 40px;
-  height: 36px;
-  border: 1px solid #7690da;
-  background:#7690da;
-  text-align: center;
-  color: #fff;
-  border-radius: 0 5px 5px 0;
-  cursor: pointer;
-  font-size: 20px;
-}
+    .searchButton {
+    width: 40px;
+    height: 36px;
+    border: 1px solid #7690da;
+    background:#7690da;
+    text-align: center;
+    color: #fff;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+    font-size: 20px;
+    }
 
 </style>
 
@@ -46,159 +46,140 @@
                 <div class="card-title">
                     <center><h2 class="mb-0">INVOICES</h2></center>
                     <hr>
+                    <div class="btn-group col-md-2" style="float: right;">
+                        <a class="btn btn-outline-info text-grey" onclick="ExportToExcel('xlsx')">Export To Excel</a>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="card radius-15">
             <div class="card-body">
-                
-
-
                 <div class="row">
-
-                        
-                        
-                        
-                    <div class="col-md-4">
-                        <div class="wrap" style="width: 60%; margin-top: 8px;">
-                            <form action="goinvoices3" method="POST">{% csrf_token %}
-                            <div class="search">
-                                
-                               <input type="text" class="searchTerm" name="search">
-                               <button type="submit" class="searchButton">
-                                 <i class="fa fa-search"></i>
-                              </button>
-                            </div>
-                            
-                          
-                         </div>
-                         
-                    </div>
                     <div class="col-md-3">
-                      
-                        <select class="form-control btn btn-outline-info dropdown-toggle text-grey" aria-label=".form-select-lg example" style="width: 40%; margin-top: 8px;" name="type">
-                            
-                            <option value="1" selected>All</option>
-                            <option value="2" >Customer Name</option>
-                            <option value="3" >Order No</option>
-                            
-                            
-                            
-                          </select>
+                        <input type="text" id="search" placeholder="Search..." class="form-control" autocomplete="off" 
+                        style="margin-top: 8px; background-color: #2f516f;color: white;">
+                    </div>
+                    <div class="col-md-2" style="width: 40%; margin-top: 9px;">
+                        <div class="dropdown">
+                            <button type="button" class="btn btn-outline-info   text-grey fas fa-sort"
+                                    data-toggle="dropdown"> Sort by
+                            </button>
+                            <div class="dropdown-menu " style="background-color: black;">
+                                <a class="dropdown-item" href="{% url 'goinvoices' %}"
+                                    style="height: 40px; font-size: 15px; color: white; text-align: center;" >All</a>
+                            <a class="dropdown-item" href="{% url 'inv_num_asc' %}"
+                                style="height: 40px; font-size: 15px; color: white; text-align: center;" >Sales Order Number </a>
+                            <!-- <a class="dropdown-item  " href="{% url 'inv_num_desc' %}"
+                                style="height: 40px; font-size: 15px; color: white; text-align: center;" >Sales Order Number <icon class=" fas fa-arrow-up"></icon></a> -->
 
-                          
+                            <a class="dropdown-item " href="{% url 'inv_date_asc' %}"
+                                style="height: 40px; font-size: 15px; color: white; text-align: center; " >Date  </a>
+                            <!-- <a class="dropdown-item " href="{% url 'inv_date_desc' %}"
+                                style="height: 40px; font-size: 15px; color: white; text-align: center;" >Date <icon class=" fas fa-arrow-up"></icon></a> -->
 
-
-                        </form>
-                        </div>
-                        <div class="col-md-2" style="width: 40%; margin-top: 8px;">
-
-                            <div class="dropdown">
-                                <button type="button" class="btn btn-outline-info dropdown-toggle text-grey"
-                                        data-toggle="dropdown">filter by
-                                </button>
-                                <div class="dropdown-menu" style="background-color: black;">
-                                    <a class="dropdown-item" href="{% url 'goinvoices' %}"
-                                       style="height: 40px; font-size: 15px; color: white; text-align: center;" >All</a>
-                                    <a class="dropdown-item" href="{% url 'goinvoices1' %}"
-                                       style="height: 40px; font-size: 15px; color: white; text-align: center;" >Draft</a>
-                                    <a class="dropdown-item" href="{% url 'goinvoices2' %}"
-                                       style="height: 40px; font-size: 15px; color: white; text-align: center;">Approved</a>
-                                    <!-- <a class="dropdown-item" href="{% url 'sale_filter3' %}"
-                                       style="height: 40px; font-size: 15px; color: white; text-align: center;">Invoice</a> -->
+                            <a class="dropdown-item  " href="{% url 'inv_cust_asc' %}"
+                                style="height: 40px; font-size: 15px; color: white; text-align: center;" >
+                                    Customer </a>
+                            <!-- <a class="dropdown-item  " href="{% url 'inv_cust_desc' %}"
+                                style="height: 40px; font-size: 15px; color: white; text-align: center;" >Customer <icon class=" fas fa-arrow-up"></icon></a> -->
+                                
                                     
                             </div> 
-                          </div>
                         </div>
-                        
-                        
+                    </div>
+                    <div class="col-md-3"></div>
 
-                        
-                   
+                    <div class="col-md-1 mx-5" style="width: 40%; margin-top: 8px;">
 
-                    <div class="col-md-3" >
+                        <div class="dropdown">
+                            <button type="button" class="btn btn-outline-info dropdown-toggle fas fa-filter text-grey"
+                                    data-toggle="dropdown"> filter by
+                            </button>
+                            <div class="dropdown-menu" style="background-color: black;">
+                                <a class="dropdown-item" href="{% url 'goinvoices' %}"
+                                    style="height: 40px; font-size: 15px; color: white; text-align: center;" >All</a>
+                                <a class="dropdown-item" href="{% url 'goinvoices1' %}"
+                                    style="height: 40px; font-size: 15px; color: white; text-align: center;" >Draft</a>
+                                <a class="dropdown-item" href="{% url 'goinvoices2' %}"
+                                    style="height: 40px; font-size: 15px; color: white; text-align: center;">Approved</a>
+                                <!-- <a class="dropdown-item" href="{% url 'sale_filter3' %}"
+                                    style="height: 40px; font-size: 15px; color: white; text-align: center;">Invoice</a> -->
+                                
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="col-md-2" >
                         <a href="{% url 'goaddinvoices' %}" >
-                            <button id="myBtn" class="btn btn-outline-info text-grey fa fa-plus" style="margin-top: 8px;">&nbsp; Add
+                            <button id="myBtn" class="btn btn-outline-info text-grey fas fa-plus" style="margin-top: 8px;">&nbsp; Add
                                 Invoices</button>
                         </a>
                     </div>
 
                 </div>
-                <table class="table table-responsive-md mt-3 table-hover">
+                <table class="table table-responsive-md mt-3 table-hover" id="table">
                     <thead>
-                    <tr>
-                        
-                        <th style="text-align: center;">INVOICE DATE</th>
-                        <th style="text-align: center;">INVOICE NO</th>
-                        
-                        <th style="text-align: center;">CUSTOMER</th>
-                        <th style="text-align: center;">STATUS</th>
-                        <th style="text-align: center;">DUE DATE</th>
-                        <th style="text-align: center;">GRAND TOTAL</th>
-                        <th style="text-align: center;">BALANCE DUE</th>
-                        
-                    </tr>
+                        <tr>
+                            
+                            <th style="text-align: center;  ">INVOICE DATE</th>
+                            <th style="text-align: center;">INVOICE NO</th>
+                            
+                            <th style="text-align: center;">CUSTOMER</th>
+                            <th style="text-align: center;">STATUS</th>
+                            <th style="text-align: center;">DUE DATE</th>
+                            <th style="text-align: center;">GRAND TOTAL</th>
+                            <th style="text-align: center;">BALANCE DUE</th>
+                            
+                        </tr>
                     </thead>
                     <tbody>
-                    {% for invoices in invoice %}
-                        {% if invoices.cid_id == cmp1.cid %}
+                        {% for invoices in invoice %}
+                            {% if invoices.cid_id == cmp1.cid %}
 
-                            <tr tr class="table-row " data-href="{% url 'invoice_view' invoices.invoiceid %}">
-                                <td style="text-align: center;">{{ invoices.invoicedate }}</td>
-                                <th style="text-align: center;">{{ invoices.invoiceno }}</th>
-                          
-                                <td style="text-align: center;">{{ invoices.customername }}</td>
-                                <td style="text-align: center;">{{ invoices.status }}</td>
-                                <td style="text-align: center;">{{ invoices.duedate }}</td>
-                                <td style="text-align: center;">{{ invoices.grandtotal }}</td>
-                                <td style="text-align: center;">{{ invoices.baldue }}</td>
-                                
+                                <tr  class="table-row " data-href="">
+                                    <td style="text-align: center;"><a class="idsr" style="list-style: none;"  href="{% url 'invoice_view' invoices.invoiceid %}">{{ invoices.invoicedate | date:'d-m-Y'}}</a></td>
+                                    <th style="text-align: center;"><a class="idsr" style="list-style: none;"  href="{% url 'invoice_view' invoices.invoiceid %}">{{ invoices.invoiceno }}</a></th>
+                            
+                                    <td style="text-align: center;"><a class="idsr" style="list-style: none;"  href="{% url 'invoice_view' invoices.invoiceid %}">{{ invoices.cust }}</a></td>
+                                    <td style="text-align: center;"><a class="idsr" style="list-style: none;"  href="{% url 'invoice_view' invoices.invoiceid %}">{{ invoices.status }}</a></td>
+                                    <td style="text-align: center;"><a class="idsr" style="list-style: none;"  href="{% url 'invoice_view' invoices.invoiceid %}">{{ invoices.duedate }}</a></td>
+                                    <td style="text-align: center;"><a class="idsr" style="list-style: none;"  href="{% url 'invoice_view' invoices.invoiceid %}">{{ invoices.grandtotal }}</a></td>
+                                    <td style="text-align: center;"><a class="idsr" style="list-style: none;"  href="{% url 'invoice_view' invoices.invoiceid %}">{{ invoices.baldue }}</a></td>
+                                    
 
-                            </tr>
-                        {% endif %}
-                    {% endfor %}
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
                     </tbody>
-
-
                 </table>
             </div>
 
-            <script>
-                // Get the modal
-                var modal = document.getElementById("myModal");
-
-                // Get the button that opens the modal
-                var btn = document.getElementById("myBtn");
-
-                // Get the <span> element that closes the modal
-                var span = document.getElementsByClassName("close")[0];
-
-                // When the user clicks the button, open the modal
-                btn.onclick = function () {
-                    modal.style.display = "block";
-                }
-
-                // When the user clicks on <span> (x), close the modal
-                span.onclick = function () {
-                    modal.style.display = "none";
-                }
-
-                // When the user clicks anywhere outside of the modal, close it
-                window.onclick = function (event) {
-                    if (event.target == modal) {
-                        modal.style.display = "none";
-                    }
-                }
-            </script>
+ 
         </div>
     </div>
-
+    <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
     <script>
-        $(document).ready(function($) {
-            $(".table-row").dblclick(function() {
-                window.document.location = $(this).data("href");
+        
+        $(document).ready(function() {
+            var $rows = $('.table tbody tr');
+            $('#search').keyup(function() {
+                var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+                $rows.show().filter(function() {
+                    console.log($rows.show())
+
+                    var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+                    console.log(text)
+                    return !~text.indexOf(val);
+                }).hide();
             });
         });
+
+        function ExportToExcel(type, fn, dl) {
+            var elt = document.getElementById('table');
+            var wb = XLSX.utils.table_to_book(elt, { sheet: "sheet1" });
+            return dl ?
+                XLSX.write(wb, { bookType: type, bookSST: true, type: 'base64' }):
+                XLSX.writeFile(wb, fn || ('Invoices_' + (type || 'xlsx')));
+        }
     </script>
 {% endblock %}
 

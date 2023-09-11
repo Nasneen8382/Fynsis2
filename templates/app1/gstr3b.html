@@ -120,13 +120,27 @@
                     $(document).on('click', '.btn_print', function (event) {
                         console.log('print1');
                         event.preventDefault();
-                        var printContents = document.getElementById("pdf-card").innerHTML;
+                        var printContent = document.getElementById("pdf-card").innerHTML;
                         var originalContents = document.body.innerHTML;
 
-                        document.body.innerHTML = printContents;
+                        // Create a <div> container for centering
+                        var containerDiv = document.createElement("div");
+                        containerDiv.style.textAlign = "center"; // Center-align the content
+
+                        // Create the <h1> element
+                        var h1Element = document.createElement("h1");
+                        h1Element.textContent = "GSTR-3B REPORT"; // Replace "Title" with your desired title text
+
+                        // Append the <h1> element to the container
+                        containerDiv.appendChild(h1Element);
+
+                        // Insert the container and the print content
+                        containerDiv.innerHTML += printContent;
+                        document.body.innerHTML = containerDiv.outerHTML;
 
                         window.print();
 
+                        // Restore the original contents (excluding the container)
                         document.body.innerHTML = originalContents;
 
                     });

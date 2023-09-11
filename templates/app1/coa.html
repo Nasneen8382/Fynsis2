@@ -15,9 +15,21 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-2">
-                            <input class="form-control mb-3 w-100" type="text" id="namefilt" onkeyup="namefilter()" placeholder="Filter by name">
+                            <input class="form-control mb-3 w-100" type="text" id="namefilt" onkeyup="namefilter()" placeholder="Search by Name">
                         </div>
-                        <div class="col-md-5"></div>
+                        <div class="col-md-5">
+                            <select class="form-control btn btn-outline-info dropdown-toggle text-grey" id="categoryid"
+                        aria-label=".form-select-lg example" style="width: 40%;" name="type"
+                        onchange="categoryType()">
+
+                        <option value="" selected>All</option>
+                        <option value="Asset">Asset</option>
+                        <option value="Liability">Liability</option>
+                        <option value="Equity">Equity</option>
+                        <option value="Income">Income</option>
+                        <option value="Expense">Expense</option>
+                    </select>
+                        </div>
                         <div class="col-md-2"></div>
                         <div class="btn-group col-md-3 w-75">
                             <a role="button" class="btn btn-outline-info h-75" style="color: #fff;" href="{% url 'balancesheet' %}">Run Report</a>
@@ -49,7 +61,7 @@
                             <tbody>
                             {% for acoun in account1s %}
                                 {% if acoun.cid_id == cmp1.cid %}
-                                    <tr>
+                                    <tr class="table-row" data-href="{% url 'chartacnt_overview' acoun.accounts1id %}">
                                         <td>{{ acoun.name }}</td>
                                         <td>{{ acoun.acctype }}</td>
                                         
@@ -128,8 +140,61 @@
                             tr[i].style.display = "none";
                         }
                     }
-                }
+                } 
             }
         </script>
+        <script>
+            $(document).ready(function ($) {
+                $(".table-row").dblclick(function () {
+                    window.document.location = $(this).data("href");
+                });
+            });
+        </script>
+
+<script>
+     function categoryType() {
+        debugger
+        let input, filter, table, tr, td, i, j, txtValue;
+        var selectElement = document.getElementById("categoryid"); 
+        filter = selectElement.value.toLowerCase();
+        table = document.getElementById("tabletobe");
+        tr = table.getElementsByTagName("tr");
+            // Loop through all table rows (excluding the first row, which contains the column headers)
+
+            for (i = 1; i < tr.length; i++) {
+            let rowVisible = false;
+            td = tr[i].getElementsByTagName("td");
+
+            // Loop through all table cells (columns) in each row
+            for (j = 0; j < td.length; j++) {
+                if (td[j]) { 
+                    if (filter == "") {
+                        txtValue = td[j].textContent || td[j].innerText;
+                        if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                            rowVisible = true;
+                            break;
+                        }
+                    }
+                    else {
+                    
+                        if (td[1].innerText.toLowerCase() == filter) {
+                            txtValue = td[j].textContent || td[j].innerText;
+                            if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                                rowVisible = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Show/hide the row based on the search results
+            tr[i].style.display = rowVisible ? "" : "none";
+        }
+
+    
+     }
+</script>
     {% endif %}
+
 {% endblock %}

@@ -33,7 +33,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-@ym=g-9p=kgp46%-$ug_t#g%3o5g(f6+37-wzyd16h=z*&grds'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -49,8 +49,6 @@ INSTALLED_APPS = [
     'app1',
     'django_social_share',
     'mathfilters',
-   
-    
 ]
 
 MIDDLEWARE = [
@@ -90,11 +88,11 @@ WSGI_APPLICATION = 'infoxfinsys.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'finsys1',
-        'USER': 'root',
-        'PASSWORD': '',
-        'HOST': 'localhost',
-        'PORT': '3306',
+        'NAME': 'fin',
+        'USER':'root',
+        'PASSWORD':'',
+        'HOST':'localhost',
+        'PORT':'3306',
     }
 }
 
@@ -140,18 +138,20 @@ USE_TZ = True
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'namedummy171@gmail.com'
-EMAIL_HOST_PASSWORD = 'qrgjirzhopixkbex'
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST_USER = 'altostechnologies6@gmail.com'
+EMAIL_HOST_PASSWORD = 'jkdpqggohjsmhyay'
 
 MEDIA_ROOT = os.path.join(BASE_DIR,'media')
 MEDIA_URL = '/media/'
-# STATIC_ROOT = os.path.join(BASE_DIR,'static')
+STATIC_ROOT = os.path.join(BASE_DIR,'static')
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'),]
+#STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'),]
 
 # STATIC_URL = '/static/'
 # STATIC_ROOT = os.path.join(BASE_DIR,'static')
@@ -162,5 +162,3 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'),]
 # MEDIA_URL = '/media/'
 
 LOGIN_URL='login'
-
-CRISPY_TEMPLATE_PACK='bootstrap4'

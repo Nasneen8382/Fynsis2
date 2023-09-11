@@ -1,13 +1,8 @@
 from django.urls import re_path,path
 from . import views
 from django.views.decorators.csrf import csrf_exempt
-from django.conf import settings
-from django.views.static import serve
-
-# from .views import EmailAttachementView
 
 urlpatterns = [
-    re_path(r'^static/(?P<path>.*)$', serve,{'document_root': settings.STATIC_ROOT}),
     re_path(r'^$', views.index, name='index'),
     re_path(r'^go$', views.go, name='go'),
     re_path(r'^Signup_emailval/$', views.Signup_emailval, name='Signup_emailval'),
@@ -366,7 +361,7 @@ urlpatterns = [
 
     # Ananthakrishnan
     
-    re_path(r'^gosearch',views.gosearch,name='gosearch'),
+    path('gosearch/', views.gosearch, name='gosearch'),
 
     path('cust_add_file/<int:id>',views.cust_add_file,name='cust_add_file'),
 
@@ -843,41 +838,254 @@ urlpatterns = [
     re_path(r'^removeinv$', views.removeinv, name='removeinv'),
     re_path(r'^removeporder$', views.removeporder, name='removeporder'),
     path('customers21', views.customers21, name='customers21'),
-    path('crd_create_item', views.crd_create_item, name='crd_create_item'), 
+    path('crd_create_item', views.crd_create_item, name='crd_create_item'),
     path('create_new', views.create_new, name='create_new'),
+
 
     
  
 
     
-      # Forgot Password --------- 07-01-23 Shebin Shaji
-        path('Forgote-Password',views.password_change,name='password_change'),
-        path('Email-check',views.forgot_password,name='forgot_password'),
-        path('Set-Password',views.change_to_new_password,name='change_to_new_password'),
+    # Forgot Password --------- 07-01-23 Shebin Shaji
+    path('Forgote-Password',views.password_change,name='password_change'),
+    path('Email-check',views.forgot_password,name='forgot_password'),
+    path('Set-Password',views.change_to_new_password,name='change_to_new_password'),
         
+    #----------------------sumayya-----------------retainer invoices-------------------------------------------------------------------------------------
+    path('retainer_invoices_list',views.retainer_invoices_list,name='retainer_invoices_list'),
+    path('new_ret_invoice',views.new_ret_invoice,name='new_ret_invoice'),
+    path('new_customer_for_retinvoice',views.new_customer_for_retinvoice,name='new_customer_for_retinvoice'),
+    path('create_retainer_invoice',views.create_retainer_invoice,name='create_retainer_invoice'),
+    path('send_retainer_invoice',views.send_retainer_invoice,name='send_retainer_invoice'),
+    path('delete_inv/<int:id>',views.delete_inv,name='delete_inv'),
+    path('ret_invoice_slip/<int:id>',views.ret_invoice_slip,name='ret_invoice_slip'),
+    path('edit_ret_invoice/<int:id>',views.edit_ret_invoice,name='edit_ret_invoice'),
+    path('update_ret_invoice/<int:id>',views.update_ret_invoice,name='update_ret_invoice'),
+    path('add_comment_retinvoice/<int:id>',views.add_comment_retinvoice,name='add_comment_retinvoice'),
+    path('upload_file_retinvoice/<int:id>',views.upload_file_retinvoice,name='upload_file_retinvoice'),
+    path('retainer_invoice_draft',views.retainer_invoice_draft,name='retainer_invoice_draft'),
+    path('retainer_invoice_sent',views.retainer_invoice_sent,name='retainer_invoice_sent'),
+    path('search_retinvoice',views.search_retinvoice,name='search_retinvoice'),  
+    
+    #---------------Nithya-------------------
+    path('recurexpenses',views.recurexpenses,name='recurexpenses'),
 
-#----------------------sumayya-----------------retainer invoices-------------------------------------------------------------------------------------
-path('retainer_invoices_list',views.retainer_invoices_list,name='retainer_invoices_list'),
-path('new_ret_invoice',views.new_ret_invoice,name='new_ret_invoice'),
-path('new_customer_for_retinvoice',views.new_customer_for_retinvoice,name='new_customer_for_retinvoice'),
-path('create_retainer_invoice',views.create_retainer_invoice,name='create_retainer_invoice'),
-path('send_retainer_invoice',views.send_retainer_invoice,name='send_retainer_invoice'),
-path('delete_inv/<int:id>',views.delete_inv,name='delete_inv'),
-path('ret_invoice_slip/<int:id>',views.ret_invoice_slip,name='ret_invoice_slip'),
-path('edit_ret_invoice/<int:id>',views.edit_ret_invoice,name='edit_ret_invoice'),
-path('update_ret_invoice/<int:id>',views.update_ret_invoice,name='update_ret_invoice'),
-path('add_comment_retinvoice/<int:id>',views.add_comment_retinvoice,name='add_comment_retinvoice'),
-path('upload_file_retinvoice/<int:id>',views.upload_file_retinvoice,name='upload_file_retinvoice'),
-path('retainer_invoice_draft',views.retainer_invoice_draft,name='retainer_invoice_draft'),
-path('retainer_invoice_sent',views.retainer_invoice_sent,name='retainer_invoice_sent'),
-path('search_retinvoice',views.search_retinvoice,name='search_retinvoice'),
+    path('addrecurexpenses',views.addrecurexpenses,name='addrecurexpenses'),
 
+    path('createrecurexpense',views.createrecurexpense,name='createrecurexpense'),
 
+    path('viewrecurexpense/<id>',views.viewrecurexpense,name='viewrecurexpense'),
+    
+    path('editrecurexpense/<id>',views.editrecurexpense,name='editrecurexpense'),
 
-path('gstrr1',views.gstrr1,name='gstrr1'),
-path('gstr2',views.gstr2,name='gstr2'),
-path('gstr9',views.gstr9,name='gstr9'),
+    path('changerecurexpense/<id>',views.changerecurexpense,name='changerecurexpense'),
 
+    path('deleterecurexpense/<id>',views.deleterecurexpense,name='deleterecurexpense'),
+
+    path('recur_expense_add_file/<id>',views.recur_expense_add_file,name='recur_expense_add_file'),
+
+    path('expence_goods',views.expence_goods,name='expence_goods'),
+
+    path('expence_services',views.expence_services,name='expence_services'),
 
     
+    path('get_GST',views.get_GST,name='get_GST'),
+
+    path('expence_custasc',views.expence_custasc,name='expence_custasc'),
+
+    path('expence_custdesc',views.expence_custdesc,name='expence_custdesc'),
+
+    path('expence_vendorasc',views.expence_vendorasc,name='expence_vendorasc'),
+
+    path('expence_vendordesc',views.expence_vendordesc,name='expence_vendordesc'),
+    
+    path('recurexpense_vendor',views.recurexpense_vendor,name='recurexpense_vendor'),
+
+    path('recurexpense_account',views.recurexpense_account,name='recurexpense_account'),
+
+    path('recurexpense_customer',views.recurexpense_customer,name='recurexpense_customer'),
+    
+    path('customer_dropdown',views.customer_dropdown,name = 'customer_dropdown'),
+
+    path('vendor_dropdown',views.vendor_dropdown,name = 'vendor_dropdown'),
+
+    path('account_dropdown',views.account_dropdown,name = 'account_dropdown'),
+    
+   # urls of muhammed ashiq 
+   
+    path('delivery_challan',views.delivery_challan,name='delivery_challan'),
+    path('goadd_dl_challan',views.goadd_dl_challan,name='goadd_dl_challan'),
+    path('delivery_view/<int:id>',views.delivery_view,name='delivery_view'),
+    path('add_cx',views.add_cx,name='add_cx'),
+    path('challancreate',views.challancreate,name='challancreate'),
+    path('challan_add_file/<int:id>',views.challan_add_file,name='challan_add_file'),
+    path('editchallan/<int:id>',views.editchallan,name='editchallan'),
+    path('deletechallan/<int:id>',views.deletechallan,name='deletechallan'),
+    path('render_pdfchallan_view/<int:id>', views.render_pdfchallan_view, name='render_pdfchallan_view'),
+    path('challan_convert1/<int:id>',views.challan_convert1,name='challan_convert1'),
+    path('edited_challan/<int:id>',views.edited_challan,name='edited_challan'),
+    path('removecl', views.removecl, name='removecl'),
+    path('gochallan1',views.gochallan1,name='gochallan1'),
+    path('gochallan2',views.gochallan2,name='gochallan2'),
+    path('additem_challan',views.additem_challan,name='additem_challan'),
+    
+    # urls for Price list
+    
+    path('price_list/',views.pricelist,name='pricelist'),
+    path('new_price_list/',views.new_price_list,name='new_price_list'),
+    path('pricelist_editpage/<int:pk>',views.pricelist_editpage,name='pricelist_editpage'),
+    path('editpl/<int:pk>',views.editpl,name='editpl'),
+    path('pricelist_viewpage/<int:pk>',views.pricelist_viewpage,name='pricelist_viewpage'),
+    path('create_pricelist/',views.create_pricelist,name='create_pricelist'),
+    path('delete_pricelist/<int:pk>',views.delete_pricelist,name='delete_pricelist'),
+    path('active_pricelist/<int:pk>',views.active_pricelist,name='active_pricelist'),
+    path('inactive_pricelist/<int:pk>',views.inactive_pricelist,name='inactive_pricelist'),
+    path('plactive/',views.plactive,name='plactive'),
+    path('plinactive/',views.plinactive,name='plinactive'),
+    
+    path('bank_account_holder_create/', views.bank_account_holder_create, name='bank_account_holder_create'),
+    path('bank_account_holder/list/', views.bank_account_holder_list, name='bank_account_holder_list'),
+  
+    path('edit/<int:pk>/', views.edit, name='edit'),
+    path('bank_account_holder/edit/<int:pk>/', views.bank_account_holder_edit, name='bank_account_holder_edit'),
+    
+    #payroll
+    re_path(r'^goaddpayrollemployee$', views.goaddpayrollemployee, name='goaddpayrollemployee'),
+    re_path(r'^addpayrollemployee$', views.addpayrollemployee, name='addpayrollemployee'),
+    re_path(r'^listpayrollemployee$', views.listpayrollemployee, name='listpayrollemployee'),
+    path('payrollemployeeprofile/<int:employeeid>', views.payrollemployeeprofile, name='payrollemployeeprofile'),
+    path('payrollemployeeedit/<int:employeeid>', views.payrollemployeeedit, name='payrollemployeeedit'),
+    path('editpayrollemployee/<int:employeeid>', views.editpayrollemployee, name='editpayrollemployee'), 
+    re_path(r'^gopayrollsearch',views.gopayrollsearch,name='gopayrollsearch'),
+    path('gopayrollfilter/<str:filters>/<str:values>', views.gopayrollfilter, name='gopayrollfilter'),
+    path('active_emp/<str:employeeid>/<str:status>', views.active_emp, name='active_emp'),
+    path('deletepayrollemp/<int:employeeid>', views.deletepayrollemp, name='deletepayrollemp'),
+    path('employee_add_file/<int:employeeid>', views.employee_add_file, name='employee_add_file'),
+    path('employeecomments/<int:employeeid>', views.employeecomments, name='employeecomments'),
+    path('deleteemployeecomments/<int:employeeid>/<int:commentid>', views.deleteemployeecomments, name='deleteemployeecomments'),
+    
+    path('accounts/<int:pk>/', views.bank_account_holder_detail, name='bank_account_holder_detail'),
+    path('bank-account/<int:pk>/activate/', views.activate_bank_account, name='activate_bank_account'),
+    path('bank-account/<int:pk>/deactivate/', views.deactivate_bank_account, name='deactivate_bank_account'),
+    path('bank-accounts/', views.bank_account_list, name='bank_account_list'),
+
+    path('cust_dropdown',views.cust_dropdown,name='cust_dropdown'),
+    path('credit_item', views.credit_item, name='credit_item'),
+    path('item_dropdown', views.item_dropdown, name='item_dropdown'),
+    path('cust_details', views.cust_details, name='cust_details'),
+    
+    path('chartacnt_overview/<int:accountsid>', views.chartacnt_overview, name='chartacnt_overview'),
+    path('active_account/<int:accountsid>/<str:status>/', views.active_account, name='active_account'),
+    
+    path('gocustomers_asc', views.gocustomers_asc, name='gocustomers_asc'),
+    path('gocustomers_desc', views.gocustomers_desc, name='gocustomers_desc'),
+    path('credit_num_asc', views.credit_num_asc, name='credit_num_asc'),
+    path('credit_num_desc', views.credit_num_desc, name='credit_num_desc'),
+    path('credit_cust_asc', views.credit_cust_asc, name='credit_cust_asc'),
+    path('credit_cust_desc', views.credit_cust_desc, name='credit_cust_desc'),
+    path('credit_date_asc', views.credit_date_asc, name='credit_date_asc'),
+    path('credit_date_desc', views.credit_date_desc, name='credit_date_desc'),
+    
+    path('gstrr1',views.gstrr1,name='gstrr1'),
+    path('gstr2',views.gstr2,name='gstr2'),
+    path('gstr9',views.gstr9,name='gstr9'),
+    
+    path('est_num_asc', views.est_num_asc, name='est_num_asc'),
+    path('est_num_desc', views.est_num_desc, name='est_num_desc'),
+    path('est_cust_asc', views.est_cust_asc, name='est_cust_asc'),
+    path('est_cust_desc', views.est_cust_desc, name='est_cust_desc'),
+    path('est_date_asc', views.est_date_asc, name='est_date_asc'),
+    path('est_date_desc', views.est_date_desc, name='est_date_desc'),
+    path('sales_num_asc', views.sales_num_asc, name='sales_num_asc'),
+    path('sales_num_desc', views.sales_num_desc, name='sales_num_desc'),
+    path('sales_cust_asc', views.sales_cust_asc, name='sales_cust_asc'),
+    path('sales_cust_desc', views.sales_cust_desc, name='sales_cust_desc'),
+    path('sales_date_asc', views.sales_date_asc, name='sales_date_asc'),
+    path('sales_date_desc', views.sales_date_desc, name='sales_date_desc'),
+    path('inv_num_asc', views.inv_num_asc, name='inv_num_asc'),
+    path('inv_num_desc', views.inv_num_desc, name='inv_num_desc'),
+    path('inv_cust_asc', views.inv_cust_asc, name='inv_cust_asc'),
+    path('inv_cust_desc', views.inv_cust_desc, name='inv_cust_desc'),
+    path('inv_date_asc', views.inv_date_asc, name='inv_date_asc'),
+    path('inv_date_desc', views.inv_date_desc, name='inv_date_desc'),  
+    path('updatesales/<int:id>',views.updatesales,name='updatesales'),
+     
+    path('export_bank_accounts/', views.export_bank_accounts_to_excel, name='export_bank_accounts'),
+    path('crt_bank',views.crt_bank,name='crt_bank'),
+    path('view_bank/<int:id>',views.view_bank,name='view_bank'),
+    path('b_to_c',views.b_to_c,name='b_to_c'),
+    path('c_to_b',views.c_to_b,name='c_to_b'),
+    path('b_to_b',views.b_to_b,name='b_to_b'),
+    path('b_adj',views.b_adj,name='b_adj'),
+    path('edit_bank/<int:id>',views.edit_bank,name='edit_bank'),
+    path('delete_bank/<int:id>',views.delete,name='delete'),
+    path('cash_in_hand',views.cash_in_hand,name='cash_in_hand'),
+    path('edit_b_to_c/<int:id>', views.edit_b_to_c, name='edit_b_to_c'),
+    path('edit_account_adjustment/<int:id>', views.edit_account_adjustment, name='edit_account_adjustment'),
+    path('update_bank_transfer/<int:transfer_id>', views.update_bank_transfer, name='update_bank_transfer'),
+    path('update_cash_to_bank_transfer/<int:id>', views.update_cash_to_bank_transfer, name='update_cash_to_bank_transfer'),
+    path('delet_bank/<int:id>',views.delet_bank,name='delet_bank'),
+    path('bnk_statement/<int:id>',views.bnk_statement,name='bnk_statement'),
+    path('add_cash',views.add_cash,name='add_cash'),
+    path('delet_bnk/<int:id>',views.delet_bnk,name='delet_bnk'),
+    path('cash_statement',views.cash_statement,name='cash_statement'),
+    path('edit_add_cash/<int:id>',views.edit_add_cash,name='edit_add_cash'),
+    
+    path('gorecinvoices',views.gorecinvoices,name='gorecinvoices'),
+    path('createrecinvoices',views.createrecinvoices,name='createrecinvoices'),
+    path('addrecinvoices',views.addrecinvoices,name='addrecinvoices'),
+    path('recinvoice_view/<int:id>',views.recinvoice_view,name='recinvoice_view'),
+   	path('itemdata1',views.itemdata1,name='itemdata1'),
+    path('reccreatecustomer1',views.reccreatecustomer1,name='reccreatecustomer1'),
+    path(' createrec_item1',views. createrec_item1,name='createrec_item1'),
+    # path(' itemdata_recur',views. itemdata_recur,name='itemdata_recur'),
+    path('recinvoice_add_file/<int:id>',views.recinvoice_add_file ,name='recinvoice_add_file'),
+    
+    path('editrecinvoice/<int:id>',views.editrecinvoice ,name='editrecinvoice'),
+    path('deleterecinvoice/<int:id>',views.deleterecinvoice ,name='deleterecinvoice'),
+    path('render_pdfrecinvoice_view/<int:id>',views.render_pdfrecinvoice_view,name='render_pdfrecinvoice_view'),
+    path('addewaybill1/<int:id>',views.addewaybill1,name='addewaybill1'),
+    path('goewaybill1',views.goewaybill1,name='goewaybill1'),
+    path('recinvoice_status/<int:id>',views.recinvoice_status,name='recinvoice_status'),
+    path('createrecinvoices1/<int:id>',views.createrecinvoices1,name='createrecinvoices1'),
+    
+    path('employeeloanpage',views.employeeloanpage,name='employeeloanpage'),
+    path('newemployeeloan',views.newemployeeloan,name='newemployeeloan'),
+    path('listemployee_loan',views.listemployee_loan,name='listemployee_loan'),
+    path('addemployeeloan',views.addemployeeloan,name='addemployeeloan'),
+    path('AddEmployeeInloanPage',views.AddEmployeeInloanPage,name='AddEmployeeInloanPage'),
+    path('employee_details<int:id>',views.employee_details,name='employee_details'),
+    path('active_loan/<str:employeeid>', views.active_loan, name='active_loan'),
+    path('inactive_loan/<str:employeeid>', views.inactive_loan, name='inactive_loan'),
+    path('editloan/<int:eid>', views.editloan, name='editloan'),
+    path('editloan_action/<int:eid>', views.editloan_action, name='editloan_action'),
+    path('deleteloan/<int:eid>', views.deleteloan, name='deleteloan'),
+    path('loan_add_file/<int:id>', views.loan_add_file, name='loan_add_file'),
+    path('activeloanpage', views.activeloanpage, name='activeloanpage'),
+    path('inactiveloanpage', views.inactiveloanpage, name='inactiveloanpage'),
+    path('sortemployeename', views.sortemployeename, name='sortemployeename'),
+    path('sortloanamount', views.sortloanamount, name='sortloanamount'),
+    
+    # cheques
+    path('cheques',views.cheques,name='cheques'),
+    
+    # Transaction Reports
+    path('cashflow',views.cashflow,name='cashflow'), 
+    path('alltransactions',views.alltransactions,name='alltransactions'), 
+    path('daybook',views.daybook,name='daybook'), 
+    path('purchase',views.purchase,name='purchase'),
+    path('sales',views.sales,name='sales'),
+    
+    #sale_summary_byHSN
+    path('sale_summary_byHSN',views.sale_summary_byHSN,name='sale_summary_byHSN'),
+    
+    path('gorecinvoices1',views.gorecinvoices1,name='gorecinvoices1'),
+    path('gorecinvoices2',views.gorecinvoices2,name='gorecinvoices2'),
+    path('getdata3',views.getdata3,name='getdata3'),
+    path('removerecinv',views.removerecinv,name='removerecinv'),
+    path('gorecinvoices3',views.gorecinvoices3,name='gorecinvoices3'),
+
+ 
+     
+     
 ]
