@@ -75,8 +75,6 @@
     .nav li a {
         text-decoration: none;
     }
-
-
 </style>
 
 <div class="page-content">
@@ -139,32 +137,75 @@
                                 });
                             });
                             var id = activatedTabId
-                            var printContent = document.getElementById(id).innerHTML;
 
-                            var originalContents = document.body.innerHTML;
-                            var containerDiv = document.createElement("div");
-                            containerDiv.style.textAlign = "center";
-                            var h1Element = document.createElement("h2");
-                            var h2Element = document.createElement("h1");
-                            h2Element.textContent ="GSTR1 REPORT"
+                            const pdfCard = document.getElementById(id).cloneNode(true);
+
+                            // Create a new window for printing
+                            const printWindow = window.open('', '');
+                            const pageTitle = printWindow.document.createElement('h1');
+                            pageTitle.style.textAlign = "center";
+                            pageTitle.style.color = "black";
+                            pageTitle.textContent = 'GSTR1';
+                            const h1Element = printWindow.document.createElement('h2');
+                            h1Element.style.color = "black";
+                            h1Element.textAlign = "center";
+                            h1Element.textContent = 'GSTR1';
+                            // var printContent = document.getElementById(id).innerHTML;
+
+                            // var originalContents = document.body.innerHTML;
+                            // var containerDiv = document.createElement("div");
+                            // containerDiv.style.textAlign = "center";
+                            // var h1Element = document.createElement("h2");
+                            // var h2Element = document.createElement("h1");
+                            // h2Element.textContent = "GSTR1 REPORT"
                             if (id == '1') {
                                 h1Element.textContent = "Sale";
                             }
                             else {
                                 h1Element.textContent = "Sale Return";
                             }
-                            // Replace "Title" with your desired title text
 
-                            // Insert the <h1> element before the print content
-                            containerDiv.appendChild(h2Element);
-                            // document.body.innerHTML = h1Element.outerHTML + printContent;
-                            containerDiv.innerHTML =containerDiv.outerHTML +  h1Element.outerHTML+printContent;
-                            document.body.innerHTML =  containerDiv.outerHTML;
-                            // document.body.innerHTML = printContent;
 
-                            window.print();
+                            var styleElement = document.createElement("style");
+                            styleElement.textContent = `
+    
+    body {
+        background-color: #333;
+        color : black;
+        font-family: Arial, sans-serif;
+        /* Add more styles as needed */
+    }
+    h2,h1 {
+        color: #333;
+        /* Add more styles as needed */
+    }
+`;
 
-                            document.body.innerHTML = originalContents;
+
+                            // Append the <h2> element and style element to the containerDiv
+                            printWindow.document.body.appendChild(pageTitle);
+                            printWindow.document.body.appendChild(h1Element);
+
+                            // Append the cloned 'pdf-card' div to the new window
+                            printWindow.document.body.appendChild(pdfCard);
+
+                            // Ensure the styles are preserved by copying CSS from the original document
+                            const stylesheets = document.styleSheets;
+                            for (let i = 0; i < stylesheets.length; i++) {
+                                const stylesheet = stylesheets[i];
+                                if (stylesheet.href) {
+                                    const link = printWindow.document.createElement('link');
+                                    link.rel = 'stylesheet';
+                                    link.href = stylesheet.href;
+                                    printWindow.document.head.appendChild(link);
+                                }
+                            }
+
+                            // Trigger the print dialog for the new window
+                            printWindow.print();
+
+                            // Close the new window after printing
+                            printWindow.close();
                             // activatedTabId=1;
                         }
 
@@ -193,8 +234,16 @@
                     </script> -->
                     <script>
                         function exportAsExcel() {
-                            const table = document.getElementById('myTable'); // Replace 'myTable' with your table's ID
-                            const wb = XLSX.utils.table_to_book(table);
+                            const table1 = document.getElementById('myTable');
+                            const table2 = document.getElementById('myTable2');
+
+                            const wb = XLSX.utils.book_new();
+
+                            const ws1 = XLSX.utils.table_to_sheet(table1);
+                            const ws2 = XLSX.utils.table_to_sheet(table2);
+
+                            XLSX.utils.book_append_sheet(wb, ws1, 'Sale'); // Add the first sheet to the workbook
+                            XLSX.utils.book_append_sheet(wb, ws2, 'Sale return'); // Add the second sheet to the workbook
 
                             XLSX.writeFile(wb, 'gstr1.xlsx');
                         }
@@ -225,7 +274,7 @@
             <div class="tab-content">
                 <div class="tab-pane active" id="1" data-title="Sale">
 
-                    <table class="table table-responsive-md mt-4 table-hover table-bordered" id="myTable"
+                    <table class="table table-responsive-md mt-4 table-hover table-bordered print-only" id="myTable"
                         style="background-color: rgba(0, 0, 0, 0.2);">
                         <thead>
                             <tr class="text-center" style="background-color: rgba(255, 255, 255, 0.137);">
@@ -254,7 +303,7 @@
                             {% for i in sale %}
                             <tr class="text-center">
                                 <td>{{i.gstin}}</td>
-                                <td>{{i.customername}}</td>
+                                <td>{{i.cust}}</td>
                                 <td>{{i.invoiceno}}</td>
                                 <td>{{i.invoicedate}}</td>
                                 <td>{{i.grandtotal}}</td>
@@ -277,7 +326,7 @@
                 </div>
                 <div class="tab-pane" id="2" data-title="Sale return">
                     <div class="container-fluid">
-                        <table class="table2excel  table table-responsive-md mt-4 table-hover table-bordered"
+                        <table class="table2excel  table table-responsive-md mt-4 table-hover table-bordered "
                             style="background-color: rgba(0, 0, 0, 0.2);" id="myTable2">
                             <thead>
                                 <tr class="text-center" style="background-color: rgba(255, 255, 255, 0.137);">
@@ -310,7 +359,7 @@
                                 {% for i in cn %}
                                 <tr class="text-center">
                                     <td>{{i.gstin}}</td>
-                                    <td>{{i.customer}}</td>
+                                    <td>{{i.cust}}</td>
                                     <td>Nill</td>
                                     <td>Nill</td>
                                     <td>{{i.credit_no}}</td>

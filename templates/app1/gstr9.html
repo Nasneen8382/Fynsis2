@@ -1383,29 +1383,40 @@
 
         $(document).on('click', '.btn_print', function (event) {
             console.log('print1');
-            event.preventDefault();
-            var printContent = document.getElementById("pdf-card").innerHTML;
-                        var originalContents = document.body.innerHTML;
+            
+            const pdfCard = document.getElementById('pdf-card').cloneNode(true);
 
-                        // Create a <div> container for centering
-                        var containerDiv = document.createElement("div");
-                        containerDiv.style.textAlign = "center"; // Center-align the content
+                        // Create a new window for printing
+                        const printWindow = window.open('', '');
 
-                        // Create the <h1> element
-                        var h1Element = document.createElement("h1");
-                        h1Element.textContent = "GSTR9 REPORT"; // Replace "Title" with your desired title text
+                        const pageTitle = printWindow.document.createElement('h1');
+                        pageTitle.textContent = 'GSTR9 REPORT'; // Replace 'Page Title' with your desired title text
+                        pageTitle.style.textAlign = 'center';
+                        pageTitle.style.color = 'black';
 
-                        // Append the <h1> element to the container
-                        containerDiv.appendChild(h1Element);
+                        // Append the <h1> element to the new window's body
+                        printWindow.document.body.appendChild(pageTitle);
 
-                        // Insert the container and the print content
-                        containerDiv.innerHTML += printContent;
-                        document.body.innerHTML = containerDiv.outerHTML;
+                        // Append the cloned 'pdf-card' div to the new window
+                        printWindow.document.body.appendChild(pdfCard);
 
-                        window.print();
+                        // Ensure the styles are preserved by copying CSS from the original document
+                        const stylesheets = document.styleSheets;
+                        for (let i = 0; i < stylesheets.length; i++) {
+                            const stylesheet = stylesheets[i];
+                            if (stylesheet.href) {
+                                const link = printWindow.document.createElement('link');
+                                link.rel = 'stylesheet';
+                                link.href = stylesheet.href;
+                                printWindow.document.head.appendChild(link);
+                            }
+                        }
 
-                        // Restore the original contents (excluding the container)
-                        document.body.innerHTML = originalContents;
+                        // Trigger the print dialog for the new window
+                        printWindow.print();
+
+                        // Close the new window after printing
+                        printWindow.close();
 
 
         });

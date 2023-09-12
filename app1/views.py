@@ -27034,6 +27034,7 @@ def estimate_create_item(request):
                                 hsn=ihsn,tax_reference=itax,
                                 purchase_cost=ipcost,
                                 sales_cost=iscost,
+                                #tax_rate=itrate,
                                 acount_pur=ipuracc,
                                 account_sal=isalacc,
                                 pur_desc=ipurdesc,
@@ -27080,6 +27081,7 @@ def estimate_create_item2(request,id):
                                 hsn=ihsn,tax_reference=itax,
                                 purchase_cost=ipcost,
                                 sales_cost=iscost,
+                                # tax_rate=itrate,
                                 acount_pur=ipuracc,
                                 account_sal=isalacc,
                                 pur_desc=ipurdesc,
@@ -27821,6 +27823,7 @@ def sale_create_item(request):
                                 hsn=ihsn,tax_reference=itax,
                                 purchase_cost=ipcost,
                                 sales_cost=iscost,
+                                #tax_rate=itrate,
                                 acount_pur=ipuracc,
                                 account_sal=isalacc,
                                 pur_desc=ipurdesc,
@@ -28323,7 +28326,7 @@ def goinvoices(request):
         customers = customer.objects.filter(cid=cmp1).all()
         invs = invoice.objects.filter(cid=cmp1).values()
         for i in invs:
-            cust = " " . join(i['customername'].split(" ")[1:])
+            cust = " " . join(i['customername'].split(" ")[:2])
             i['cust'] = cust
         context = {'invoice': invs, 'customers': customers, 'cmp1': cmp1}
         return render(request, 'app1/invoices.html', context)
@@ -30879,6 +30882,7 @@ def iodhsn(request):
 def iod_rate(request):
     try:
         cmp1 = company.objects.get(id=request.session['uid'])
+        # items = itemtable.objects.order_by('tax_rate').filter(cid=cmp1)
         # context = {'items':items,'cmp1': cmp1}
         return render(request, 'app1/itemmodule.html',{'cmp1': cmp1})  
     except:
@@ -30931,6 +30935,7 @@ def create_item(request):
                                 purchase_cost=ipcost,
                                 sales_cost=iscost,
                                 itmdate=itmdate,
+                                #tax_rate=itrate,
                                 acount_pur=ipuracc,
                                 account_sal=isalacc,
                                 pur_desc=ipurdesc,
@@ -31011,6 +31016,7 @@ def update_item(request, id):
             item.purchase_cost = request.POST.get('pcost')
             item.sales_cost = request.POST.get('salesprice')
             item.itmdate = request.POST.get('itmdate')
+            # item.tax_rate = request.POST.get('tax')
             item.acount_pur = request.POST.get('pur_account')
             item.account_sal = request.POST.get('sale_account')
             item.pur_desc = request.POST.get('pur_desc')
@@ -31529,6 +31535,7 @@ def getit(request):
             'tax_reference': itemobject.tax_reference,
             'purchase_cost': itemobject.purchase_cost,
             'sales_cost': itemobject.sales_cost,
+            # 'tax_rate': itemobject.tax_rate,
             'acount_pur': itemobject.acount_pur,
             'account_sal': itemobject.account_sal,
             'pur_desc': itemobject.pur_desc,
@@ -32265,6 +32272,7 @@ def gstr3b(request):
         for i in tax2 :
             if i.amount is not None:
             	t02 += round(int(i.amount))
+
         total3 = t02
 
         t03 = 0
@@ -33446,6 +33454,7 @@ def create_item1(request):
                                 purchase_cost=ipcost,
                                 sales_cost=iscost,
                                 itmdate=itmdate,
+                                #tax_rate=itrate,
                                 acount_pur=ipuracc,
                                 account_sal=isalacc,
                                 pur_desc=ipurdesc,
@@ -33494,6 +33503,7 @@ def create_item2(request):
                                 purchase_cost=ipcost,
                                 sales_cost=iscost,
                                 itmdate=itmdate,
+                                #tax_rate=itrate,
                                 acount_pur=ipuracc,
                                 account_sal=isalacc,
                                 pur_desc=ipurdesc,
@@ -33542,6 +33552,7 @@ def create_item3(request):
                                 purchase_cost=ipcost,
                                 sales_cost=iscost,
                                 itmdate=itmdate,
+                                #tax_rate=itrate,
                                 acount_pur=ipuracc,
                                 account_sal=isalacc,
                                 pur_desc=ipurdesc,
@@ -37859,6 +37870,7 @@ def crd_create_item(request):
                                 hsn=ihsn,tax_reference=itax,
                                 purchase_cost=ipcost,
                                 sales_cost=iscost,
+                                #tax_rate=itrate,
                                 acount_pur=ipuracc,
                                 account_sal=isalacc,
                                 pur_desc=ipurdesc,
@@ -39339,6 +39351,7 @@ def additem_challan(request):
                                 hsn=hsn,tax_reference=taxType,
                                 purchase_cost=cost_prices,
                                 sales_cost=sel_prices,
+                                #tax_rate=itrate,
                                 acount_pur=cost_accs,
                                 account_sal=sel_accs,
                                 pur_desc=p_descs,
@@ -40341,42 +40354,43 @@ def gstrr1(request):
         cn = salescreditnote.objects.all()
         sale=invoice.objects.all()
         
-            
         for c in cn:
-            name = c.customer
+            cname = c.customer
+            parts = cname.split()
+            if len(parts) == 3:
+                c.cust = ' '.join(parts[1:])
+            else:
+                c.cust = cname
+            name=c.cust
             print(name)
             x = name.split()
             x.append(" ")
             a = x[0]
             b = x[1]
-            if x[2] is not None:
-                b = x[1] + " " + x[2]
-                cust = customer.objects.filter(email=c.email,firstname=a, lastname=b)
-                for i in cust:
-                    c.gstin= i.gstin
-
-            else:
-                cust = customer.objects.filter(email=c.email,firstname=a, lastname=b)
-                for i in cust:
-                    c.gstin= i.gstin
+            
+            cust = customer.objects.filter(email=c.email,firstname=a, lastname=b)
+            for i in cust:
+                c.gstin= i.gstin
             
         for s in sale:
-            name = s.customername
+            cname = s.customername
+            parts = cname.split()
+            if len(parts) == 3:
+                s.cust = ' '.join(parts[1:])
+            else:
+                s.cust = cname
+            
+            name=s.cust
             print(name)
             x = name.split()
             x.append(" ")
             a = x[0]
             b = x[1]
-            if x[2] is not None:
-                b = x[1] + " " + x[2]
-                cust = customer.objects.filter(email=s.email,firstname=a, lastname=b)
-                for i in cust:
-                    s.gstin= i.gstin
-
-            else:
-                cust = customer.objects.filter(email=s.email,firstname=a, lastname=b)
-                for i in cust:
-                    s.gstin= i.gstin
+            
+            cust = customer.objects.filter(email=s.email,firstname=a, lastname=b)
+            for i in cust:
+                s.gstin= i.gstin
+            
 
         return render(request,'app1/gstrr1.html',{'sale':sale,'cmp1':cmp1,'cn':cn})          
 
@@ -41618,6 +41632,7 @@ def createrec_item1(request):
                                 purchase_cost=ipcost,
                                 sales_cost=iscost,
                                 #itmdate=itmdate,
+                                #tax_rate=itrate,
                                 acount_pur=ipuracc,
                                 account_sal=isalacc,
                                 pur_desc=ipurdesc,

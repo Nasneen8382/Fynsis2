@@ -64,6 +64,57 @@
     .bar .left input {
         height: 5vh;
     }
+
+    @media print {
+        body * {
+            visibility: hidden;
+        }
+
+        header {
+            display: none;
+        }
+
+        .print-only * {
+            visibility: visible;
+
+        }
+
+        .print-only {
+            color: black;
+            /* position: absolute; */
+
+            /* position: fixed; */
+            left: 0;
+            top: 0;
+            right: 0;
+            height: auto;
+            /* page-break-before: always;
+            page-break-inside: avoid; */
+        }
+        
+        @page {
+            size: 100%;
+            margin: 0;
+            height: auto;
+        }
+
+        .print-only .table {
+            border-collapse: collapse;
+            width: 100%;
+            /* Set the width to 100% of the printed page */
+            margin: 0;
+            /* Remove margins to maximize the width */
+        }
+
+        .print-only th,
+        .print-only td {
+            padding: 8px;
+            /* Add padding for better readability */
+            text-align: center;
+            /* Center-align text in cells */
+        }
+
+    }
 </style>
 
 <div class="page-content">
@@ -110,28 +161,41 @@
                     $(document).on('click', '.btn_print', function (event) {
                         console.log('print1');
                         event.preventDefault();
-                        var printContent = document.getElementById("pdf-card").innerHTML;
-                        var originalContents = document.body.innerHTML;
 
-                        // Create a <div> container for centering
-                        var containerDiv = document.createElement("div");
-                        containerDiv.style.textAlign = "center"; // Center-align the content
 
-                        // Create the <h1> element
-                        var h1Element = document.createElement("h1");
-                        h1Element.textContent = "GSTR2 REPORT"; // Replace "Title" with your desired title text
+                        const pdfCard = document.getElementById('pdf-card').cloneNode(true);
 
-                        // Append the <h1> element to the container
-                        containerDiv.appendChild(h1Element);
+                        // Create a new window for printing
+                        const printWindow = window.open('', '');
 
-                        // Insert the container and the print content
-                        containerDiv.innerHTML += printContent;
-                        document.body.innerHTML = containerDiv.outerHTML;
+                        const pageTitle = printWindow.document.createElement('h1');
+                        pageTitle.textContent = 'GSTR2 REPORT'; // Replace 'Page Title' with your desired title text
+                        pageTitle.style.textAlign = 'center';
+                        pageTitle.style.color = 'black';
 
-                        window.print();
+                        // Append the <h1> element to the new window's body
+                        printWindow.document.body.appendChild(pageTitle);
 
-                        // Restore the original contents (excluding the container)
-                        document.body.innerHTML = originalContents;
+                        // Append the cloned 'pdf-card' div to the new window
+                        printWindow.document.body.appendChild(pdfCard);
+
+                        // Ensure the styles are preserved by copying CSS from the original document
+                        const stylesheets = document.styleSheets;
+                        for (let i = 0; i < stylesheets.length; i++) {
+                            const stylesheet = stylesheets[i];
+                            if (stylesheet.href) {
+                                const link = printWindow.document.createElement('link');
+                                link.rel = 'stylesheet';
+                                link.href = stylesheet.href;
+                                printWindow.document.head.appendChild(link);
+                            }
+                        }
+
+                        // Trigger the print dialog for the new window
+                        printWindow.print();
+
+                        // Close the new window after printing
+                        printWindow.close();
 
 
                     });
@@ -152,7 +216,7 @@
         </div>
     </div>
 
-    <div class="card radius-15 " id="pdf-card">
+    <div class="card radius-15 print-only" id="pdf-card">
         <div class="card-body">
             <div class="container-fluid">
 

@@ -1648,7 +1648,6 @@ class salescreditnote(models.Model):
     cid = models.ForeignKey(company, on_delete=models.CASCADE,null=True)
     credit_no = models.IntegerField(default=1000)
     customer = models.CharField(max_length=100,null=True)
-    c = models.ForeignKey(customer, on_delete=models.CASCADE,null=True)
     address = models.TextField(null=True)
     creditdate = models.DateField(null=True)
     email = models.CharField(max_length=100,null=True)
