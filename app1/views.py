@@ -40353,6 +40353,7 @@ def gstrr1(request):
         # customr = customer.objects.filter(cid=cmp1)
         cn = salescreditnote.objects.all()
         sale=invoice.objects.all()
+        rinv=invoice.objects.all()
         
         for c in cn:
             cname = c.customer
@@ -40401,7 +40402,24 @@ def gstr2(request):
         else:
             return redirect('/')
         cmp1 = company.objects.get(id=request.session['uid'])
-        return render(request,'app1/gstr2.html',{'cmp1':cmp1})         
+        bill = purchasebill.objects.all()
+        for c in bill:
+            
+            name=c.vendor_name
+            print(name)
+            x = name.split()
+            x.append(" ")
+            a = x[0]
+            b = x[1]
+            
+            vend = vendor.objects.filter(firstname=a, lastname=b)
+            for i in vend:
+                c.gstin= i.gstin
+        return render(request,'app1/gstr2.html',{'cmp1':cmp1,'bill':bill})  
+def with_gstin(request):
+    cmp1 = company.objects.get(id=request.session["uid"])
+    pbill = purchasebill.objects.filter(status='Draft',cid=cmp1).all()
+    return render(request,'app1/gobilling.html',{'cmp1':cmp1,'pbill':pbill})
 
 def gstr9(request):
     if 'uid' in request.session:
