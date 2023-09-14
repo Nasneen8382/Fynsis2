@@ -11,7 +11,7 @@ from datetime import datetime, date, timedelta
 from .models import advancepayment, paydowncreditcard, salesrecpts, timeact, timeactsale, Cheqs, suplrcredit, addac, \
     bills, invoice, expences, payment, credit, delayedcharge, estimate, service, noninventory, bundle, employee, \
     payslip, inventory, customer, supplier, company, accounts, ProductModel, ItemModel, accountype, \
-    expenseaccount, incomeaccount, accounts1, recon1, recordpay, addtax1, bankstatement, customize
+    expenseaccount, incomeaccount, accounts1, recon1, recordpay, addtax1, bankstatement, customize,RetainerInvoices,recinvoice
 from django.forms import ModelForm
 from django.contrib.auth.models import auth, User
 from django.contrib import messages
@@ -40353,8 +40353,29 @@ def gstrr1(request):
         # customr = customer.objects.filter(cid=cmp1)
         cn = salescreditnote.objects.all()
         sale=invoice.objects.all()
-        rinv=invoice.objects.all()
-        
+        ret_invoices = RetainerInvoices.objects.all()
+        rec_invoices = recinvoice.objects.all()
+        for r in rec_invoices:
+            name= r.customername
+            x = name.split()
+            x.append(" ")
+            a = x[0]
+            b = x[1]
+            
+            cust = customer.objects.filter(firstname=a, lastname=b)
+            for j in cust:
+                r.gstin= j.gstin
+        for i in ret_invoices:
+            name= i.customer
+            x = name.split()
+            x.append(" ")
+            a = x[0]
+            b = x[1]
+            
+            cust = customer.objects.filter(email=i.email,firstname=a, lastname=b)
+            for j in cust:
+                i.gstin= j.gstin
+            
         for c in cn:
             cname = c.customer
             parts = cname.split()
@@ -40393,7 +40414,7 @@ def gstrr1(request):
                 s.gstin= i.gstin
             
 
-        return render(request,'app1/gstrr1.html',{'sale':sale,'cmp1':cmp1,'cn':cn})          
+        return render(request,'app1/gstrr1.html',{'sale':sale,'cmp1':cmp1,'cn':cn,'ret_invoices':ret_invoices,'rec_invoices':rec_invoices})          
 
 def gstr2(request):
     if 'uid' in request.session:

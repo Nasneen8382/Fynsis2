@@ -91,7 +91,7 @@
             /* page-break-before: always;
             page-break-inside: avoid; */
         }
-        
+
         @page {
             size: 100%;
             margin: 0;
@@ -149,24 +149,54 @@
                     </div>
 
                 </div>
+
+            </div>
+            <div class="bar pt-4 px-2">
+                <div class="left ">
+                    <a class="btn btn-outline-info" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                        role="button">Filter By
+                    </a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="" onclick="">All</a>
+                        <a class="dropdown-item" onclick="filterTable('With')">with GSTIN</a>
+                        <a class="dropdown-item" onclick="filterTable('Without')">without GSTIN</a>
+                    </div>
+                </div>
                 <div class="right">
+                    <button class="btn btn_pdf btn-outline-info">pdf</button>
                     <button class="btn btn_print btn-outline-info">Print</button>
                     <button class=" btn btn-outline-info" id="export-button" onclick="exportAsExcel()">Excel</button>
                 </div>
             </div>
-            <div class="row">
-                <a class="btn btn-outline-info" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                role="button">Filter By
-            </a>
-            <div class="dropdown-menu">
-                <a class="dropdown-item" href="" onclick="">All</a>
-                <a class="dropdown-item" href="" onclick="filterTable('With')">with GSTIN</a>
-                <a class="dropdown-item" href="" onclick="filterTable('Without')">without GSTIN</a>
-            </div>
+        </div>
+    </div>
+    <script>
 
-            </div>
-            <script>        
-            function filterTable(filterValue){
+        $(document).ready(function ($) {
+            
+
+            $(document).on('click', '.btn_pdf', function (event) {
+                console.log('print1');
+                event.preventDefault();
+                var element = document.getElementById('pdf-card');
+                element.style.color = 'black';
+                element.style.backgroundColor = '#243e54';
+                var opt =
+                {
+                    margin: 1,
+                    filename: 'employee' + '.pdf',
+                    image: { type: 'png', quality: 1.0 },
+                    html2canvas: { scale: 3, useCORS: true, backgroundColor: null },
+                    jsPDF: { unit: 'in', format: 'a3', orientation: 'portrait' }
+                };
+                html2pdf().set(opt).from(element).save();
+
+            });
+
+        });
+
+
+        function filterTable(filterValue) {
             const table = document.getElementById('myTable');
             const rows = table.getElementsByTagName('tr');
 
@@ -181,68 +211,67 @@
                 }
             }
         }
-           </script>
+    </script>
 
-            <script type="text/javascript">
-                $(document).ready(function ($) {
-                    
-                    $(document).on('click', '.btn_print', function (event) {
-                        console.log('print1');
-                        event.preventDefault();
+    <script type="text/javascript">
+        $(document).ready(function ($) {
 
-
-                        const pdfCard = document.getElementById('pdf-card').cloneNode(true);
-
-                        // Create a new window for printing
-                        const printWindow = window.open('', '');
-
-                        const pageTitle = printWindow.document.createElement('h1');
-                        pageTitle.textContent = 'GSTR2 REPORT'; // Replace 'Page Title' with your desired title text
-                        pageTitle.style.textAlign = 'center';
-                        pageTitle.style.color = 'black';
-
-                        // Append the <h1> element to the new window's body
-                        printWindow.document.body.appendChild(pageTitle);
-
-                        // Append the cloned 'pdf-card' div to the new window
-                        printWindow.document.body.appendChild(pdfCard);
-
-                        // Ensure the styles are preserved by copying CSS from the original document
-                        const stylesheets = document.styleSheets;
-                        for (let i = 0; i < stylesheets.length; i++) {
-                            const stylesheet = stylesheets[i];
-                            if (stylesheet.href) {
-                                const link = printWindow.document.createElement('link');
-                                link.rel = 'stylesheet';
-                                link.href = stylesheet.href;
-                                printWindow.document.head.appendChild(link);
-                            }
-                        }
-
-                        // Trigger the print dialog for the new window
-                        printWindow.print();
-
-                        // Close the new window after printing
-                        printWindow.close();
+            $(document).on('click', '.btn_print', function (event) {
+                console.log('print1');
+                event.preventDefault();
 
 
-                    });
+                const pdfCard = document.getElementById('pdf-card').cloneNode(true);
 
-                });
-            </script>
-            <script type="text/javascript">
-                function exportAsExcel() {
-                    const table = document.getElementById('myTable'); // Replace 'myTable' with your table's ID
-                    const wb = XLSX.utils.table_to_book(table);
+                // Create a new window for printing
+                const printWindow = window.open('', '');
 
-                    XLSX.writeFile(wb, 'gstr2.xlsx');
+                const pageTitle = printWindow.document.createElement('h1');
+                pageTitle.textContent = 'GSTR2 REPORT'; // Replace 'Page Title' with your desired title text
+                pageTitle.style.textAlign = 'center';
+                pageTitle.style.color = 'black';
+
+                // Append the <h1> element to the new window's body
+                printWindow.document.body.appendChild(pageTitle);
+
+                // Append the cloned 'pdf-card' div to the new window
+                printWindow.document.body.appendChild(pdfCard);
+
+                // Ensure the styles are preserved by copying CSS from the original document
+                const stylesheets = document.styleSheets;
+                for (let i = 0; i < stylesheets.length; i++) {
+                    const stylesheet = stylesheets[i];
+                    if (stylesheet.href) {
+                        const link = printWindow.document.createElement('link');
+                        link.rel = 'stylesheet';
+                        link.href = stylesheet.href;
+                        printWindow.document.head.appendChild(link);
+                    }
                 }
-            </script>
-            <br>
-            <br>
 
-        </div>
-    </div>
+                // Trigger the print dialog for the new window
+                printWindow.print();
+
+                // Close the new window after printing
+                printWindow.close();
+
+
+            });
+
+        });
+    </script>
+    <script type="text/javascript">
+        function exportAsExcel() {
+            const table = document.getElementById('myTable'); // Replace 'myTable' with your table's ID
+            const wb = XLSX.utils.table_to_book(table);
+
+            XLSX.writeFile(wb, 'gstr2.xlsx');
+        }
+    </script>
+    <br>
+    <br>
+
+
 
     <div class="card radius-15 print-only" id="pdf-card">
         <div class="card-body">
