@@ -69,9 +69,11 @@
 
 
                 <div class="right">
+                    <button class="btn btn_pdf btn-outline-info mt-4">pdf</button>
+                    <button class="btn btn_print btn-outline-info mt-4">Print</button>
                     <button class="exportToExcel btn btn-outline-info mt-4" id="export-button"
                         onclick="exportAsExcel()">Excel</button>
-                    <button class="btn btn_print btn-outline-info mt-4">Print</button>
+                    
                 </div>
             </div>
             <br>
@@ -1376,6 +1378,28 @@
             }
         });
     });
+    $(document).ready(function ($) {
+            
+
+            $(document).on('click', '.btn_pdf', function (event) {
+                console.log('print1');
+                event.preventDefault();
+                var element = document.getElementById('pdf-card');
+                element.style.color = 'black';
+                element.style.backgroundColor = '#243e54';
+                var opt =
+                {
+                    margin: 1,
+                    filename: 'gstr9' + '.pdf',
+                    image: { type: 'png', quality: 1.0 },
+                    html2canvas: { scale: 3, useCORS: true, backgroundColor: null },
+                    jsPDF: { unit: 'in', format: 'a3', orientation: 'portrait' }
+                };
+                html2pdf().set(opt).from(element).save();
+
+            });
+
+        });
 </script>
 <script type="text/javascript">
     $(document).ready(function ($) {
