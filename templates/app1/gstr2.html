@@ -65,56 +65,7 @@
         height: 5vh;
     }
 
-    @media print {
-        body * {
-            visibility: hidden;
-        }
-
-        header {
-            display: none;
-        }
-
-        .print-only * {
-            visibility: visible;
-
-        }
-
-        .print-only {
-            color: black;
-            /* position: absolute; */
-
-            /* position: fixed; */
-            left: 0;
-            top: 0;
-            right: 0;
-            height: auto;
-            /* page-break-before: always;
-            page-break-inside: avoid; */
-        }
-
-        @page {
-            size: 100%;
-            margin: 0;
-            height: auto;
-        }
-
-        .print-only .table {
-            border-collapse: collapse;
-            width: 100%;
-            /* Set the width to 100% of the printed page */
-            margin: 0;
-            /* Remove margins to maximize the width */
-        }
-
-        .print-only th,
-        .print-only td {
-            padding: 8px;
-            /* Add padding for better readability */
-            text-align: center;
-            /* Center-align text in cells */
-        }
-
-    }
+   
 </style>
 
 <div class="page-content">
@@ -157,7 +108,7 @@
                         role="button"><i class="fa fa-filter"></i> Filter By
                     </a>
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" href="" onclick="">All</a>
+                        <a class="dropdown-item" onclick="filterTable('All')">All</a>
                         <a class="dropdown-item" onclick="filterTable('With')">with GSTIN</a>
                         <a class="dropdown-item" onclick="filterTable('Without')">without GSTIN</a>
                     </div>
@@ -199,7 +150,13 @@
         function filterTable(filterValue) {
             const table = document.getElementById('myTable');
             const rows = table.getElementsByTagName('tr');
-
+            if (filterValue === 'All') {
+                for (let i = 2; i < rows.length; i++) {
+                const row = rows[i];
+                row.style.display = 'table-row';
+                }
+            }
+            else{
             for (let i = 2; i < rows.length; i++) {
                 const row = rows[i];
                 const cells = row.getElementsByTagName('td');
@@ -210,6 +167,7 @@
                     row.style.display = 'none';
                 }
             }
+        }
         }
     </script>
 
@@ -225,7 +183,9 @@
 
                 // Create a new window for printing
                 const printWindow = window.open('', '');
-
+                printWindow.document.write('<html><head><title>Print Preview</title></head><body style="background-color: white;>');
+                pdfCard.style.color = 'black';
+                pdfCard.style.backgroundColor = '#243e54';
                 const pageTitle = printWindow.document.createElement('h1');
                 pageTitle.textContent = 'GSTR2 REPORT'; // Replace 'Page Title' with your desired title text
                 pageTitle.style.textAlign = 'center';

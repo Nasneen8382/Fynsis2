@@ -592,7 +592,7 @@
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
 
-<script type="text/javascript">
+<!-- <script type="text/javascript">
     $(document).ready(function ($) {
 
 
@@ -618,7 +618,7 @@
     });
 
 
-</script>
+</script> -->
 
 <script>
     $(document).ready(function ($) {
@@ -775,7 +775,54 @@
     })
 
 
+    $(document).ready(function ($) {
+
+$(document).on('click', '.btn_print', function (event) {
+    console.log('print1');
+    event.preventDefault();
+
+
+    const pdfCard = document.getElementById('pdf-card').cloneNode(true);
+    pdfCard.style.color = 'black';
+    pdfCard.style.backgroundColor = 'gray';
+    // Create a new window for printing
+    const printWindow = window.open('', '');
+
+    const pageTitle = printWindow.document.createElement('h1');
+    pageTitle.textContent = 'Sale Summary By HSN'; // Replace 'Page Title' with your desired title text
+    pageTitle.style.textAlign = 'center';
+    pageTitle.style.color = 'black';
+
+    // Append the <h1> element to the new window's body
+    printWindow.document.body.appendChild(pageTitle);
+
+    // Append the cloned 'pdf-card' div to the new window
+    printWindow.document.body.appendChild(pdfCard);
+
+    // Ensure the styles are preserved by copying CSS from the original document
+    const stylesheets = document.styleSheets;
+    for (let i = 0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if (stylesheet.href) {
+            const link = printWindow.document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = stylesheet.href;
+            printWindow.document.head.appendChild(link);
+        }
+    }
+
+    // Trigger the print dialog for the new window
+    printWindow.print();
+
+    // Close the new window after printing
+    printWindow.close();
+
+
+});
+
+});
 </script>
+
 
 {% endif %}
 {% endblock %}
