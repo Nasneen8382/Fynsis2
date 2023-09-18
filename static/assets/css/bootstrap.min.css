@@ -8023,7 +8023,15 @@ button.bg-dark:focus {
     top: 0;
     z-index: 1020;
   }
+  .nav-wrapper.sticky-top {
+    position: fixed;
 }
+.nav-wrapper.sticky-top.menu-opened {
+    overflow: scroll;
+    height: 100vh;
+}
+}
+
 
 .sr-only {
   position: absolute;

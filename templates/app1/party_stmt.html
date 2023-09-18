@@ -1,0 +1,146 @@
+{% extends 'app1/base.html' %}
+{% block body %}
+{% load static %}
+{% if user.is_authenticated %}
+<style>
+    .bar {
+        align-items: center;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .bar .left {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    .bar .left input {
+        height: 5vh;
+    }
+</style>
+<div class="page-content">
+    <div class="card radius-15">
+        <div class="card-body">
+            <div class="card-title">
+                <center>
+
+                    <h2 class="my-4" id="headline">PARTY STATEMENT</h2>
+                    <div class="display">
+                        <div id="d1" style="display: inline-block;"></div>
+                        <div id="d2" style="display: inline-block;"></div>
+                    </div>
+
+                </center>
+                <hr>
+            </div>
+
+            <div class="bar">
+                <div class=" left">
+                    <div class="px-2">
+                        <label style="text-align:left ">From</label><br>
+                        <input name="FromDate" class="inputdate form-control" type="date" id="in1">
+                    </div>
+
+                    <div class="px-2">
+                        <label style="text-align:left ">To</label><br>
+                        <input name="ToDate" type="date" class="inputdate form-control" id="in2">
+                    </div>
+                    <div class="px-2">
+                        <label style="text-align:left ">Party</label><br>
+                        <input name="party" list="party" class="form-control" id="pin">
+                        <datalist id="party">
+                            {% for i in cust %}
+                            <option value="{{i.firstname}} {{i.lastname}}">
+                                {% endfor %}
+                                {% for i in vend %}
+                            <option value="{{i.firstname}} {{i.lastname}}">
+                                {% endfor %}
+                        </datalist>
+                    </div>
+
+                </div>
+                <div class="right">
+                    <button class="btn btn_pdf btn-outline-info">pdf</button>
+                    <button class="btn btn_print btn-outline-info">Print</button>
+                    <button class=" btn btn-outline-info" id="export-button" onclick="exportAsExcel()">Excel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card radius-15 print-only" id="pdf-card" size="A4">
+        <div class="card-body">
+            <div class="container-fluid">
+
+                <table class="table table-responsive-md mt-4 table-hover table-bordered"
+                    style="background-color: rgba(0, 0, 0, 0.2);" id="myTable">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Type</th>
+                            <th>Reference no.</th>
+                            <th>Payment method</th>
+                            <th>Total</th>
+                            <th>Debit</th>
+                            <th>Credit</th>
+                            <th>Running Balance</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in inv %}
+                        <tr class="text-center">
+                            <td>{{i.invoicedate}}</td>
+                            <td>invoice</td>
+                            <td>{{i.invoiceno}}</td>
+                            <td>cash</td>
+                            <td>{{i.grandtotal}}</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>{{i.grandtotal}}</td>
+                        </tr>
+                        {% endfor %}
+                        <tr>
+                            <td colspan="4"><b>Total Value</b></td>
+                            <td style="text-align: center;" id="total"></td>
+                            <td style="text-align: center;"><b>₹0.00</b></td>
+                            <td style="text-align: center;"><b>₹0.00</b></td>
+                            <td style="text-align: center;" id="balance"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    const inputElement = document.querySelector('input[name="party"]');
+    const headlineElement = document.getElementById('headline');
+    inputElement.addEventListener('input', function () {
+        const selectedValue = inputElement.value;
+        head = selectedValue + ' Statement';
+        headlineElement.textContent = head.toUpperCase();
+    });
+    
+    function calctot(col,iid){
+       
+    const table = document.getElementById("myTable");
+    const rows = table.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
+    let total = 0;
+    
+    for (let i = 0; i < rows.length; i++) {
+        console.log(col);
+        console.log("hhhhhhhhhhhhhhhhhhhhhhhhh");
+        const cell = rows[i].getElementsByTagName("td")[col];
+        const amount = parseFloat(cell.textContent) || 0;
+        total += amount;
+    }
+    console.log(iid);
+    // Update the total amount in the footer
+    const totalAmountCell = document.getElementById(iid);
+    totalAmountCell.textContent = '₹'+ total.toFixed(2); // Display total with two decimal places
+    }
+    calctot(4,'total');
+    calctot(4,'balance');
+</script>
+{% endif %}
+
+{% endblock %}

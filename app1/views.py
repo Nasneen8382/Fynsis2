@@ -42433,4 +42433,16 @@ def deleteloan(request,eid):
     cmp1 = company.objects.get(id=request.session["uid"])
     employee = EmployeeLoan.objects.get(id=eid,company=request.session["uid"])
     employee.delete()
-    return redirect('employeeloanpage')  
+    return redirect('employeeloanpage')
+# ==================================================
+
+
+def party_stmt(request):
+    cmp1 = company.objects.get(id=request.session["uid"])
+    cust = customer.objects.all()
+    vend = vendor.objects.all()
+    inv= invoice.objects.all()
+   
+
+    context = {'cust': cust,'vend':vend,  'cmp1': cmp1,'inv':inv}
+    return render(request, 'app1/party_stmt.html',context)

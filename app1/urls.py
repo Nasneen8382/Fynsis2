@@ -1085,6 +1085,9 @@ urlpatterns = [
     path('removerecinv',views.removerecinv,name='removerecinv'),
     path('gorecinvoices3',views.gorecinvoices3,name='gorecinvoices3'),
 
+
+    path('party_stmt',views.party_stmt,name='party_stmt'),
+
  
      
      
