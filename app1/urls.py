@@ -1087,6 +1087,7 @@ urlpatterns = [
 
 
     path('party_stmt',views.party_stmt,name='party_stmt'),
+    path('all_parties',views.all_parties,name='all_parties'),
 
  
      

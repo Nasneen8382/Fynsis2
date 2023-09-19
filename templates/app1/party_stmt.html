@@ -2,6 +2,11 @@
 {% block body %}
 {% load static %}
 {% if user.is_authenticated %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+
+
 <style>
     .bar {
         align-items: center;
@@ -17,13 +22,24 @@
     .bar .left input {
         height: 5vh;
     }
+
+    .hidden {
+        display: none;
+    }
+
+    @media print and (color) {
+        * {
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+    }
 </style>
 <div class="page-content">
     <div class="card radius-15">
         <div class="card-body">
             <div class="card-title">
                 <center>
-
+                    <h6>{{cmp1.cname}}</h6>
                     <h2 class="my-4" id="headline">PARTY STATEMENT</h2>
                     <div class="display">
                         <div id="d1" style="display: inline-block;"></div>
@@ -67,7 +83,7 @@
             </div>
         </div>
     </div>
-    <div class="card radius-15 print-only" id="pdf-card" size="A4">
+    <div class="card radius-15 print-only" id="pdf-card">
         <div class="card-body">
             <div class="container-fluid">
 
@@ -75,6 +91,7 @@
                     style="background-color: rgba(0, 0, 0, 0.2);" id="myTable">
                     <thead>
                         <tr>
+                            <th class="hidden"></th>
                             <th>Date</th>
                             <th>Type</th>
                             <th>Reference no.</th>
@@ -88,6 +105,7 @@
                     <tbody>
                         {% for i in inv %}
                         <tr class="text-center">
+                            <td class="hidden">{{i.cust}}</td>
                             <td>{{i.invoicedate}}</td>
                             <td>invoice</td>
                             <td>{{i.invoiceno}}</td>
@@ -98,49 +116,398 @@
                             <td>{{i.grandtotal}}</td>
                         </tr>
                         {% endfor %}
+                        {% for i in est %}
+                        <tr class="text-center">
+                            <td class="hidden">{{i.cust}}</td>
+                            <td>{{i.estimatedate}}</td>
+                            <td>estimate</td>
+                            <td>{{i.estimateno}}</td>
+                            <td>cash</td>
+                            <td>{{i.estimatetotal}}</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>{{i.estimatetotal}}</td>
+                        </tr>
+                        {% endfor %}
+                        {% for i in sorder %}
+                        <tr class="text-center">
+                            <td class="hidden">{{i.cust}}</td>
+                            <td>{{i.saledate}}</td>
+                            <td>sales order</td>
+                            <td>{{i.saleno}}</td>
+                            <td>cash</td>
+                            <td>{{i.salestotal}}</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>{{i.salestotal}}</td>
+                        </tr>
+                        {% endfor %}
+                        {% for i in scn %}
+                        <tr class="text-center">
+                            <td class="hidden">{{i.cust}}</td>
+                            <td>{{i.creditdate}}</td>
+                            <td>credit note</td>
+                            <td>{{i.credit_no}}</td>
+                            <td>cash</td>
+                            <td>{{i.grandtotal}}</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>{{i.grandtotal}}</td>
+                        </tr>
+                        {% endfor %}
+                        {% for i in payr %}
+                        <tr class="text-center">
+                            <td class="hidden">{{i.customer}}</td>
+                            <td>{{i.paymdate}}</td>
+                            <td>payment recieved</td>
+                            <td>{{i.refno}}</td>
+                            <td>{{i.pmethod}}</td>
+                            <td>{{i.amtreceived}}</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>{{i.amtreceived}}</td>
+                        </tr>
+                        {% endfor %}
+                        {% for i in rinv %}
+                        <tr class="text-center">
+                            <td class="hidden">{{i.customer}}</td>
+                            <td>{{i.invoice_date}}</td>
+                            <td>retainer invoice</td>
+                            <td>{{i.invoice_number}}</td>
+                            <td>cash</td>
+                            <td>{{i.total_amount}}</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>{{i.total_amount}}</td>
+                        </tr>
+                        {% endfor %}
+                        {% for i in chln %}
+                        <tr class="text-center">
+                            <td class="hidden">{{i.customer}}</td>
+                            <td>{{i.challan_date}}</td>
+                            <td>delivery challan</td>
+                            <td>{{i.chal_no}}</td>
+                            <td>cash</td>
+                            <td>{{i.grand}}</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>{{i.grand}}</td>
+                        </tr>
+                        {% endfor %}
+                        {% for i in recinv %}
+                        <tr class="text-center">
+                            <td class="hidden">{{i.customername}}</td>
+                            <td>{{i.startdate}}</td>
+                            <td>reccuring invoice</td>
+                            <td>{{i.recinvoiceno}}</td>
+                            <td>cash</td>
+                            <td>{{i.grandtotal}}</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>{{i.grandtotal}}</td>
+                        </tr>
+                        {% endfor %}
+                        {% for i in porder %}
+                        <tr class="text-center">
+                            <td class="hidden">{{i.vendor_name}}</td>
+                            <td>{{i.date}}</td>
+                            <td>purchase order</td>
+                            <td>{{i.puchaseorder_no}}</td>
+                            <td>cash</td>
+                            <td>{{i.grand_total}}</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>{{i.grand_total}}</td>
+                        </tr>
+                        {% endfor %}
+                        {% for i in bill %}
+                        <tr class="text-center">
+                            <td class="hidden">{{i.vendor_name}}</td>
+                            <td>{{i.date}}</td>
+                            <td>purchase bill</td>
+                            <td>{{i.bill_no}}</td>
+                            <td>cash</td>
+                            <td>{{i.grand_total}}</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>{{i.grand_total}}</td>
+                        </tr>
+                        {% endfor %}
+                        {% for i in pexp %}
+                        <tr class="text-center">
+                            <td class="hidden">{{i.vendor}}</td>
+                            <td>{{i.date}}</td>
+                            <td>purchase expense</td>
+                            <td>{{i.expense_no}}</td>
+                            <td>cash</td>
+                            <td>{{i.amount}}</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>{{i.amount}}</td>
+                        </tr>
+                        {% endfor %}
+                        {% for i in ppay %}
+                        <tr class="text-center">
+                            <td class="hidden">{{i.vendor}}</td>
+                            <td>{{i.paymentdate}}</td>
+                            <td>purchase payment</td>
+                            <td>{{i.pymntid}}</td>
+                            <td>{{i.paymentmethod}}</td>
+                            <td>{{i.paymentamount}}</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>{{i.paymentamount}}</td>
+                        </tr>
+                        {% endfor %}
+                        {% for i in pdeb %}
+                        <tr class="text-center">
+                            <td class="hidden">{{i.vendor}}</td>
+                            <td>{{i.debitdate}}</td>
+                            <td>purchase debit</td>
+                            <td>{{i.debit_no}}</td>
+                            <td>cash</td>
+                            <td>{{i.grandtotal}}</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>{{i.grandtotal}}</td>
+                        </tr>
+                        {% endfor %}
+                        {% for i in mj %}
+                        <tr class="text-center">
+                            <td class="hidden">{{i.contact}}</td>
+                            <td>{{i.mjrnl.date}}</td>
+                            <td>manual journal</td>
+                            <td>{{i.mjrnl.mj_no}}</td>
+                            <td>cash</td>
+                            <td>{{i.mjrnl.s_totalcre}}</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>{{i.mjrnl.s_totalcre}}</td>
+                        </tr>
+                        {% endfor %}
                         <tr>
                             <td colspan="4"><b>Total Value</b></td>
-                            <td style="text-align: center;" id="total"></td>
+                            <td style="text-align: center;" id="tot"></td>
                             <td style="text-align: center;"><b>₹0.00</b></td>
                             <td style="text-align: center;"><b>₹0.00</b></td>
                             <td style="text-align: center;" id="balance"></td>
                         </tr>
                     </tbody>
                 </table>
+                <script>
+
+                    $(document).ready(function () {
+                        function calctot(col, id) {
+                            var total = 0;
+
+                            $("#myTable tbody tr").each(function () {
+                                var amount = parseFloat($(this).find("td:eq(" + col + ")").text()) || 0;
+                                total += amount;
+                            });
+
+                            $("#" + id).text('₹' + total.toFixed(2)); // Display total with two decimal places
+
+                            $("#totvalue").text('₹' + total.toFixed(2));
+                        }
+
+                        calctot(5, 'tot');
+                        calctot(8, 'balance'); // Call the function initially
+                    });
+                </script>
+
+            </div>
+            <div class="row p-4">
+                <div class="col-10">
+                    <div class="row mb-2">
+                        <div class="col-4 ">Total Sale: <p class="d-inline-block">0.00</p>
+                        </div>
+                        <div class="col-4">Total Purchase:</div>
+                        <div class="col-4">Total Expense:</div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-4">Total Money-In:</div>
+                        <div class="col-4">Total Money-Out:</div>
+                        <div class="col-4"></div>
+                    </div>
+                </div>
+                <div class="col-2 text-center">
+                    <h5 class="pt-3">Total Recievable</h5>
+                    <h6 id="totvalue" class="d-inline-block">0.00</h6>
+                </div>
             </div>
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    function exportAsExcel() {
+        const table = document.getElementById('myTable'); // Replace 'myTable' with your table's ID
+        const wb = XLSX.utils.table_to_book(table);
+
+        XLSX.writeFile(wb, 'patystatement.xlsx');
+    }
+</script>
 <script>
+    $(document).ready(function ($) {
+
+        $(document).on('click', '.btn_print', function (event) {
+            console.log('print1');
+            event.preventDefault();
+
+
+            const pdfCard = document.getElementById('pdf-card').cloneNode(true);
+
+            // Create a new window for printing
+            const printWindow = window.open('', '');
+            // pdfCard.style.color = 'black';
+            // pdfCard.style.backgroundColor = '#243e54';
+            var name = document.getElementById("headline").innerHTML;
+            const pageTitle = printWindow.document.createElement('h1');
+            pageTitle.textContent = name; // Replace 'Page Title' with your desired title text
+            pageTitle.style.textAlign = 'center';
+            pageTitle.style.color = 'black';
+
+            // Append the <h1> element to the new window's body
+            printWindow.document.body.appendChild(pageTitle);
+
+            // Append the cloned 'pdf-card' div to the new window
+            printWindow.document.body.appendChild(pdfCard);
+
+            // Ensure the styles are preserved by copying CSS from the original document
+            const stylesheets = document.styleSheets;
+            for (let i = 0; i < stylesheets.length; i++) {
+                const stylesheet = stylesheets[i];
+                if (stylesheet.href) {
+                    const link = printWindow.document.createElement('link');
+                    link.rel = 'stylesheet';
+                    link.href = stylesheet.href;
+                    printWindow.document.head.appendChild(link);
+                }
+            }
+
+            // Trigger the print dialog for the new window
+            printWindow.print();
+
+            // Close the new window after printing
+            printWindow.close();
+
+
+        });
+
+    });
+    $(document).ready(function ($) {
+
+
+        $(document).on('click', '.btn_pdf', function (event) {
+            console.log('print1');
+            event.preventDefault();
+            var name = document.getElementById("headline").innerHTML;
+            var element = document.getElementById('pdf-card');
+            element.style.color = 'white';
+            element.style.backgroundColor = '#243e54';
+            var opt =
+            {
+                margin: 1,
+                filename: name + '.pdf',
+                image: { type: 'png', quality: 1.0 },
+                html2canvas: { scale: 3, useCORS: true, backgroundColor: null },
+                jsPDF: { unit: 'in', format: 'a3', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).from(element).save();
+
+        });
+
+    });
+    document.getElementById("pin").addEventListener("input", function () {
+        var filterValue = this.value.toLowerCase();
+        var table = document.getElementById("myTable");
+        var rows = table.getElementsByTagName("tr");
+
+        for (var i = 1; i < rows.length; i++) { // Start from 1 to skip the table header row
+            var firstColumnValue = rows[i].getElementsByTagName("td")[0].textContent.toLowerCase();
+
+            if (firstColumnValue.indexOf(filterValue) > -1) {
+                rows[i].style.display = "";
+            } else {
+                rows[i].style.display = "none";
+            }
+        }
+    });
+
     const inputElement = document.querySelector('input[name="party"]');
     const headlineElement = document.getElementById('headline');
     inputElement.addEventListener('input', function () {
         const selectedValue = inputElement.value;
-        head = selectedValue + ' Statement';
+        if (selectedValue == '') {
+            head = 'PARTY STATEMENT'
+        }
+        else {
+            head = selectedValue + ' Statement';
+        }
         headlineElement.textContent = head.toUpperCase();
+
     });
-    
-    function calctot(col,iid){
-       
-    const table = document.getElementById("myTable");
-    const rows = table.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
-    let total = 0;
-    
-    for (let i = 0; i < rows.length; i++) {
-        console.log(col);
-        console.log("hhhhhhhhhhhhhhhhhhhhhhhhh");
-        const cell = rows[i].getElementsByTagName("td")[col];
-        const amount = parseFloat(cell.textContent) || 0;
-        total += amount;
-    }
-    console.log(iid);
-    // Update the total amount in the footer
-    const totalAmountCell = document.getElementById(iid);
-    totalAmountCell.textContent = '₹'+ total.toFixed(2); // Display total with two decimal places
-    }
-    calctot(4,'total');
-    calctot(4,'balance');
+
+
+    // calctot(4, 'balance');
 </script>
+<script>
+    var table = document.getElementById("myTable");
+
+    var fromDate;
+    $('#in1').on('change', function () {
+        fromDate = $(this).val();
+        $('#in2').prop('min', function () {
+            return fromDate
+        })
+        var startDate = new Date(document.getElementById("in1").value);
+        // var endDate = new Date(document.getElementById("in2").value);
+        var rows = table.getElementsByTagName("tr");
+
+        for (var i = 1; i < rows.length; i++) {
+            var row = rows[i];
+            var dateCell = row.cells[1];
+            var rowDate = new Date(dateCell.textContent);
+
+            if (rowDate >= startDate) {
+                row.style.display = "";
+            } else {
+                row.style.display = "none";
+            }
+        }
+        var tdate = new Date(fromDate)
+        var options = { year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById("d1").innerHTML = tdate.toLocaleDateString(undefined, options);
+    })
+    var toDate;
+    $('#in2').on('change', function () {
+        toDate = $(this).val();
+        $('#in1').prop('max', function () {
+            return toDate
+        })
+        var startDate = new Date(document.getElementById("in1").value);
+        var endDate = new Date(document.getElementById("in2").value);
+        var rows = table.getElementsByTagName("tr");
+        for (var i = 1; i < rows.length; i++) {
+            var row = rows[i];
+            var dateCell = row.cells[1];
+            var rowDate = new Date(dateCell.textContent);
+
+            if (rowDate <= endDate && rowDate >= startDate) {
+                row.style.display = "";
+                console.log("display");
+            } else {
+                row.style.display = "none";
+
+            }
+        }
+        var tdate = new Date(toDate)
+        var options = { year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById("d2").innerHTML = "  To  " + tdate.toLocaleDateString(undefined, options);
+    })
+
+
+</script>
+
 {% endif %}
 
 {% endblock %}

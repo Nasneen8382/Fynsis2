@@ -42436,13 +42436,65 @@ def deleteloan(request,eid):
     return redirect('employeeloanpage')
 # ==================================================
 
-
+    
 def party_stmt(request):
     cmp1 = company.objects.get(id=request.session["uid"])
     cust = customer.objects.all()
     vend = vendor.objects.all()
     inv= invoice.objects.all()
-   
+    est= estimate.objects.all()
+    sorder= salesorder.objects.all()
+    scn= salescreditnote.objects.all()
+    payr= payment.objects.all()
+    rinv= RetainerInvoices.objects.all()
+    chln= challan.objects.all()
+    recinv= recinvoice.objects.all()
+    porder= purchaseorder.objects.all()
+    bill = purchasebill.objects.all()
+    pexp = purchase_expense.objects.all()
+    ppay = purchasepayment.objects.all()
+    pdeb = purchasedebit.objects.all()
+    mj = mjournal1.objects.all()
 
-    context = {'cust': cust,'vend':vend,  'cmp1': cmp1,'inv':inv}
+    for i in inv:
+        cname = i.customername
+        parts = cname.split()
+        if len(parts) == 3:
+            i.cust = ' '.join(parts[1:])
+        else:
+            i.cust = cname
+    for i in est:
+        cname = i.customer
+        parts = cname.split()
+        if len(parts) == 3:
+            i.cust = ' '.join(parts[1:])
+        else:
+            i.cust = cname
+    for i in sorder:
+        cname = i.salename
+        parts = cname.split()
+        if len(parts) == 3:
+            i.cust = ' '.join(parts[1:])
+        else:
+            i.cust = cname
+    for i in scn:
+        cname = i.customer
+        parts = cname.split()
+        if len(parts) == 3:
+            i.cust = ' '.join(parts[1:])
+        else:
+            i.cust = cname
+
+    context = {
+        'cust': cust,'vend':vend,  'cmp1': cmp1,'inv':inv,'est':est,'sorder':sorder,
+        'scn':scn,'payr':payr,'rinv':rinv,'chln':chln,'recinv':recinv,'porder':porder,
+        'bill':bill,'pexp':pexp,'ppay':ppay,'pdeb':pdeb,'mj':mj
+    }
     return render(request, 'app1/party_stmt.html',context)
+
+def all_parties(request):
+    cmp1 = company.objects.get(id=request.session["uid"])
+    cust = customer.objects.all()
+    vend = vendor.objects.all()
+    context = { 'cmp1': cmp1,'cust': cust,'vend':vend}
+    return render(request, 'app1/party_all.html',context)
