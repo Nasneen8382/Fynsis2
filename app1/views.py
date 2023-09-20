@@ -42449,6 +42449,7 @@ def party_stmt(request):
     rinv= RetainerInvoices.objects.all()
     chln= challan.objects.all()
     recinv= recinvoice.objects.all()
+
     porder= purchaseorder.objects.all()
     bill = purchasebill.objects.all()
     pexp = purchase_expense.objects.all()
@@ -42456,7 +42457,37 @@ def party_stmt(request):
     pdeb = purchasedebit.objects.all()
     mj = mjournal1.objects.all()
 
+    totalsale=0
+    totalpurchase=0
+    totalexp=0
+    totalpay=0
+    totalpayr=0
+
+    for i in porder:
+        totalpurchase += float(i.grand_total)
+    for i in bill:
+        totalpurchase += float(i.grand_total)
+    for i in pexp:
+        totalexp += float(i.amount)
+        totalpurchase += float(i.amount)
+    for i in ppay:
+        totalpurchase += float(i.paymentamount)
+        totalpay += float(i.paymentamount)
+    for i in pdeb:
+        totalpurchase += float(i.grandtotal)
+        
+
+    for i in chln:
+        totalsale += float(i.grand)
+    for i in recinv:
+        totalsale += float(i.grandtotal)
+    for i in rinv:
+        totalsale += float(i.total_amount)
+    for i in payr:
+        totalsale += float(i.amtreceived)
+        totalpayr += float(i.amtreceived)
     for i in inv:
+        totalsale += float(i.grandtotal)
         cname = i.customername
         parts = cname.split()
         if len(parts) == 3:
@@ -42464,6 +42495,7 @@ def party_stmt(request):
         else:
             i.cust = cname
     for i in est:
+        totalsale += float(i.estimatetotal)
         cname = i.customer
         parts = cname.split()
         if len(parts) == 3:
@@ -42471,6 +42503,7 @@ def party_stmt(request):
         else:
             i.cust = cname
     for i in sorder:
+        totalsale += float(i.salestotal)
         cname = i.salename
         parts = cname.split()
         if len(parts) == 3:
@@ -42478,6 +42511,7 @@ def party_stmt(request):
         else:
             i.cust = cname
     for i in scn:
+        totalsale += float(i.grandtotal)
         cname = i.customer
         parts = cname.split()
         if len(parts) == 3:
@@ -42488,7 +42522,8 @@ def party_stmt(request):
     context = {
         'cust': cust,'vend':vend,  'cmp1': cmp1,'inv':inv,'est':est,'sorder':sorder,
         'scn':scn,'payr':payr,'rinv':rinv,'chln':chln,'recinv':recinv,'porder':porder,
-        'bill':bill,'pexp':pexp,'ppay':ppay,'pdeb':pdeb,'mj':mj
+        'bill':bill,'pexp':pexp,'ppay':ppay,'pdeb':pdeb,'mj':mj,'sale':totalsale,'purchase':totalpurchase,
+        'exp':totalexp,'totalpay':totalpay,'totalpayr':totalpayr
     }
     return render(request, 'app1/party_stmt.html',context)
 

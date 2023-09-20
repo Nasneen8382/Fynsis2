@@ -92,8 +92,12 @@
     </div>
     <div class="card radius-15 print-only" id="pdf-card">
         <div class="card-body">
+            
             <div class="container-fluid">
-
+                <div class="mt-3">
+                    <input class="form-control" type="text" placeholder="Search..." name="search" id="search"
+                        onkeyup="searchFunction()" style="color: rgb(255, 255, 255);background: transparent;width: 20vw;">
+                </div>
                 <table class="table table-responsive-md mt-4 table-hover table-bordered"
                     style="background-color: rgba(0, 0, 0, 0.2);" id="myTable">
                     <thead>
@@ -152,6 +156,30 @@
 </div>
 
 <script type="text/javascript">
+    function searchFunction() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("search");
+        filter = input.value.toLowerCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+        // input.style.borderColor = "green";
+        for (i = 1; i < tr.length; i++) {
+            let rowVisible = false;
+            td = tr[i].getElementsByTagName("td");
+            for (j = 0; j < td.length; j++) {
+                  if (td[j]) {
+                      txtValue = td[j].textContent || td[j].innerText;
+                      if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                          rowVisible = true;
+                          break;
+                      }
+                  }
+              }
+  
+              // Show/hide the row based on the search results
+              tr[i].style.display = rowVisible ? "" : "none";
+          }
+      }
     function exportAsExcel() {
         const table = document.getElementById('myTable'); // Replace 'myTable' with your table's ID
         const wb = XLSX.utils.table_to_book(table);

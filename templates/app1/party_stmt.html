@@ -37,7 +37,7 @@
 <div class="page-content">
     <div class="card radius-15">
         <div class="card-body">
-            <div class="card-title">
+            <div class="card-title" id="div2">
                 <center>
                     <h6>{{cmp1.cname}}</h6>
                     <h2 class="my-4" id="headline">PARTY STATEMENT</h2>
@@ -106,7 +106,7 @@
                         {% for i in inv %}
                         <tr class="text-center">
                             <td class="hidden">{{i.cust}}</td>
-                            <td>{{i.invoicedate}}</td>
+                            <td>{{i.invoicedate | date:'Y-m-d'}}</td>
                             <td>invoice</td>
                             <td>{{i.invoiceno}}</td>
                             <td>cash</td>
@@ -119,7 +119,7 @@
                         {% for i in est %}
                         <tr class="text-center">
                             <td class="hidden">{{i.cust}}</td>
-                            <td>{{i.estimatedate}}</td>
+                            <td>{{i.estimatedate | date:'Y-m-d'}}</td>
                             <td>estimate</td>
                             <td>{{i.estimateno}}</td>
                             <td>cash</td>
@@ -132,7 +132,7 @@
                         {% for i in sorder %}
                         <tr class="text-center">
                             <td class="hidden">{{i.cust}}</td>
-                            <td>{{i.saledate}}</td>
+                            <td>{{i.saledate | date:'Y-m-d'}}</td>
                             <td>sales order</td>
                             <td>{{i.saleno}}</td>
                             <td>cash</td>
@@ -145,7 +145,7 @@
                         {% for i in scn %}
                         <tr class="text-center">
                             <td class="hidden">{{i.cust}}</td>
-                            <td>{{i.creditdate}}</td>
+                            <td>{{i.creditdate | date:'Y-m-d'}}</td>
                             <td>credit note</td>
                             <td>{{i.credit_no}}</td>
                             <td>cash</td>
@@ -158,7 +158,7 @@
                         {% for i in payr %}
                         <tr class="text-center">
                             <td class="hidden">{{i.customer}}</td>
-                            <td>{{i.paymdate}}</td>
+                            <td>{{i.paymdate | date:'Y-m-d'}}</td>
                             <td>payment recieved</td>
                             <td>{{i.refno}}</td>
                             <td>{{i.pmethod}}</td>
@@ -171,7 +171,7 @@
                         {% for i in rinv %}
                         <tr class="text-center">
                             <td class="hidden">{{i.customer}}</td>
-                            <td>{{i.invoice_date}}</td>
+                            <td>{{i.invoice_date | date:'Y-m-d'}}</td>
                             <td>retainer invoice</td>
                             <td>{{i.invoice_number}}</td>
                             <td>cash</td>
@@ -184,7 +184,7 @@
                         {% for i in chln %}
                         <tr class="text-center">
                             <td class="hidden">{{i.customer}}</td>
-                            <td>{{i.challan_date}}</td>
+                            <td>{{i.challan_date | date:'Y-m-d'}}</td>
                             <td>delivery challan</td>
                             <td>{{i.chal_no}}</td>
                             <td>cash</td>
@@ -210,7 +210,7 @@
                         {% for i in porder %}
                         <tr class="text-center">
                             <td class="hidden">{{i.vendor_name}}</td>
-                            <td>{{i.date}}</td>
+                            <td>{{i.date | date:'Y-m-d'}}</td>
                             <td>purchase order</td>
                             <td>{{i.puchaseorder_no}}</td>
                             <td>cash</td>
@@ -223,7 +223,7 @@
                         {% for i in bill %}
                         <tr class="text-center">
                             <td class="hidden">{{i.vendor_name}}</td>
-                            <td>{{i.date}}</td>
+                            <td>{{i.date | date:'Y-m-d'}}</td>
                             <td>purchase bill</td>
                             <td>{{i.bill_no}}</td>
                             <td>cash</td>
@@ -236,7 +236,7 @@
                         {% for i in pexp %}
                         <tr class="text-center">
                             <td class="hidden">{{i.vendor}}</td>
-                            <td>{{i.date}}</td>
+                            <td>{{i.date | date:'Y-m-d'}}</td>
                             <td>purchase expense</td>
                             <td>{{i.expense_no}}</td>
                             <td>cash</td>
@@ -249,7 +249,7 @@
                         {% for i in ppay %}
                         <tr class="text-center">
                             <td class="hidden">{{i.vendor}}</td>
-                            <td>{{i.paymentdate}}</td>
+                            <td>{{i.paymentdate | date:'Y-m-d'}}</td>
                             <td>purchase payment</td>
                             <td>{{i.pymntid}}</td>
                             <td>{{i.paymentmethod}}</td>
@@ -262,7 +262,7 @@
                         {% for i in pdeb %}
                         <tr class="text-center">
                             <td class="hidden">{{i.vendor}}</td>
-                            <td>{{i.debitdate}}</td>
+                            <td>{{i.debitdate | date:'Y-m-d'}}</td>
                             <td>purchase debit</td>
                             <td>{{i.debit_no}}</td>
                             <td>cash</td>
@@ -319,14 +319,14 @@
             <div class="row p-4">
                 <div class="col-10">
                     <div class="row mb-2">
-                        <div class="col-4 ">Total Sale: <p class="d-inline-block">0.00</p>
+                        <div class="col-4 ">Total Sale: <p class="d-inline-block">₹{{sale}}</p>
                         </div>
-                        <div class="col-4">Total Purchase:</div>
-                        <div class="col-4">Total Expense:</div>
+                        <div class="col-4">Total Purchase: ₹{{purchase}}</div>
+                        <div class="col-4">Total Expense: ₹{{exp}}</div>
                     </div>
                     <div class="row mb-2">
-                        <div class="col-4">Total Money-In:</div>
-                        <div class="col-4">Total Money-Out:</div>
+                        <div class="col-4">Total Money-In:  ₹{{totalpayr}}</div>
+                        <div class="col-4">Total Money-Out:  ₹{{totalpay}}</div>
                         <div class="col-4"></div>
                     </div>
                 </div>
@@ -401,6 +401,7 @@
             console.log('print1');
             event.preventDefault();
             var name = document.getElementById("headline").innerHTML;
+            var div2 = document.getElementById("div2");
             var element = document.getElementById('pdf-card');
             element.style.color = 'white';
             element.style.backgroundColor = '#243e54';
@@ -417,25 +418,56 @@
         });
 
     });
-    document.getElementById("pin").addEventListener("input", function () {
-        var filterValue = this.value.toLowerCase();
-        var table = document.getElementById("myTable");
-        var rows = table.getElementsByTagName("tr");
+    function selectParty() {
+        document.getElementById("pin").addEventListener("input", function () {
+            var filterValue = this.value.toLowerCase();
+            var table = document.getElementById("myTable");
+            var rows = table.getElementsByTagName("tr");
 
-        for (var i = 1; i < rows.length; i++) { // Start from 1 to skip the table header row
-            var firstColumnValue = rows[i].getElementsByTagName("td")[0].textContent.toLowerCase();
+            
+            if (document.getElementById("in1").value == '' && document.getElementById("in2").value == '') {
+                for (var i = 1; i < rows.length; i++) { // Start from 1 to skip the table header row
+                    
+                    var firstColumnValue = rows[i].getElementsByTagName("td")[0].textContent.toLowerCase();
 
-            if (firstColumnValue.indexOf(filterValue) > -1) {
-                rows[i].style.display = "";
-            } else {
-                rows[i].style.display = "none";
+                    if (firstColumnValue.indexOf(filterValue) > -1) {
+
+                        rows[i].style.display = "";
+                    } else {
+                        rows[i].style.display = "none";
+                    }
+
+                }
+
             }
-        }
-    });
+            else {
+                var startDate = new Date(document.getElementById("in1").value);
+            var endDate = new Date(document.getElementById("in2").value);
+                for (var i = 1; i < rows.length; i++) {
+                    var firstColumnValue = rows[i].getElementsByTagName("td")[0].textContent.toLowerCase();
+                    var row = rows[i];
+                    var dateCell = row.cells[1];
+                    var rowDate = new Date(dateCell.textContent);
 
+                    if (rowDate >= startDate && rowDate <= endDate && firstColumnValue.indexOf(filterValue) > -1) {
+                        row.style.display = "";
+                    } else {
+                        row.style.display = "none";
+                    }
+
+                }
+            }
+
+
+
+
+        });
+    }
+    selectParty();
     const inputElement = document.querySelector('input[name="party"]');
     const headlineElement = document.getElementById('headline');
     inputElement.addEventListener('input', function () {
+
         const selectedValue = inputElement.value;
         if (selectedValue == '') {
             head = 'PARTY STATEMENT'
@@ -451,6 +483,27 @@
     // calctot(4, 'balance');
 </script>
 <script>
+    function setDate() {
+        var startDate = new Date(document.getElementById("in1").value);
+        var endDate = new Date(document.getElementById("in2").value);
+        var rows = table.getElementsByTagName("tr")
+       
+
+        for (var i = 1; i < rows.length; i++) {
+            var row = rows[i];
+            
+
+            var dateCell = row.cells[1];
+            var rowDate = new Date(dateCell.textContent);
+
+            if (rowDate >= startDate && rowDate <= endDate && firstColumnValue.indexOf(filterValue) > -1) {
+                row.style.display = "";
+            } else {
+                row.style.display = "none";
+            }
+
+        }
+    }
     var table = document.getElementById("myTable");
 
     var fromDate;
@@ -460,23 +513,28 @@
             return fromDate
         })
         var startDate = new Date(document.getElementById("in1").value);
-        // var endDate = new Date(document.getElementById("in2").value);
-        var rows = table.getElementsByTagName("tr");
+        var endDate = new Date(document.getElementById("in2").value);
+        var rows = table.getElementsByTagName("tr")
+        var filterValue= document.getElementById("pin").value.toLowerCase()
 
         for (var i = 1; i < rows.length; i++) {
+            var firstColumnValue = rows[i].getElementsByTagName("td")[0].textContent.toLowerCase();
             var row = rows[i];
             var dateCell = row.cells[1];
             var rowDate = new Date(dateCell.textContent);
 
-            if (rowDate >= startDate) {
+            if (rowDate >= startDate && firstColumnValue.indexOf(filterValue) > -1) {
                 row.style.display = "";
             } else {
                 row.style.display = "none";
             }
+
         }
+        selectParty();
         var tdate = new Date(fromDate)
         var options = { year: 'numeric', month: 'long', day: 'numeric' };
         document.getElementById("d1").innerHTML = tdate.toLocaleDateString(undefined, options);
+
     })
     var toDate;
     $('#in2').on('change', function () {
@@ -487,12 +545,14 @@
         var startDate = new Date(document.getElementById("in1").value);
         var endDate = new Date(document.getElementById("in2").value);
         var rows = table.getElementsByTagName("tr");
+        var filterValue= document.getElementById("pin").value.toLowerCase()
         for (var i = 1; i < rows.length; i++) {
+            var firstColumnValue = rows[i].getElementsByTagName("td")[0].textContent.toLowerCase();
             var row = rows[i];
             var dateCell = row.cells[1];
             var rowDate = new Date(dateCell.textContent);
 
-            if (rowDate <= endDate && rowDate >= startDate) {
+            if (rowDate >= startDate && rowDate <= endDate && firstColumnValue.indexOf(filterValue) > -1) {
                 row.style.display = "";
                 console.log("display");
             } else {
@@ -500,11 +560,12 @@
 
             }
         }
+        selectParty();
         var tdate = new Date(toDate)
         var options = { year: 'numeric', month: 'long', day: 'numeric' };
         document.getElementById("d2").innerHTML = "  To  " + tdate.toLocaleDateString(undefined, options);
-    })
 
+    })
 
 </script>
 
