@@ -42462,6 +42462,8 @@ def party_stmt(request):
     totalexp=0
     totalpay=0
     totalpayr=0
+    salesreturn=0
+    purchasereturn=0
 
     for i in porder:
         totalpurchase += float(i.grand_total)
@@ -42471,10 +42473,11 @@ def party_stmt(request):
         totalexp += float(i.amount)
         totalpurchase += float(i.amount)
     for i in ppay:
-        totalpurchase += float(i.paymentamount)
+        paymentamount=float(i.paymentamount)
+        totalpurchase += paymentamount
         totalpay += float(i.paymentamount)
     for i in pdeb:
-        totalpurchase += float(i.grandtotal)
+        purchasereturn += float(i.grandtotal)
         
 
     for i in chln:
@@ -42511,18 +42514,22 @@ def party_stmt(request):
         else:
             i.cust = cname
     for i in scn:
-        totalsale += float(i.grandtotal)
+        salesreturn += float(i.grandtotal)
         cname = i.customer
         parts = cname.split()
         if len(parts) == 3:
             i.cust = ' '.join(parts[1:])
         else:
             i.cust = cname
+    
+    
+    sale=totalsale-salesreturn
+    purchase = totalpurchase-purchasereturn
 
     context = {
         'cust': cust,'vend':vend,  'cmp1': cmp1,'inv':inv,'est':est,'sorder':sorder,
         'scn':scn,'payr':payr,'rinv':rinv,'chln':chln,'recinv':recinv,'porder':porder,
-        'bill':bill,'pexp':pexp,'ppay':ppay,'pdeb':pdeb,'mj':mj,'sale':totalsale,'purchase':totalpurchase,
+        'bill':bill,'pexp':pexp,'ppay':ppay,'pdeb':pdeb,'mj':mj,'sale':sale,'purchase':purchase,
         'exp':totalexp,'totalpay':totalpay,'totalpayr':totalpayr
     }
     return render(request, 'app1/party_stmt.html',context)

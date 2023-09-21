@@ -10,6 +10,7 @@
 <style>
      body {
         counter-reset: Serial;
+      
     }
 
     tr td:first-child:before {
@@ -46,7 +47,7 @@
     <div class="card radius-15">
         <div class="card-body">
             <div class="card-title">
-                <center>
+                <center id="h1-content">
                     <h6>{{cmp1.cname}}</h6>
                     <h2 class="my-4" id="headline">ALL PARTIES</h2>
                     <div class="display">
@@ -58,7 +59,7 @@
                 <hr>
             </div>
 
-            <div class="bar">
+            <div class="bar" id="bar">
                 <div class=" left">
                     <div class=" p-3" style="font-size: 1.3rem;">
                         <input style="vertical-align:middle;" type="checkbox" id="ch1">
@@ -92,7 +93,7 @@
     </div>
     <div class="card radius-15 print-only" id="pdf-card">
         <div class="card-body">
-            
+           
             <div class="container-fluid">
                 <div class="mt-3">
                     <input class="form-control" type="text" placeholder="Search..." name="search" id="search"
@@ -184,7 +185,7 @@
         const table = document.getElementById('myTable'); // Replace 'myTable' with your table's ID
         const wb = XLSX.utils.table_to_book(table);
 
-        XLSX.writeFile(wb, 'patystatement.xlsx');
+        XLSX.writeFile(wb, 'parties.xlsx');
     }
 </script>
 <script>
@@ -234,15 +235,15 @@ $(document).on('click', '.btn_print', function (event) {
 });
 
 });
-    $(document).ready(function ($) {
-
-
+    $(document).ready(function ($) {        
         $(document).on('click', '.btn_pdf', function (event) {
             console.log('print1');
             event.preventDefault();
             var element = document.getElementById('pdf-card');
+            
             element.style.color = 'white';
             element.style.backgroundColor = '#243e54';
+            
             var opt =
             {
                 margin: 1,
@@ -252,7 +253,6 @@ $(document).on('click', '.btn_print', function (event) {
                 jsPDF: { unit: 'in', format: 'a3', orientation: 'portrait' }
             };
             html2pdf().set(opt).from(element).save();
-
         });
 
     });
