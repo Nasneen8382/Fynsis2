@@ -42465,32 +42465,43 @@ def party_stmt(request):
     salesreturn=0
     purchasereturn=0
 
+    amount=0
+
     for i in porder:
-        totalpurchase += float(i.grand_total)
+        if i.grand_total !='NULL' or i.grand_total != " ":
+            totalpurchase += float(i.grand_total)
     for i in bill:
-        totalpurchase += float(i.grand_total)
+        if i.grand_total != 'NULL' or i.grand_total != " ":
+            totalpurchase += float(i.grand_total)
     for i in pexp:
-        totalexp += float(i.amount)
-        totalpurchase += float(i.amount)
+        if i.amount != 'NULL' or i.amount != " ":
+            totalexp += float(i.amount)
+            totalpurchase += float(i.amount)
     for i in ppay:
-        paymentamount=float(i.paymentamount)
-        totalpurchase += paymentamount
-        totalpay += float(i.paymentamount)
+        if i.paymentamount != 'NULL' or i.paymentamount != " ":
+            totalpurchase += float(i.paymentamount)
+            totalpay += float(i.paymentamount)
     for i in pdeb:
-        purchasereturn += float(i.grandtotal)
+        if i.grandtotal != 'NULL' or i.grandtotal != " ":
+            purchasereturn += float(i.grandtotal)
         
 
     for i in chln:
-        totalsale += float(i.grand)
+        if i.grand != 'NULL' or i.grand != " ":
+            totalsale += float(i.grand)
     for i in recinv:
-        totalsale += float(i.grandtotal)
+        if i.grandtotal != 'NULL' or i.grandtotal != " ":
+            totalsale += float(i.grandtotal)
     for i in rinv:
-        totalsale += float(i.total_amount)
+        if i.total_amount != 'NULL' or i.total_amount != " ":
+            totalsale += float(i.total_amount)
     for i in payr:
-        totalsale += float(i.amtreceived)
-        totalpayr += float(i.amtreceived)
+        if i.amtreceived != 'NULL' or i.amtreceived != " ":
+            totalsale += float(i.amtreceived)
+            totalpayr += float(i.amtreceived)
     for i in inv:
-        totalsale += float(i.grandtotal)
+        if i.grandtotal != 'NULL' or i.grandtotal != " ":
+            totalsale += float(i.grandtotal)
         cname = i.customername
         parts = cname.split()
         if len(parts) == 3:
@@ -42498,7 +42509,8 @@ def party_stmt(request):
         else:
             i.cust = cname
     for i in est:
-        totalsale += float(i.estimatetotal)
+        if i.estimatetotal != 'NULL' or i.estimatetotal != " ":
+            totalsale += float(i.estimatetotal)
         cname = i.customer
         parts = cname.split()
         if len(parts) == 3:
@@ -42506,7 +42518,8 @@ def party_stmt(request):
         else:
             i.cust = cname
     for i in sorder:
-        totalsale += float(i.salestotal)
+        if i.salestotal != 'NULL' or i.salestotal != " ":
+            totalsale += float(i.salestotal)
         cname = i.salename
         parts = cname.split()
         if len(parts) == 3:
@@ -42514,7 +42527,8 @@ def party_stmt(request):
         else:
             i.cust = cname
     for i in scn:
-        salesreturn += float(i.grandtotal)
+        if i.grandtotal != 'NULL' or i.grandtotal != " ":
+            salesreturn += float(i.grandtotal)
         cname = i.customer
         parts = cname.split()
         if len(parts) == 3:
@@ -42522,6 +42536,8 @@ def party_stmt(request):
         else:
             i.cust = cname
     
+    print(totalpurchase)
+    print(purchasereturn)
     
     sale=totalsale-salesreturn
     purchase = totalpurchase-purchasereturn
