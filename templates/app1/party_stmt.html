@@ -319,15 +319,16 @@
             <div class="row p-4">
                 <div class="col-10">
                     <div class="row mb-2">
-                        <div class="col-4 ">Total Sale: <p class="d-inline-block">₹{{sale}}</p>
+                        <div class="col-4 ">Total Sale: <p class="d-inline-block" id="sales">₹{{sale}}</p>
                         </div>
-                        <div class="col-4">Total Purchase: ₹{{purchase}}</div>
-                        <div class="col-4">Total Expense: ₹{{exp}}</div>
+                        <div class="col-4">Total Purchase: <p class="d-inline-block" id="purchase">₹{{purchase}}</p></div>
+                        <div class="col-4">Total Expense: <p class="d-inline-block" id="expense">₹{{exp}}</p></div>
                     </div>
                     <div class="row mb-2">
-                        <div class="col-4">Total Money-In:  ₹{{totalpayr}}</div>
-                        <div class="col-4">Total Money-Out:  ₹{{totalpay}}</div>
-                        <div class="col-4"></div>
+                        <div class="col-4">Total Money-In: <p class="d-inline-block" id="moneyin"> ₹{{totalpayr}}</p>
+                        </div>
+                        <div class="col-4">Total Money-Out:<p class="d-inline-block" id="moneyout">₹{{totalpay}}</p> </div>
+                        <div class="col-4" id="totalAmount"></div>
                     </div>
                 </div>
                 <div class="col-2 text-center">
@@ -338,6 +339,28 @@
         </div>
     </div>
 </div>
+<!-- <script>
+    $(document).ready(function () {
+        // Initialize the total sum
+        let totalAmount = 0;
+
+        // Iterate through the table rows
+        $('#myTable tbody tr').each(function () {
+            // Get the 'type' and 'amount' columns in this row
+            const type = $(this).find('td:eq(2)').text();
+            const amount = parseFloat($(this).find('td:eq(5)').text());
+
+            // Check if the 'type' is 'invoice'
+            if (type.trim() === 'estimate') {
+                // Add the 'amount' to the total sum
+                totalAmount += amount;
+            }
+        });
+
+        // Display the total sum
+        $('#totalAmount').text('Total Amount for Invoices: ' + totalAmount);
+    });
+</script> -->
 <script type="text/javascript">
     function exportAsExcel() {
         const table = document.getElementById('myTable'); // Replace 'myTable' with your table's ID
@@ -417,6 +440,7 @@
 
         });
 
+
     });
     function selectParty() {
         document.getElementById("pin").addEventListener("input", function () {
@@ -424,10 +448,10 @@
             var table = document.getElementById("myTable");
             var rows = table.getElementsByTagName("tr");
 
-            
+
             if (document.getElementById("in1").value == '' && document.getElementById("in2").value == '') {
-                for (var i = 1; i < rows.length; i++) { // Start from 1 to skip the table header row
-                    
+                for (var i = 1; i < rows.length-1; i++) { // Start from 1 to skip the table header row
+
                     var firstColumnValue = rows[i].getElementsByTagName("td")[0].textContent.toLowerCase();
 
                     if (firstColumnValue.indexOf(filterValue) > -1) {
@@ -442,8 +466,8 @@
             }
             else {
                 var startDate = new Date(document.getElementById("in1").value);
-            var endDate = new Date(document.getElementById("in2").value);
-                for (var i = 1; i < rows.length; i++) {
+                var endDate = new Date(document.getElementById("in2").value);
+                for (var i = 1; i < rows.length-1; i++) {
                     var firstColumnValue = rows[i].getElementsByTagName("td")[0].textContent.toLowerCase();
                     var row = rows[i];
                     var dateCell = row.cells[1];
@@ -460,38 +484,120 @@
 
 
 
-
         });
     }
     selectParty();
-    const inputElement = document.querySelector('input[name="party"]');
-    const headlineElement = document.getElementById('headline');
-    inputElement.addEventListener('input', function () {
+    
 
-        const selectedValue = inputElement.value;
-        if (selectedValue == '') {
+
+    // Get the input element
+    const inputElement = $('input[name="party"]');
+    
+    
+    // Event handler for input change
+    inputElement.on('input', function () {
+        const inputValue = $(this).val();
+
+        let total =0;
+        let totalMoneyin = 0;
+        let totalMoneyout = 0;
+        let totalexpense = 0;
+        let totalsales = 0;
+        let salesreturn = 0;
+        let sales=0;
+        let totalpurchase = 0;
+        let purchasereturn = 0;
+        let purchase=0;
+
+        
+
+
+        // Iterate through the table rows
+        $('#myTable tbody tr').each(function () {
+            const type = $(this).find('td:eq(2)').text().trim();
+            const name = $(this).find('td:eq(0)').text().trim();
+            const amount = parseFloat($(this).find('td:eq(5)').text());
+
+            // Check if the 'type' is 'invoice' and matches the input value
+            if (type === 'payment recieved' && name === inputValue) {
+                // Add the 'amount' to the total sum
+                totalMoneyin += amount;
+            }
+            if (type === 'purchase payment' && name === inputValue) {
+                // Add the 'amount' to the total sum
+                totalMoneyout += amount;
+            }
+            if ((type === 'purchase expense' || type === 'manual journal' ) && name === inputValue) {
+                // Add the 'amount' to the total sum
+                totalexpense += amount;
+            }
+            if ((type === 'invoice' || type === 'sales order' || type === 'reccuring invoice' || type === 'delivery challan' || type === 'retainer invoice' || type === 'estimate' || type === 'payment recieved') && name === inputValue) {
+                // Add the 'amount' to the total sum
+                totalsales += amount;
+            }
+            if (type === 'credit note' && name === inputValue) {
+                // Add the 'amount' to the total sum
+                salesreturn += amount;
+            }
+            if ((type === 'purchase order' || type === 'purchase bill' || type === 'purchase expense' || type === 'purchase payment') && name === inputValue) {
+                // Add the 'amount' to the total sum
+                totalpurchase += amount;
+            }
+            if (type === 'purchase debit' && name === inputValue) {
+                // Add the 'amount' to the total sum
+                purchasereturn += amount;
+            }
+            if (name === inputValue) {
+                // Add the 'amount' to the total sum
+                total += amount;
+            }
+
+
+            sales = totalsales-salesreturn
+            purchase = totalpurchase-purchasereturn
+        });
+        
+        if (inputValue != '') {
+           
+            // Display the total sum
+            $('#moneyin').text('₹' + totalMoneyin);
+            $('#moneyout').text('₹' + totalMoneyout);
+            $('#expense').text('₹' + totalexpense);
+            $('#sales').text('₹' + sales);
+            $('#purchase').text('₹' + purchase);
+            $("#totvalue").text('₹' + total.toFixed(2));
+            $("#tot").text('₹' + total.toFixed(2));
+            $("#balance").text('₹' + total.toFixed(2));
+        } else if (inputValue == '' || inputValue.length == 1){
+            location.reload();
+        }
+        if(inputValue === '' || inputValue.length== 1){
             head = 'PARTY STATEMENT'
         }
-        else {
-            head = selectedValue + ' Statement';
+        else{
+            console.log(inputValue);
+            head = inputValue + ' Statement';
         }
-        headlineElement.textContent = head.toUpperCase();
+        $('#headline').text(head);
+
+    
 
     });
 
 
-    // calctot(4, 'balance');
+
+
 </script>
 <script>
     function setDate() {
         var startDate = new Date(document.getElementById("in1").value);
         var endDate = new Date(document.getElementById("in2").value);
         var rows = table.getElementsByTagName("tr")
-       
+
 
         for (var i = 1; i < rows.length; i++) {
             var row = rows[i];
-            
+
 
             var dateCell = row.cells[1];
             var rowDate = new Date(dateCell.textContent);
@@ -515,7 +621,7 @@
         var startDate = new Date(document.getElementById("in1").value);
         var endDate = new Date(document.getElementById("in2").value);
         var rows = table.getElementsByTagName("tr")
-        var filterValue= document.getElementById("pin").value.toLowerCase()
+        var filterValue = document.getElementById("pin").value.toLowerCase()
 
         for (var i = 1; i < rows.length; i++) {
             var firstColumnValue = rows[i].getElementsByTagName("td")[0].textContent.toLowerCase();
@@ -545,7 +651,7 @@
         var startDate = new Date(document.getElementById("in1").value);
         var endDate = new Date(document.getElementById("in2").value);
         var rows = table.getElementsByTagName("tr");
-        var filterValue= document.getElementById("pin").value.toLowerCase()
+        var filterValue = document.getElementById("pin").value.toLowerCase()
         for (var i = 1; i < rows.length; i++) {
             var firstColumnValue = rows[i].getElementsByTagName("td")[0].textContent.toLowerCase();
             var row = rows[i];

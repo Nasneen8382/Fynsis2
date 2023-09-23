@@ -42439,23 +42439,23 @@ def deleteloan(request,eid):
     
 def party_stmt(request):
     cmp1 = company.objects.get(id=request.session["uid"])
-    cust = customer.objects.all()
-    vend = vendor.objects.all()
-    inv= invoice.objects.all()
-    est= estimate.objects.all()
-    sorder= salesorder.objects.all()
-    scn= salescreditnote.objects.all()
-    payr= payment.objects.all()
-    rinv= RetainerInvoices.objects.all()
-    chln= challan.objects.all()
-    recinv= recinvoice.objects.all()
+    cust = customer.objects.filter(cid=cmp1)
+    vend = vendor.objects.filter(cid=cmp1)
+    inv= invoice.objects.filter(cid=cmp1)
+    est= estimate.objects.filter(cid=cmp1)
+    sorder= salesorder.objects.filter(cid=cmp1)
+    scn= salescreditnote.objects.filter(cid=cmp1)
+    payr= payment.objects.filter(cid=cmp1)
+    rinv= RetainerInvoices.objects.filter(cid=cmp1)
+    chln= challan.objects.filter(cid=cmp1)
+    recinv= recinvoice.objects.filter(cid=cmp1)
 
-    porder= purchaseorder.objects.all()
-    bill = purchasebill.objects.all()
-    pexp = purchase_expense.objects.all()
-    ppay = purchasepayment.objects.all()
-    pdeb = purchasedebit.objects.all()
-    mj = mjournal1.objects.all()
+    porder= purchaseorder.objects.filter(cid=cmp1)
+    bill = purchasebill.objects.filter(cid=cmp1)
+    pexp = purchase_expense.objects.filter(cid=cmp1)
+    ppay = purchasepayment.objects.filter(cid=cmp1)
+    pdeb = purchasedebit.objects.filter(cid=cmp1)
+    mj = mjournal1.objects.filter(cid=cmp1)
 
     totalsale=0
     totalpurchase=0
@@ -42552,7 +42552,7 @@ def party_stmt(request):
 
 def all_parties(request):
     cmp1 = company.objects.get(id=request.session["uid"])
-    cust = customer.objects.all()
-    vend = vendor.objects.all()
+    cust = customer.objects.filter(cid=cmp)
+    vend = vendor.objects.filter(cid=cmp)
     context = { 'cmp1': cmp1,'cust': cust,'vend':vend}
     return render(request, 'app1/party_all.html',context)
