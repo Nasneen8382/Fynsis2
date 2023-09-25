@@ -520,36 +520,40 @@
 
             // Check if the 'type' is 'invoice' and matches the input value
             if (type === 'payment recieved' && name === inputValue) {
-                // Add the 'amount' to the total sum
                 totalMoneyin += amount;
+                console.log(totalMoneyin);
             }
             if (type === 'purchase payment' && name === inputValue) {
-                // Add the 'amount' to the total sum
                 totalMoneyout += amount;
+                console.log(totalMoneyout);
             }
             if ((type === 'purchase expense' || type === 'manual journal' ) && name === inputValue) {
-                // Add the 'amount' to the total sum
                 totalexpense += amount;
+                console.log(totalexpense);
             }
             if ((type === 'invoice' || type === 'sales order' || type === 'reccuring invoice' || type === 'delivery challan' || type === 'retainer invoice' || type === 'estimate' || type === 'payment recieved') && name === inputValue) {
                 // Add the 'amount' to the total sum
                 totalsales += amount;
+                console.log(totalsales);
             }
             if (type === 'credit note' && name === inputValue) {
                 // Add the 'amount' to the total sum
                 salesreturn += amount;
+                console.log(salesreturn);
             }
             if ((type === 'purchase order' || type === 'purchase bill' || type === 'purchase expense' || type === 'purchase payment') && name === inputValue) {
                 // Add the 'amount' to the total sum
                 totalpurchase += amount;
+                console.log(totalpurchase);
             }
             if (type === 'purchase debit' && name === inputValue) {
-                // Add the 'amount' to the total sum
+                
                 purchasereturn += amount;
+                console.log(purchasereturn);
             }
             if (name === inputValue) {
-                // Add the 'amount' to the total sum
                 total += amount;
+                console.log('amount is'+amount);
             }
 
 

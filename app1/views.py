@@ -42504,37 +42504,41 @@ def party_stmt(request):
             totalsale += float(i.grandtotal)
         cname = i.customername
         parts = cname.split()
-        if len(parts) == 3:
+        if parts[0].isdigit():
             i.cust = ' '.join(parts[1:])
         else:
             i.cust = cname
+        
     for i in est:
         if i.estimatetotal != 'NULL' or i.estimatetotal != " ":
             totalsale += float(i.estimatetotal)
         cname = i.customer
         parts = cname.split()
-        if len(parts) == 3:
+        if parts[0].isdigit():
             i.cust = ' '.join(parts[1:])
         else:
             i.cust = cname
+        
     for i in sorder:
         if i.salestotal != 'NULL' or i.salestotal != " ":
             totalsale += float(i.salestotal)
         cname = i.salename
         parts = cname.split()
-        if len(parts) == 3:
+        if parts[0].isdigit():
             i.cust = ' '.join(parts[1:])
         else:
             i.cust = cname
+        
     for i in scn:
         if i.grandtotal != 'NULL' or i.grandtotal != " ":
             salesreturn += float(i.grandtotal)
         cname = i.customer
         parts = cname.split()
-        if len(parts) == 3:
+        if parts[0].isdigit():
             i.cust = ' '.join(parts[1:])
         else:
             i.cust = cname
+        
     
     print(totalpurchase)
     print(purchasereturn)
@@ -42552,7 +42556,7 @@ def party_stmt(request):
 
 def all_parties(request):
     cmp1 = company.objects.get(id=request.session["uid"])
-    cust = customer.objects.filter(cid=cmp)
-    vend = vendor.objects.filter(cid=cmp)
+    cust = customer.objects.filter(cid=cmp1)
+    vend = vendor.objects.filter(cid=cmp1)
     context = { 'cmp1': cmp1,'cust': cust,'vend':vend}
     return render(request, 'app1/party_all.html',context)
