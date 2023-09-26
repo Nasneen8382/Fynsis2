@@ -42476,7 +42476,9 @@ def party_stmt(request):
     for i in pexp:
         if i.amount != 'NULL' or i.amount != " ":
             totalexp += float(i.amount)
-            totalpurchase += float(i.amount)
+    for i in mj:
+        if i.mjrnl.s_totalcre != 'NULL' or i.mjrnl.s_totalcre != " ":
+            totalexp += float(i.mjrnl.s_totalcre)
     for i in ppay:
         if i.paymentamount != 'NULL' or i.paymentamount != " ":
             totalpurchase += float(i.paymentamount)
