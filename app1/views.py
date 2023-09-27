@@ -42470,6 +42470,7 @@ def party_stmt(request):
     for i in porder:
         if i.grand_total !='NULL' or i.grand_total != " ":
             totalpurchase += float(i.grand_total)
+            
     for i in bill:
         if i.grand_total != 'NULL' or i.grand_total != " ":
             totalpurchase += float(i.grand_total)
@@ -42547,6 +42548,13 @@ def party_stmt(request):
     
     sale=totalsale-salesreturn
     purchase = totalpurchase-purchasereturn
+    
+    sale='{:.2f}'.format(sale)
+    purchase='{:.2f}'.format(purchase)
+    totalexp='{:.2f}'.format(totalexp)
+    totalpay='{:.2f}'.format(totalpay)
+    totalpayr='{:.2f}'.format(totalpayr)
+
 
     context = {
         'cust': cust,'vend':vend,  'cmp1': cmp1,'inv':inv,'est':est,'sorder':sorder,

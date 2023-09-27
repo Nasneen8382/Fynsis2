@@ -183,7 +183,7 @@
                         {% endfor %}
                         {% for i in chln %}
                         <tr class="text-center">
-                            <td class="hidden">{{i.customer}}</td>
+                            <td class="hidden">{{i.customer.firstname}} {{i.customer.lastname}}</td>
                             <td>{{i.challan_date | date:'Y-m-d'}}</td>
                             <td>delivery challan</td>
                             <td>{{i.chal_no}}</td>
@@ -561,7 +561,12 @@
 
 
             sales = totalsales - salesreturn
+            sales= sales.toFixed(2)
             purchase = totalpurchase - purchasereturn
+            purchase= purchase.toFixed(2)
+            totalexpense= totalexpense.toFixed(2)
+            totalMoneyin= totalMoneyin.toFixed(2)
+            totalMoneyout= totalMoneyout.toFixed(2)
             if (sales < 0) {
                 sales = Math.abs(sales); // Convert to positive value
             }
